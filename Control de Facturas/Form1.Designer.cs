@@ -29,16 +29,20 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            btnLimpiarPath = new Button();
+            label2 = new Label();
             btnSeleccionarCarpeta = new Button();
             txtCarpeta = new TextBox();
             label1 = new Label();
             folderBrowserDialog1 = new FolderBrowserDialog();
-            label2 = new Label();
+            btnPruebas = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnPruebas);
+            groupBox1.Controls.Add(btnLimpiarPath);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(btnSeleccionarCarpeta);
             groupBox1.Controls.Add(txtCarpeta);
@@ -49,6 +53,25 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Selección de Archivos";
+            // 
+            // btnLimpiarPath
+            // 
+            btnLimpiarPath.Location = new Point(145, 22);
+            btnLimpiarPath.Name = "btnLimpiarPath";
+            btnLimpiarPath.Size = new Size(75, 23);
+            btnLimpiarPath.TabIndex = 1;
+            btnLimpiarPath.Text = "Limpiar";
+            btnLimpiarPath.UseVisualStyleBackColor = true;
+            btnLimpiarPath.Click += btnLimpiarPath_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(6, 92);
+            label2.Name = "label2";
+            label2.Size = new Size(133, 15);
+            label2.TabIndex = 3;
+            label2.Text = "Cantidad de archivos: 0.";
             // 
             // btnSeleccionarCarpeta
             // 
@@ -77,20 +100,23 @@
             label1.TabIndex = 0;
             label1.Text = "Carpeta";
             // 
-            // label2
+            // btnPruebas
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(6, 92);
-            label2.Name = "label2";
-            label2.Size = new Size(133, 15);
-            label2.TabIndex = 3;
-            label2.Text = "Cantidad de archivos: 0.";
+            btnPruebas.BackColor = Color.DarkGoldenrod;
+            btnPruebas.ForeColor = SystemColors.ControlText;
+            btnPruebas.Location = new Point(377, 22);
+            btnPruebas.Name = "btnPruebas";
+            btnPruebas.Size = new Size(75, 23);
+            btnPruebas.TabIndex = 4;
+            btnPruebas.Text = "PRUEBAS";
+            btnPruebas.UseVisualStyleBackColor = false;
+            btnPruebas.Click += btnPruebas_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(724, 240);
+            ClientSize = new Size(494, 240);
             Controls.Add(groupBox1);
             Name = "Form1";
             Text = "Form1";
@@ -105,7 +131,9 @@
         private Button btnSeleccionarCarpeta;
         private TextBox txtCarpeta;
         private Label label1;
-        private FolderBrowserDialog folderBrowserDialog1;
         private Label label2;
+        private FolderBrowserDialog folderBrowserDialog1;
+        private Button btnLimpiarPath;
+        private Button btnPruebas;
     }
 }
