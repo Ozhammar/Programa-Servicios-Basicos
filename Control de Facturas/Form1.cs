@@ -7,8 +7,16 @@ namespace Control_de_Facturas
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void btnSeleccionarCarpeta_Click(object sender, EventArgs e)
         {
+            string path = "";
+            folderBrowserDialog1.Description = "Seleccione la carpeta que contiene las facturas";
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txtCarpeta.Text = folderBrowserDialog1.SelectedPath;
+                path = folderBrowserDialog1.SelectedPath;
+            }
+
 
         }
     }
