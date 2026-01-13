@@ -41,23 +41,31 @@ namespace Control_de_Facturas
 
         private void btnPruebas_Click(object sender, EventArgs e)
         {
-            var pdfs = gestorArchivos.ObtenerPDF(path);
-
-            string primerPdf = pdfs.FirstOrDefault();
-
-            if (primerPdf == null)
+            if (path != "")
             {
-                MessageBox.Show("No se encontraron PDFs.");
-                return;
+                var pdfs = gestorArchivos.ObtenerPDF(path);
+
+                string primerPdf = pdfs.FirstOrDefault();
+                
+                if (primerPdf == null)
+                {
+                    MessageBox.Show("No se encontraron PDFs.");
+                    return;
+                }
+
+                string texto = gestorArchivos.LeerPDF(primerPdf);
+                //MessageBox.Show(texto);
+
+                string path_archivo_prueba = @"..\..\..\prueba.txt";
+                using (StreamWriter sw = new StreamWriter(path_archivo_prueba, true))
+                {
+                    sw.WriteLine(texto);
+                }
             }
-
-            string texto = gestorArchivos.LeerPDF(primerPdf);
-            //MessageBox.Show(texto);
-
-            string path_archivo_prueba = @"..\..\..\prueba.txt";
-            using(StreamWriter sw = new StreamWriter(path_archivo_prueba, true))
+            else
             {
-                sw.WriteLine(texto);
+                MessageBox.Show("No se ha seleccionado ninguna carpeta.");
+
             }
         }
     }
