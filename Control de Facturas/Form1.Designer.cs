@@ -34,14 +34,16 @@
             btnSeleccionarCarpeta = new Button();
             txtCarpeta = new TextBox();
             label1 = new Label();
-            folderBrowserDialog1 = new FolderBrowserDialog();
             btnPruebas = new Button();
+            folderBrowserDialog1 = new FolderBrowserDialog();
+            button1 = new Button();
+            dataGridView1 = new DataGridView();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(btnPruebas);
             groupBox1.Controls.Add(btnLimpiarPath);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(btnSeleccionarCarpeta);
@@ -104,24 +106,50 @@
             // 
             btnPruebas.BackColor = Color.DarkGoldenrod;
             btnPruebas.ForeColor = SystemColors.ControlText;
-            btnPruebas.Location = new Point(377, 22);
+            btnPruebas.Location = new Point(1016, 34);
             btnPruebas.Name = "btnPruebas";
-            btnPruebas.Size = new Size(75, 23);
+            btnPruebas.Size = new Size(182, 23);
             btnPruebas.TabIndex = 4;
-            btnPruebas.Text = "PRUEBAS";
+            btnPruebas.Text = "PRUEBA EXTRAER TEXTO";
             btnPruebas.UseVisualStyleBackColor = false;
             btnPruebas.Click += btnPruebas_Click;
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.DarkGoldenrod;
+            button1.ForeColor = SystemColors.ControlText;
+            button1.Location = new Point(1016, 63);
+            button1.Name = "button1";
+            button1.Size = new Size(221, 23);
+            button1.TabIndex = 5;
+            button1.Text = "PRUEBA FACTURAS A UN DATAGRID";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(12, 182);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(1260, 150);
+            dataGridView1.TabIndex = 6;
+            dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(494, 240);
+            ClientSize = new Size(1292, 465);
+            Controls.Add(dataGridView1);
+            Controls.Add(button1);
+            Controls.Add(btnPruebas);
             Controls.Add(groupBox1);
             Name = "Form1";
             Text = "Form1";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
 
@@ -135,5 +163,7 @@
         private FolderBrowserDialog folderBrowserDialog1;
         private Button btnLimpiarPath;
         private Button btnPruebas;
+        private Button button1;
+        private DataGridView dataGridView1;
     }
 }

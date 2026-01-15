@@ -7,12 +7,14 @@ namespace Control_de_Facturas
         //VARIABLES GLOBALES
         string path = "";
         private GestorArchivos gestorArchivos;
+        private ControladorFacturas controladorFacturas;
 
 
         public Form1()
         {
             InitializeComponent();
             gestorArchivos = new GestorArchivos();
+            controladorFacturas = new ControladorFacturas();
         }
 
         private void btnSeleccionarCarpeta_Click(object sender, EventArgs e)
@@ -46,7 +48,7 @@ namespace Control_de_Facturas
                 var pdfs = gestorArchivos.ObtenerPDF(path);
 
                 string primerPdf = pdfs.FirstOrDefault();
-                
+
                 if (primerPdf == null)
                 {
                     MessageBox.Show("No se encontraron PDFs.");
@@ -66,6 +68,36 @@ namespace Control_de_Facturas
             {
                 MessageBox.Show("No se ha seleccionado ninguna carpeta.");
 
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            dataGridView1.Rows.Clear();
+
+
+            List<Factura> facturas = controladorFacturas.ProcesarFacturasEnCarpeta(path);
+
+            dataGridView1.DataSource = facturas;
+        }
+
+        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            {
+                DataGridView dgv = sender as DataGridView;
+
+                string numero = (e.RowIndex + 1).ToString();
+
+                using (SolidBrush brush = new SolidBrush(dgv.RowHeadersDefaultCellStyle.ForeColor))
+                {
+                    e.Graphics.DrawString(
+                        numero,
+                        dgv.RowHeadersDefaultCellStyle.Font,
+                        brush,
+                        e.RowBounds.Left + 10,
+                        e.RowBounds.Top + 4
+                    );
+                }
             }
         }
     }

@@ -1,11 +1,8 @@
-﻿using System.Windows.Forms;
-
-namespace Control_de_Facturas.Servicios
+﻿namespace Control_de_Facturas.Servicios
 {
     internal class GestorArchivos
     {
-
-        public IEnumerable<string> ObtenerPDF(string path)
+               public IEnumerable<string> ObtenerPDF(string path)
         {
 
             return Directory.EnumerateFiles(path, "*.pdf", SearchOption.AllDirectories);
@@ -14,16 +11,15 @@ namespace Control_de_Facturas.Servicios
         public string LeerPDF(string path)
         {
             StringBuilder texto = new StringBuilder();
-            using(PdfDocument document = PdfDocument.Open(path))
+            using (PdfDocument document = PdfDocument.Open(path))
             {
                 foreach (Page page in document.GetPages())
                 {
                     texto.AppendLine(page.Text);
                 }
             }
+            
             return texto.ToString();
         }
-
-
     }
 }
