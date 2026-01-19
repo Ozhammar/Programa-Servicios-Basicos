@@ -29,19 +29,26 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            labelPorcentaje = new Label();
+            progressBar1 = new ProgressBar();
             btnLimpiarPath = new Button();
             label2 = new Label();
             btnSeleccionarCarpeta = new Button();
             txtCarpeta = new TextBox();
             label1 = new Label();
-            folderBrowserDialog1 = new FolderBrowserDialog();
             btnPruebas = new Button();
+            folderBrowserDialog1 = new FolderBrowserDialog();
+            button1 = new Button();
+            dataGridView1 = new DataGridView();
+            button2 = new Button();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(btnPruebas);
+            groupBox1.Controls.Add(labelPorcentaje);
+            groupBox1.Controls.Add(progressBar1);
             groupBox1.Controls.Add(btnLimpiarPath);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(btnSeleccionarCarpeta);
@@ -53,6 +60,22 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Selección de Archivos";
+            // 
+            // labelPorcentaje
+            // 
+            labelPorcentaje.AutoSize = true;
+            labelPorcentaje.Location = new Point(418, 110);
+            labelPorcentaje.Name = "labelPorcentaje";
+            labelPorcentaje.Size = new Size(23, 15);
+            labelPorcentaje.TabIndex = 8;
+            labelPorcentaje.Text = "0%";
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(6, 115);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(406, 10);
+            progressBar1.TabIndex = 7;
             // 
             // btnLimpiarPath
             // 
@@ -104,24 +127,63 @@
             // 
             btnPruebas.BackColor = Color.DarkGoldenrod;
             btnPruebas.ForeColor = SystemColors.ControlText;
-            btnPruebas.Location = new Point(377, 22);
+            btnPruebas.Location = new Point(492, 12);
             btnPruebas.Name = "btnPruebas";
-            btnPruebas.Size = new Size(75, 23);
+            btnPruebas.Size = new Size(182, 23);
             btnPruebas.TabIndex = 4;
-            btnPruebas.Text = "PRUEBAS";
+            btnPruebas.Text = "PRUEBA EXTRAER TEXTO";
             btnPruebas.UseVisualStyleBackColor = false;
             btnPruebas.Click += btnPruebas_Click;
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.DarkGoldenrod;
+            button1.ForeColor = SystemColors.ControlText;
+            button1.Location = new Point(492, 41);
+            button1.Name = "button1";
+            button1.Size = new Size(221, 23);
+            button1.TabIndex = 5;
+            button1.Text = "PRUEBA FACTURAS A UN DATAGRID";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(12, 182);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(1260, 150);
+            dataGridView1.TabIndex = 6;
+            dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
+            // 
+            // button2
+            // 
+            button2.BackColor = Color.DarkGoldenrod;
+            button2.ForeColor = SystemColors.ControlText;
+            button2.Location = new Point(492, 70);
+            button2.Name = "button2";
+            button2.Size = new Size(221, 23);
+            button2.TabIndex = 7;
+            button2.Text = "PRUEBAS EXCEL";
+            button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(494, 240);
+            ClientSize = new Size(1292, 465);
+            Controls.Add(button2);
+            Controls.Add(dataGridView1);
+            Controls.Add(button1);
+            Controls.Add(btnPruebas);
             Controls.Add(groupBox1);
             Name = "Form1";
             Text = "Form1";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
 
@@ -135,5 +197,10 @@
         private FolderBrowserDialog folderBrowserDialog1;
         private Button btnLimpiarPath;
         private Button btnPruebas;
+        private Button button1;
+        private DataGridView dataGridView1;
+        private Label labelPorcentaje;
+        private ProgressBar progressBar1;
+        private Button button2;
     }
 }

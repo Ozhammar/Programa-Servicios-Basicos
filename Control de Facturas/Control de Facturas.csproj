@@ -10,9 +10,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Plantillas\PLANTILLA EXCEL CAPITAL.xlsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Plantillas\PLANTILLA EXCEL CAPITAL.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="NPOI" Version="2.7.5" />
     <PackageReference Include="PdfPig" Version="0.1.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Configuración\" />
   </ItemGroup>
 
 </Project>

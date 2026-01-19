@@ -35,8 +35,8 @@ global using System.Collections.Generic;        // Colecciones genéricas (List,
 global using System.Linq;                       // Operadores LINQ
 global using System.Text;                       // Encodings y StringBuilder
 global using System.Windows.Forms;              // WinForms: controles y formularios
-global using System.IO;
-global using Control_de_Facturas;
+global using System.IO;                         // IO: archivos y directorios
+global using Control_de_Facturas;               // Espacio de nombres raíz del proyecto
 global using Control_de_Facturas.Models;        // Modelos de dominio del proyecto
 global using Control_de_Facturas.Processors;    // Lógica de procesamiento central
 global using Control_de_Facturas.Servicios;     // Servicios (persistencia, IO, etc.)
@@ -47,3 +47,4 @@ global using ClosedXML.Excel;                   // Lectura/escritura de Excel .x
 global using NPOI.HSSF.UserModel;               // NPOI: soporte para .xls (HSSF)
 global using NPOI.XSSF.UserModel;               // NPOI: soporte para .xlsx (XSSF)
 global using NPOI.SS.UserModel;                 // Interfaces comunes de NPOI (IWorkbook, ISheet)
+global using System.Globalization;              // Cultura e internacionalización
