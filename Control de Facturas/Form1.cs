@@ -39,6 +39,9 @@ namespace Control_de_Facturas
             path = "";
             txtCarpeta.Text = path;
             label2.Text = "Cantidad de archivos: 0.";
+            progressBar1.Value = 0;
+            labelPorcentaje.Text = "0%";
+            dataGridView1.DataSource = null;
         }
 
         private void btnPruebas_Click(object sender, EventArgs e)
@@ -71,14 +74,35 @@ namespace Control_de_Facturas
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
+            // Deshabilitar botón durante procesamiento
+            button1.Enabled = false;
+            btnSeleccionarCarpeta.Enabled = false;
+
             dataGridView1.Rows.Clear();
 
+            //DATOS BASICOS PARA EL PROGRESS BAR
+            progressBar1.Maximum = 100;
+            progressBar1.Value = 0;
+            
+            int totalPDFS_Porcentual = gestorArchivos.ObtenerPDF(path).Count();
+            var progreso = new Progress<int>(actual =>
+            {
+                int porcentaje = (actual*100)/ totalPDFS_Porcentual;
+                progressBar1.Value = porcentaje;
+                labelPorcentaje.Text = $"{porcentaje}%";
+                labelPorcentaje.Refresh();
+            });
 
-            List<Factura> facturas = controladorFacturas.ProcesarFacturasEnCarpeta(path);
+
+            List<Factura> facturas = await controladorFacturas.ProcesarFacturasEnCarpeta(path, progreso);
 
             dataGridView1.DataSource = facturas;
+
+            // Rehabilitar botones
+            button1.Enabled = true;
+            btnSeleccionarCarpeta.Enabled = true;
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -100,5 +124,7 @@ namespace Control_de_Facturas
                 }
             }
         }
+
+
     }
 }

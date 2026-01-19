@@ -23,26 +23,45 @@ namespace Control_de_Facturas.Servicios
             //procesadorMetrogas = new ProcesadorMetrogas();
             //procesadorTelecom = new ProcesadorTelecom();
         }
-        public List<Factura> ProcesarFacturasEnCarpeta(string carpeta)
+        public async Task<List<Factura>> ProcesarFacturasEnCarpeta(string carpeta, IProgress<int> progreso = null)
         {
             List<Factura> facturasProcesadas = new List<Factura>();
             IEnumerable<string> archivosPDF = gestorArchivos.ObtenerPDF(carpeta);
+
+            //CONTEO DE PDFS Y VALOR BASE PARA CONTEO DE PROGRESO
+            int total = archivosPDF.Count();
+            int actual = 0;
+
             foreach (string archivo in archivosPDF)
             {
                 try
                 {
-                    string textoPDF = gestorArchivos.LeerPDF(archivo);
-                    Factura factura = IdentificarYProcesarFactura(textoPDF, archivo);
-                    if (factura != null)
-                    {
-                        facturasProcesadas.Add(factura);
-                    }
+                    // Permitir que la UI se actualice
+                    //await Task.Yield();
+                    await Task.Run(() => {
+                        string textoPDF = gestorArchivos.LeerPDF(archivo);
+                        Factura factura = IdentificarYProcesarFactura(textoPDF, archivo);
+                        if (factura != null)
+                        {
+                            facturasProcesadas.Add(factura);
+                        }
+                    });
+
+                    
+                  
                 }
                 catch (Exception ex)
                 {
                     // Manejar errores de lectura o procesamiento
                     Console.WriteLine($"Error al procesar {archivo}: {ex.Message}");
+           
                 }
+                finally {
+                    actual++; // Incrementar aunque falle para que el progreso continúe
+                    progreso?.Report(actual);
+                }
+
+
             }
             return facturasProcesadas;
         }

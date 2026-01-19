@@ -11,14 +11,11 @@ namespace Control_de_Facturas.Processors
 
 
             factura.Empresa = "Edesur";
-
             factura.NumeroCliente = ExtraerNumeroCliente(textoPDF);
             factura.NumeroFactura = ExtraerNumeroFactura(textoPDF);
             factura.FechaEmision = ExtraerFechaEmision(textoPDF);
             factura.FechaVencimiento = ExtraerFechaVencimiento(textoPDF);
-
             factura.ImportePrimerVencimiento = ExtraerImportePrimerVencimiento(textoPDF);
-
             factura.ImporteSaldoAnterior = ExtraerImporteSaldoAnterior(textoPDF);
             factura.ImporteAbonable = factura.CalcularImporteAbonable();
             factura.CUIT = 30655116512; // CUIT fijo de Edesur

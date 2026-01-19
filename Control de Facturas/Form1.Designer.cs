@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            labelPorcentaje = new Label();
+            progressBar1 = new ProgressBar();
             btnLimpiarPath = new Button();
             label2 = new Label();
             btnSeleccionarCarpeta = new Button();
@@ -44,6 +46,8 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(labelPorcentaje);
+            groupBox1.Controls.Add(progressBar1);
             groupBox1.Controls.Add(btnLimpiarPath);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(btnSeleccionarCarpeta);
@@ -55,6 +59,22 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Selección de Archivos";
+            // 
+            // labelPorcentaje
+            // 
+            labelPorcentaje.AutoSize = true;
+            labelPorcentaje.Location = new Point(418, 110);
+            labelPorcentaje.Name = "labelPorcentaje";
+            labelPorcentaje.Size = new Size(23, 15);
+            labelPorcentaje.TabIndex = 8;
+            labelPorcentaje.Text = "0%";
+            // 
+            // progressBar1
+            // 
+            progressBar1.Location = new Point(6, 115);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(406, 10);
+            progressBar1.TabIndex = 7;
             // 
             // btnLimpiarPath
             // 
@@ -165,5 +185,7 @@
         private Button btnPruebas;
         private Button button1;
         private DataGridView dataGridView1;
+        private Label labelPorcentaje;
+        private ProgressBar progressBar1;
     }
 }
