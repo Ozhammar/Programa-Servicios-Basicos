@@ -23,6 +23,8 @@ namespace Control_de_Facturas.Servicios
             //procesadorMetrogas = new ProcesadorMetrogas();
             //procesadorTelecom = new ProcesadorTelecom();
         }
+
+        //METODO DE ENTRADA AL PROCESAMIENTO DE DATOS
         public async Task<List<Factura>> ProcesarFacturasEnCarpeta(string carpeta, IProgress<int> progreso = null)
         {
             List<Factura> facturasProcesadas = new List<Factura>();
@@ -46,22 +48,16 @@ namespace Control_de_Facturas.Servicios
                             facturasProcesadas.Add(factura);
                         }
                     });
-
-                    
-                  
                 }
                 catch (Exception ex)
                 {
                     // Manejar errores de lectura o procesamiento
                     Console.WriteLine($"Error al procesar {archivo}: {ex.Message}");
-           
                 }
                 finally {
                     actual++; // Incrementar aunque falle para que el progreso continúe
                     progreso?.Report(actual);
                 }
-
-
             }
             return facturasProcesadas;
         }

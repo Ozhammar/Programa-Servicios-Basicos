@@ -40,6 +40,7 @@
             folderBrowserDialog1 = new FolderBrowserDialog();
             button1 = new Button();
             dataGridView1 = new DataGridView();
+            button2 = new Button();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
@@ -126,7 +127,7 @@
             // 
             btnPruebas.BackColor = Color.DarkGoldenrod;
             btnPruebas.ForeColor = SystemColors.ControlText;
-            btnPruebas.Location = new Point(1016, 34);
+            btnPruebas.Location = new Point(492, 12);
             btnPruebas.Name = "btnPruebas";
             btnPruebas.Size = new Size(182, 23);
             btnPruebas.TabIndex = 4;
@@ -138,7 +139,7 @@
             // 
             button1.BackColor = Color.DarkGoldenrod;
             button1.ForeColor = SystemColors.ControlText;
-            button1.Location = new Point(1016, 63);
+            button1.Location = new Point(492, 41);
             button1.Name = "button1";
             button1.Size = new Size(221, 23);
             button1.TabIndex = 5;
@@ -156,11 +157,24 @@
             dataGridView1.TabIndex = 6;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
+            // button2
+            // 
+            button2.BackColor = Color.DarkGoldenrod;
+            button2.ForeColor = SystemColors.ControlText;
+            button2.Location = new Point(492, 70);
+            button2.Name = "button2";
+            button2.Size = new Size(221, 23);
+            button2.TabIndex = 7;
+            button2.Text = "PRUEBAS EXCEL";
+            button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1292, 465);
+            Controls.Add(button2);
             Controls.Add(dataGridView1);
             Controls.Add(button1);
             Controls.Add(btnPruebas);
@@ -187,5 +201,6 @@
         private DataGridView dataGridView1;
         private Label labelPorcentaje;
         private ProgressBar progressBar1;
+        private Button button2;
     }
 }

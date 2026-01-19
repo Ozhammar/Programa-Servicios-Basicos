@@ -5,6 +5,8 @@
         public Factura(
             string pEmpresa = "",
             string pNumeroCliente = "",
+            string pTipoFactura = "",
+            string pPuntoVenta = "",
             string pNumeroFactura = "",
             DateTime? pFechaEmision = null,
             DateTime? pFechaVencimiento = null,
@@ -23,6 +25,8 @@
         {
             Empresa = pEmpresa;
             NumeroCliente = pNumeroCliente;
+            TipoFactura = pTipoFactura;
+            PuntoVenta = pPuntoVenta;
             NumeroFactura = pNumeroFactura;
             FechaEmision = pFechaEmision ?? DateTime.MinValue;
             FechaVencimiento = pFechaVencimiento ?? DateTime.MinValue;
@@ -41,6 +45,9 @@
         }
         public string Empresa { get; set; }
         public string NumeroCliente { get; set; }
+        public string TipoFactura { get; set; }
+        public string PuntoVenta { get; set; }
+
         public string NumeroFactura { get; set; }
         public DateTime FechaEmision { get; set; }
         public DateTime FechaVencimiento { get; set; }

@@ -12,6 +12,8 @@ namespace Control_de_Facturas.Processors
 
             factura.Empresa = "Edesur";
             factura.NumeroCliente = ExtraerNumeroCliente(textoPDF);
+            factura.TipoFactura = ExtraerTipoFactura(textoPDF);
+            factura.PuntoVenta = ExtraerPuntoVenta(textoPDF);
             factura.NumeroFactura = ExtraerNumeroFactura(textoPDF);
             factura.FechaEmision = ExtraerFechaEmision(textoPDF);
             factura.FechaVencimiento = ExtraerFechaVencimiento(textoPDF);
@@ -129,19 +131,6 @@ namespace Control_de_Facturas.Processors
                     break;
                 }
             }
-
-            //Regex rImportePrimerVencimiento = new Regex(@"1\s*\D*\s*Vencimiento.*?TOTAL:\s*\$\s*([\d.,]+)\s*2\s*\D*\s*Vencimiento", RegexOptions.IgnoreCase | RegexOptions.Singleline);//@"1°\s*Vencimiento:.*?TOTAL:\s*\$([\d.,]+
-            //Match match = rImportePrimerVencimiento.Match(textoPDF);
-
-            //if (match.Success)
-            //{
-            //    string valor = match.Groups[1].Value;
-            //    valor = valor.Replace(",", "");
-            //    valor = valor.Replace(".", ",");
-
-            //    ImportePrimerVencimiento = decimal.Parse(valor);
-            //    //, NumberStyles.Number, new CultureInfo("es-AR")
-            //}
             return ImportePrimerVencimiento;
         }
 
@@ -193,16 +182,75 @@ namespace Control_de_Facturas.Processors
         {
             string numeroFactura = "";
 
-            Regex rNumeroFactura = new Regex(@"Servicios\s*P[úu]blicos\s*\(LSP\)\s*B\s*(\d{4}\-\d{8})", RegexOptions.IgnoreCase);
-            Match match = rNumeroFactura.Match(textoPDF);
-
-            if (match.Success)
+            List<Regex> patrones = new List<Regex>
             {
-                numeroFactura = match.Groups[1].Value;
+                new Regex(@"Servicios\s*P[úu]blicos\s*\(LSP\)\s*B\s*\d{4}\-(\d{8})", RegexOptions.IgnoreCase),
+                new Regex(@"Servicios\s*P[úu]blicos\s*\(LSP\)\s*A\s*\d{4}\-(\d{8})", RegexOptions.IgnoreCase)
+            };
+
+            foreach (Regex regex in patrones)
+            {
+                Match match = regex.Match(textoPDF);
+                if (match.Success)
+                {
+                    numeroFactura = match.Groups[1].Value;
+                    break;
+                }
+
             }
             return numeroFactura;
         }
+        private string ExtraerPuntoVenta(string textoPDF)
+        {
+            string puntoVenta = "";
 
+            List<Regex> patrones = new List<Regex>
+            {
+                new Regex(@"Servicios\s*P[úu]blicos\s*\(LSP\)\s*B\s*(\d{4})\-\d{8}", RegexOptions.IgnoreCase),
+                new Regex(@"Servicios\s*P[úu]blicos\s*\(LSP\)\s*A\s*(\d{4})\-\d{8}", RegexOptions.IgnoreCase)
+            };
+
+            foreach (Regex regex in patrones)
+            {
+                Match match = regex.Match(textoPDF);
+                if (match.Success)
+                {
+
+                    puntoVenta = match.Groups[1].Value;
+                    //BYPASS PARA FACTURA A 
+                    if(puntoVenta == "A")
+                    {
+                        puntoVenta = "B";
+                    }
+                    ///////////////////////
+                    break;
+                }
+            }
+            return puntoVenta;
+        }
+
+        private string ExtraerTipoFactura(string textoPDF)
+        {
+            string tipoFactura = "";
+
+            List<Regex> patrones = new List<Regex>
+            {
+                new Regex(@"Servicios\s*P[úu]blicos\s*\(LSP\)\s*(B)\s*\d{4}\-\d{8}", RegexOptions.IgnoreCase),
+                new Regex(@"Servicios\s*P[úu]blicos\s*\(LSP\)\s*(A)\s*\d{4}\-\d{8}", RegexOptions.IgnoreCase)
+            };
+
+            foreach (Regex regex in patrones)
+            {
+                Match match = regex.Match(textoPDF);
+                if (match.Success)
+                {
+                    tipoFactura = match.Groups[1].Value;
+                    break;
+                }
+            }
+
+            return tipoFactura;
+        }
         private string ExtraerNumeroCliente(string textoPDF)
         {
             // Lógica para extraer el número de cliente del texto del PDF
