@@ -41,8 +41,16 @@
             button1 = new Button();
             dataGridView1 = new DataGridView();
             button2 = new Button();
+            tabControl1 = new TabControl();
+            EDESUR = new TabPage();
+            button3 = new Button();
+            EDENOR = new TabPage();
+            button4 = new Button();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            tabControl1.SuspendLayout();
+            EDESUR.SuspendLayout();
+            EDENOR.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
@@ -151,9 +159,9 @@
             // 
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(12, 182);
+            dataGridView1.Location = new Point(12, 187);
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(1260, 150);
+            dataGridView1.Size = new Size(1309, 150);
             dataGridView1.TabIndex = 6;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
@@ -169,11 +177,61 @@
             button2.UseVisualStyleBackColor = false;
             button2.Click += button2_Click;
             // 
+            // tabControl1
+            // 
+            tabControl1.Controls.Add(EDESUR);
+            tabControl1.Controls.Add(EDENOR);
+            tabControl1.Location = new Point(728, 12);
+            tabControl1.Name = "tabControl1";
+            tabControl1.SelectedIndex = 0;
+            tabControl1.Size = new Size(593, 158);
+            tabControl1.TabIndex = 8;
+            // 
+            // EDESUR
+            // 
+            EDESUR.Controls.Add(button3);
+            EDESUR.Location = new Point(4, 24);
+            EDESUR.Name = "EDESUR";
+            EDESUR.Padding = new Padding(3);
+            EDESUR.Size = new Size(585, 130);
+            EDESUR.TabIndex = 0;
+            EDESUR.Text = "EDESUR";
+            EDESUR.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            button3.Location = new Point(17, 24);
+            button3.Name = "button3";
+            button3.Size = new Size(75, 23);
+            button3.TabIndex = 9;
+            button3.Text = "button3";
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // EDENOR
+            // 
+            EDENOR.Controls.Add(button4);
+            EDENOR.Location = new Point(4, 24);
+            EDENOR.Name = "EDENOR";
+            EDENOR.Size = new Size(585, 130);
+            EDENOR.TabIndex = 1;
+            EDENOR.Text = "EDENOR";
+            EDENOR.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            button4.Location = new Point(12, 16);
+            button4.Name = "button4";
+            button4.Size = new Size(75, 23);
+            button4.TabIndex = 0;
+            button4.Text = "button4";
+            button4.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1292, 465);
+            ClientSize = new Size(1333, 465);
+            Controls.Add(tabControl1);
             Controls.Add(button2);
             Controls.Add(dataGridView1);
             Controls.Add(button1);
@@ -184,6 +242,9 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            tabControl1.ResumeLayout(false);
+            EDESUR.ResumeLayout(false);
+            EDENOR.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -202,5 +263,10 @@
         private Label labelPorcentaje;
         private ProgressBar progressBar1;
         private Button button2;
+        private TabControl tabControl1;
+        private TabPage EDESUR;
+        private TabPage EDENOR;
+        private Button button3;
+        private Button button4;
     }
 }

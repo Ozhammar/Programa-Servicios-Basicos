@@ -4,13 +4,13 @@
     {
         public DatosBasicosExcel(
             int pSaf,
-            string pTipoComprobante,
-            int pEjercicio,
+            string pTipoComprobante, //FACGS
+            int pEjercicio, //AÑO
             string pTipoDocumento, //CUI
             string pTipoMoneda, //ARP
             int pCotizacion, // 1
             string pMedioPago, //RC
-            int pCantidadUnidades,
+            int pCantidadUnidades, //CANTIDAD DETALLE CPTE
             int pJurisdiccion,
             int pSubJurisdiccion,
             int pEntidad,

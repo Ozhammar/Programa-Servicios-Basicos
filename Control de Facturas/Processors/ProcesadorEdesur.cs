@@ -17,6 +17,7 @@ namespace Control_de_Facturas.Processors
             factura.NumeroFactura = ExtraerNumeroFactura(textoPDF);
             factura.FechaEmision = ExtraerFechaEmision(textoPDF);
             factura.FechaVencimiento = ExtraerFechaVencimiento(textoPDF);
+            factura.Periodo = factura.FechaVencimiento.ToString("MMMM");
             factura.ImportePrimerVencimiento = ExtraerImportePrimerVencimiento(textoPDF);
             factura.ImporteSaldoAnterior = ExtraerImporteSaldoAnterior(textoPDF);
             factura.ImporteAbonable = factura.CalcularImporteAbonable();
@@ -25,7 +26,7 @@ namespace Control_de_Facturas.Processors
             factura.CodigoCatalogo = "3.1.1-2390-1"; // Código de catálogo fijo para Edesur
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
-            factura.Archivo = rutaArchivo;
+            //factura.Archivo = rutaArchivo;
             factura.TipoServicio = "Electricidad";
             factura.Tarifa = ExtraerTarifa(textoPDF);
 
@@ -50,16 +51,24 @@ namespace Control_de_Facturas.Processors
         {
             decimal ImporteSaldoAnterior = 0;
 
-            Regex rImporteSaldoAnterior = new Regex(@"Saldo\s*anterior\s*([\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            Match match = rImporteSaldoAnterior.Match(textoPDF);
-
-            if (match.Success)
+            List<Regex> patrones = new List<Regex>
             {
-                string valor = match.Groups[1].Value;
-                valor = valor.Replace(",", "");
-                valor = valor.Replace(".", ",");
+                new Regex(@"Saldo\s*anterior\s*([\d.,]+-)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
+                new Regex(@"Saldo\s*anterior\s*(-[\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
+                new Regex(@"Saldo\s*anterior\s*([\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline)
+            };
 
-                ImporteSaldoAnterior = decimal.Parse(valor, NumberStyles.Number, new CultureInfo("es-AR"));
+            foreach (Regex regex in patrones)
+            {
+                Match match = regex.Match(textoPDF);
+                if (match.Success)
+                {
+                    string valor = match.Groups[1].Value;
+                    valor = valor.Replace(",", "");
+                    valor = valor.Replace(".", ",");
+                    ImporteSaldoAnterior = decimal.Parse(valor, NumberStyles.Number, new CultureInfo("es-AR"));
+                    break;
+                }
             }
             return ImporteSaldoAnterior;
 
@@ -217,12 +226,7 @@ namespace Control_de_Facturas.Processors
                 {
 
                     puntoVenta = match.Groups[1].Value;
-                    //BYPASS PARA FACTURA A 
-                    if(puntoVenta == "A")
-                    {
-                        puntoVenta = "B";
-                    }
-                    ///////////////////////
+
                     break;
                 }
             }
@@ -245,6 +249,12 @@ namespace Control_de_Facturas.Processors
                 if (match.Success)
                 {
                     tipoFactura = match.Groups[1].Value;
+                    //BYPASS PARA FACTURA A 
+                    if (tipoFactura == "A")
+                    {
+                        tipoFactura = "B";
+                    }
+                    ///////////////////////
                     break;
                 }
             }
@@ -272,7 +282,5 @@ namespace Control_de_Facturas.Processors
             }
             return numeroCliente;
         }
-
-
     }
 }
