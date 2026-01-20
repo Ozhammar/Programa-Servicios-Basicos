@@ -10,6 +10,7 @@
             string pNumeroFactura = "",
             DateTime? pFechaEmision = null,
             DateTime? pFechaVencimiento = null,
+            string pPeriodo = "",
             decimal pImportePrimerVencimiento = 0,
             decimal pImporteSaldoAnterior = 0,
             decimal pImporteAbonable = 0,
@@ -19,7 +20,7 @@
             string pTipoCodigoAutorizacion = "CESP",
             string pCodigoAutorizacion = "",
             DateTime? pVencimientoCodigoAutorizacion = null,
-            string pArchivo = "",
+            //string pArchivo = "",
             string pTipoServicio = "",
             string pTarifa = "")
         {
@@ -30,6 +31,7 @@
             NumeroFactura = pNumeroFactura;
             FechaEmision = pFechaEmision ?? DateTime.MinValue;
             FechaVencimiento = pFechaVencimiento ?? DateTime.MinValue;
+            Periodo = pPeriodo;
             ImportePrimerVencimiento = pImportePrimerVencimiento;
             ImporteSaldoAnterior = pImporteSaldoAnterior;
             ImporteAbonable = pImporteAbonable;
@@ -39,7 +41,7 @@
             TipoCodigoAutorizacion = pTipoCodigoAutorizacion;
             CodigoAutorizacion = pCodigoAutorizacion;
             VencimientoCodigoAutorizacion = pVencimientoCodigoAutorizacion ?? DateTime.MinValue;
-            Archivo = pArchivo;
+            //Archivo = pArchivo;
             TipoServicio = pTipoServicio;
             Tarifa = pTarifa;
         }
@@ -51,6 +53,7 @@
         public string NumeroFactura { get; set; }
         public DateTime FechaEmision { get; set; }
         public DateTime FechaVencimiento { get; set; }
+        public string Periodo { get; set; }
         public decimal ImportePrimerVencimiento { get; set; }
         public decimal ImporteSaldoAnterior { get; set; }
         public decimal ImporteAbonable { get; set; }
@@ -60,7 +63,7 @@
         public string TipoCodigoAutorizacion { get; set; }
         public string CodigoAutorizacion { get; set; }
         public DateTime VencimientoCodigoAutorizacion { get; set; }
-        public string Archivo { get; set; }
+        //public string Archivo { get; set; }
         public string TipoServicio { get; set; }
         public string Tarifa { get; set; } // Solo para Edesur
 
@@ -76,14 +79,12 @@
         // Método adicional útil para calcular importe abonable
         public decimal CalcularImporteAbonable()
         {
-            decimal ImporteAbonable = ImportePrimerVencimiento - ImporteSaldoAnterior;
+            decimal ImporteAbonable = ImportePrimerVencimiento - Math.Abs(ImporteSaldoAnterior);
             if (ImporteAbonable < 0)
             {
                 ImporteAbonable = 0;
             }
-
             return ImporteAbonable;
-
         }
     }
 }

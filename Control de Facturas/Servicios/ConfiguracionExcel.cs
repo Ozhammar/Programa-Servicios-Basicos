@@ -24,10 +24,11 @@ namespace Control_de_Facturas.Servicios
                 pMoneda: 0,
                 pPex: 0,
                 pBapin: 0,
-                pCodigoGanancias: "G01",
-                pCodigoIVA: "IVA21",
-                pCodigoSUSS: "SUSS",
-                pPorcentualIVA: 21
+                pCodigoGanancias: "EXE",
+                pCodigoIVA: "EXE",
+                pCodigoSUSS: "EXE",
+                pPorcentualIVA: 0
+
             );
         }
     }
