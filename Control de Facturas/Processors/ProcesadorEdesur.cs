@@ -10,7 +10,7 @@ namespace Control_de_Facturas.Processors
 
 
 
-            factura.Empresa = "Edesur";
+            factura.Empresa = "EDESUR";
             factura.NumeroCliente = ExtraerNumeroCliente(textoPDF);
             factura.TipoFactura = ExtraerTipoFactura(textoPDF);
             factura.PuntoVenta = ExtraerPuntoVenta(textoPDF);
@@ -27,7 +27,7 @@ namespace Control_de_Facturas.Processors
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
             //factura.Archivo = rutaArchivo;
-            factura.TipoServicio = "Electricidad";
+            factura.TipoServicio = "ELECTRICIDAD";
             factura.Tarifa = ExtraerTarifa(textoPDF);
 
             return factura;

@@ -31,6 +31,14 @@ namespace Control_de_Facturas.Servicios
             }
         }
 
+        private void cargarPlantillaSidif(out XLWorkbook libro, out IXLWorksheet cabecera, out IXLWorksheet detalle_cabecera, out IXLWorksheet detalle_financiero)
+        {
+            libro = this.abrirPlantilla();
+            cabecera = libro.Worksheet("Cabecera-Cpte");
+            detalle_cabecera = libro.Worksheet("Detalle Cpte FacGS");
+            detalle_financiero = libro.Worksheet("Detalle Presupuestario  FACGS");
+        }
+
         #region PlantillaExportadores
         /*public void generarLiquidacionEdesur(List<Factura> facturasCache)
         {
@@ -129,11 +137,9 @@ namespace Control_de_Facturas.Servicios
 
         public void generarLiquidacionGeneral(List<Factura> facturasCache)
         {
-            XLWorkbook libro = this.abrirPlantilla();
-
-            IXLWorksheet cabecera = libro.Worksheet("Cabecera-Cpte");
-            IXLWorksheet detalle_cabecera = libro.Worksheet("Detalle Cpte FacGS");
-            IXLWorksheet detalle_financiero = libro.Worksheet("Detalle Presupuestario  FACGS");
+            XLWorkbook libro;
+            IXLWorksheet cabecera, detalle_cabecera, detalle_financiero;
+            cargarPlantillaSidif(out libro, out cabecera, out detalle_cabecera, out detalle_financiero);
 
             DatosBasicosExcel config = ConfiguracionExcel.CrearPorDefecto();
             List<Factura> facturas = facturasCache;
@@ -213,11 +219,11 @@ namespace Control_de_Facturas.Servicios
                 detalle_financiero.Cell($"AJ{filaDetalleCabecera}").Value = factura.ImporteAbonable;
                 filaDetalleFinanciero++;
             }
-
             libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturas[0].Empresa}Exportadas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
 
-        
+
+
     }
 }

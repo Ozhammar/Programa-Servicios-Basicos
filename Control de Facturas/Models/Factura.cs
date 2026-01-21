@@ -1,4 +1,6 @@
-﻿namespace Control_de_Facturas.Models
+﻿using NPOI.SS.Formula.Functions;
+
+namespace Control_de_Facturas.Models
 {
     public class Factura
     {
@@ -85,6 +87,34 @@
                 ImporteAbonable = 0;
             }
             return ImporteAbonable;
+        }
+
+        public string obtenerAtributo(string atributo)
+        {
+            return atributo switch
+            {
+                "empresa" => Empresa,
+                "numerocliente" => NumeroCliente,
+                "tipofactura" => TipoFactura,
+                "puntoventa" => PuntoVenta,
+                "numerofactura" => NumeroFactura,
+                "fechaemision" => FechaEmision.ToString("yyyy-MM-dd"),
+                "fechavencimiento" => FechaVencimiento.ToString("yyyy-MM-dd"),
+                "periodo" => Periodo,
+                "importeprimervencimiento" => ImportePrimerVencimiento.ToString("F2"),
+                "importesaldoanterior" => ImporteSaldoAnterior.ToString("F2"),
+                "importeabonable" => ImporteAbonable.ToString("F2"),
+                "cuit" => CUIT.ToString(),
+                "objetogasto" => ObjetoGasto,
+                "codigocatalogo" => CodigoCatalogo,
+                "tipocodigoautorizacion" => TipoCodigoAutorizacion,
+                "codigoautorizacion" => CodigoAutorizacion,
+                "vencimientocodigoautorizacion" => VencimientoCodigoAutorizacion.ToString("yyyy-MM-dd"),
+                //"archivo" => Archivo,
+                "tiposervicio" => TipoServicio,
+                "tarifa" => Tarifa,
+                _ => "",
+            };
         }
     }
 }

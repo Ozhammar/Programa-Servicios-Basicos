@@ -82,5 +82,66 @@ namespace Control_de_Facturas.Servicios
                 return null;
             }
         }
+
+        public void ModificarFactura(
+    List<Factura> facturasCache,
+    int index,
+    string atributo,
+    object valorNuevo
+)
+        {
+            Factura factura = facturasCache[index];
+
+            var propiedad = typeof(Factura).GetProperty(atributo);
+            if (propiedad == null)
+                throw new Exception("Propiedad inexistente");
+
+            try
+            {
+                object valorConvertido;
+
+                if (propiedad.PropertyType == typeof(DateTime))
+                {
+                    if (!DateTime.TryParse(valorNuevo?.ToString(), out DateTime fecha))
+                        throw new Exception("Formato de fecha inválido");
+
+                    valorConvertido = fecha;
+                }
+                else if (propiedad.PropertyType == typeof(int))
+                {
+                    if (!int.TryParse(valorNuevo?.ToString(), out int entero))
+                        throw new Exception("Formato numérico inválido");
+
+                    valorConvertido = entero;
+                }
+                else if (propiedad.PropertyType == typeof(decimal))
+                {
+                    if (!decimal.TryParse(valorNuevo?.ToString(), out decimal dec))
+                        throw new Exception("Formato decimal inválido");
+
+                    valorConvertido = dec;
+                }
+                else
+                {
+                    // string u otros tipos simples
+                    valorConvertido = Convert.ChangeType(
+                        valorNuevo,
+                        propiedad.PropertyType
+                    );
+                }
+
+                propiedad.SetValue(factura, valorConvertido);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(
+                    $"Error al modificar '{atributo}': {ex.Message}"
+                );
+            }
+        }
+
+
+
+
     }
 }
