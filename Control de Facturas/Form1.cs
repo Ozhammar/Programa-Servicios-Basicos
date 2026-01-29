@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.VisualBasic;
 
 namespace Control_de_Facturas
@@ -10,7 +9,6 @@ namespace Control_de_Facturas
         private GestorArchivos gestorArchivos;
         private ControladorFacturas controladorFacturas;
         private ExportadorExcel exportadorExcel;
-
         private List<Factura> facturasCache = null;
 
         public Form1()
@@ -21,27 +19,38 @@ namespace Control_de_Facturas
             exportadorExcel = new ExportadorExcel();
         }
 
-        #region Eventos y Métodos de la Interfaz de Usuario
-        //FUNCION PARA PONER EL NUMERO DE ROW EN EL DATAGRID
-        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        #region Eventos de Carga y Configuración
+        private void Form1_Load(object sender, EventArgs e)
         {
+            tabControl1.Enabled = false;
+            btnValidar.Enabled = false;
+            btnEjecutar.Enabled = false;
+        }
+        #endregion
+
+        #region Eventos de Selección y Limpieza
+        private void btnSeleccionarCarpeta_Click(object sender, EventArgs e)
+        {
+            try
             {
-                DataGridView dgv = sender as DataGridView;
-
-                string numero = (e.RowIndex + 1).ToString();
-
-                using (SolidBrush brush = new SolidBrush(dgv.RowHeadersDefaultCellStyle.ForeColor))
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    e.Graphics.DrawString(
-                        numero,
-                        dgv.RowHeadersDefaultCellStyle.Font,
-                        brush,
-                        e.RowBounds.Left + 10,
-                        e.RowBounds.Top + 4
-                    );
+                    path = folderBrowserDialog1.SelectedPath;
                 }
+                txtCarpeta.Text = path;
+
+                if (Directory.Exists(path))
+                {
+                    label2.Text = $"Cantidad de archivos: {gestorArchivos.ObtenerPDF(path).Count()}.";
+                }
+                btnEjecutar.Enabled = true;
+            }
+            catch
+            {
+                MessageBox.Show("No se ha seleccionado ninguna carpeta.");
             }
         }
+
         private void btnLimpiarPath_Click(object sender, EventArgs e)
         {
             path = "";
@@ -58,81 +67,17 @@ namespace Control_de_Facturas
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = true;
         }
-        //FUNCION PARA EXTRACCION DE TEXTO DEL PRIMER PDF DE LA CARPETA SELECCIONADA
-        private void btnPruebas_Click(object sender, EventArgs e)
-        {
-            if (path != "")
-            {
-                var pdfs = gestorArchivos.ObtenerPDF(path);
 
-                string primerPdf = pdfs.FirstOrDefault();
-
-                if (primerPdf == null)
-                {
-                    MessageBox.Show("No se encontraron PDFs.");
-                    return;
-                }
-
-                string texto = gestorArchivos.LeerPDF(primerPdf);
-                //MessageBox.Show(texto);
-
-                string path_archivo_prueba = @"..\..\..\prueba.txt";
-                using (StreamWriter sw = new StreamWriter(path_archivo_prueba, true))
-                {
-                    sw.WriteLine(texto);
-                }
-            }
-            else
-            {
-                MessageBox.Show("No se ha seleccionado ninguna carpeta.");
-
-            }
-        }
-        private async void button2_Click(object sender, EventArgs e)
+        private async Task comprobacionCache()
         {
             if (facturasCache == null || facturasCache.Count == 0)
             {
                 await cargaFacturas();
             }
-            exportadorExcel.generarLiquidacionGeneral(facturasCache);
-        }
-        private void btnSalir_Click(object sender, EventArgs e)
-        {
-            Close();
         }
         #endregion
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            tabControl1.Enabled = false;
-            btnValidar.Enabled = false;
-            btnEjecutar.Enabled = false;
-        }
-
-        private void btnSeleccionarCarpeta_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //folderBrowserDialog1.Description = "Seleccione la carpeta que contiene las facturas"; //AGREGA UNA DESCRIPCION EN LA VENTANA DE SELECCIÓN
-                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    path = folderBrowserDialog1.SelectedPath;
-                }
-                txtCarpeta.Text = path;
-
-                // Contar archivos PDF en la carpeta seleccionada
-                if (Directory.Exists(path))
-                {
-                    label2.Text = $"Cantidad de archivos: {(gestorArchivos.ObtenerPDF(path)).Count().ToString()}.";
-                }
-                btnEjecutar.Enabled = true;
-            }
-            catch
-            {
-                MessageBox.Show("No se ha seleccionado ninguna carpeta.");
-            }
-        }
-
+        #region Procesamiento de Facturas
         private async void btnEjecutar_Click(object sender, EventArgs e)
         {
             progressBar1.Visible = true;
@@ -149,7 +94,7 @@ namespace Control_de_Facturas
         {
             try
             {
-                // Deshabilitar botón durante procesamiento
+                // Deshabilitar controles durante procesamiento
                 button1.Enabled = false;
                 btnLimpiarPath.Enabled = false;
                 btnSeleccionarCarpeta.Enabled = false;
@@ -157,23 +102,24 @@ namespace Control_de_Facturas
 
                 dataGridView1.Rows.Clear();
 
-                //DATOS BASICOS PARA EL PROGRESS BAR
+                // Configurar progress bar
                 progressBar1.Maximum = 100;
                 progressBar1.Value = 0;
 
-                int totalPDFS_Porcentual = gestorArchivos.ObtenerPDF(path).Count();
+                int totalPDFS = gestorArchivos.ObtenerPDF(path).Count();
                 var progreso = new Progress<int>(actual =>
                 {
-                    int porcentaje = (actual * 100) / totalPDFS_Porcentual;
+                    int porcentaje = (actual * 100) / totalPDFS;
                     progressBar1.Value = porcentaje;
                     labelPorcentaje.Text = $"{porcentaje}%";
                     labelPorcentaje.Refresh();
                 });
 
+                // Procesar facturas
                 facturasCache = await controladorFacturas.ProcesarFacturasEnCarpeta(path, progreso);
                 dataGridView1.DataSource = facturasCache;
 
-                // Rehabilitar botones
+                // Rehabilitar controles
                 button1.Enabled = true;
                 btnLimpiarPath.Enabled = true;
                 btnEjecutar.Enabled = true;
@@ -181,64 +127,175 @@ namespace Control_de_Facturas
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error durante el procesamiento: {ex.Message}");
-                // Rehabilitar botones
+                MessageBox.Show($"Error durante el procesamiento: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Rehabilitar controles
                 button1.Enabled = true;
                 btnEjecutar.Enabled = true;
                 btnLimpiarPath.Enabled = true;
                 btnSeleccionarCarpeta.Enabled = true;
             }
-        }
-
-        private async void btnLiqIEdesur_Click(object sender, EventArgs e)
-        {
-            
-            if (facturasCache == null || facturasCache.Count == 0)
-            {
-                await cargaFacturas();
-            }
-
-            List<Factura> facturasAuxEdesur = new List<Factura>();
-            foreach (Factura factura in facturasCache)
-            {
-                if(factura.Empresa == "EDESUR")
-                {
-
-                    facturasAuxEdesur.Add(factura);
-                }
-            }
-            facturasAuxEdesur.OrderBy(f => f.NumeroCliente);
-            exportadorExcel.generarLiquidacionGeneral(facturasAuxEdesur);
-            
         }
 
         private void btnValidar_Click(object sender, EventArgs e)
         {
             tabControl1.Enabled = true;
         }
+        #endregion
 
+        #region Exportación de Liquidaciones
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            exportadorExcel.generarLiquidacionIndividual(facturasCache, "1.0.0.1.0");
+        }
+
+        //LIQUIDACION EDESUR INDIVIDUAL
+        private async void btnLiqIEdesur_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+
+            // LÓGICA MOVIDA AL CONTROLADOR
+            List<Factura> facturasEdesur = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDESUR");
+
+            if (facturasEdesur.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            exportadorExcel.generarLiquidacionIndividual(facturasEdesur, "1.0.0.1.0");
+        }
+
+
+        //LIQUIDACION EDESUR UNIFICADA
+        private async void btnLiqUEdesur_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasEdesur = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDESUR");
+
+            if (facturasEdesur.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            exportadorExcel.generarLiquidacionUnificada(facturasEdesur, "1.0.0.1.0");
+
+
+        }
+        #endregion
+
+        #region Modificación de Datos
         private void modificarDatosFactura(object sender, DataGridViewCellEventArgs e)
         {
-            int fila = e.RowIndex; //INDIVIDUALIZA ROW
-            var celda = dataGridView1.Rows[fila].Cells[e.ColumnIndex].Value;//CONTENIDO DE LA COLUMNA
-            string atributo = dataGridView1.Columns[e.ColumnIndex].DataPropertyName; //NOMBRE DE LA COLUMNA
-            var celda_vieja = dataGridView1.Rows[fila].Cells[e.ColumnIndex].Value;
+            // Validar que no sea el header
+            if (e.RowIndex < 0) return;
 
-            object valorNuevo = Interaction.InputBox($"Modificado {atributo}: {celda}. \n\n Ingrese el nuevo valor. ","Modificador de Datos",$"{ celda}");
-    
-            if (valorNuevo == "") { 
-                valorNuevo = celda_vieja;
-                dataGridView1.DataSource = facturasCache; 
+            int fila = e.RowIndex;
+            int columna = e.ColumnIndex;
+
+            var celdaActual = dataGridView1.Rows[fila].Cells[columna].Value;
+            string atributo = dataGridView1.Columns[columna].DataPropertyName;
+
+            // InputBox para obtener nuevo valor
+            object valorNuevoStr = Interaction.InputBox(
+                $"Modificando '{atributo}'\n\nValor actual: {celdaActual}\n\nIngrese el nuevo valor:",
+                "Modificador de Datos",
+                celdaActual?.ToString() ?? ""
+            );
+
+            // Si cancela o deja vacío, no hacer nada
+            if (string.IsNullOrWhiteSpace(valorNuevoStr.ToString()))
+            {
+                return;
             }
+
             try
             {
-                controladorFacturas.ModificarFactura(facturasCache, fila, atributo, valorNuevo);
+                controladorFacturas.ModificarFactura(facturasCache, fila, atributo, valorNuevoStr);
+
+                // Refrescar DataGridView
+                dataGridView1.DataSource = null;
                 dataGridView1.DataSource = facturasCache;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al modificar la factura: {ex.Message}");
+                MessageBox.Show($"Error al modificar la factura:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
+
+        #region Utilidades UI
+
+
+        private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridView dgv = sender as DataGridView;
+            string numero = (e.RowIndex + 1).ToString();
+
+            using (SolidBrush brush = new SolidBrush(dgv.RowHeadersDefaultCellStyle.ForeColor))
+            {
+                e.Graphics.DrawString(
+                    numero,
+                    dgv.RowHeadersDefaultCellStyle.Font,
+                    brush,
+                    e.RowBounds.Left + 10,
+                    e.RowBounds.Top + 4
+                );
+            }
+        }
+
+        private void btnPruebas_Click(object sender, EventArgs e)
+        {
+            if (path != "")
+            {
+                var pdfs = gestorArchivos.ObtenerPDF(path);
+                string primerPdf = pdfs.FirstOrDefault();
+
+                if (primerPdf == null)
+                {
+                    MessageBox.Show("No se encontraron PDFs.");
+                    return;
+                }
+
+                string texto = gestorArchivos.LeerPDF(primerPdf);
+                string path_archivo_prueba = @"..\..\..\prueba.txt";
+
+                using (StreamWriter sw = new StreamWriter(path_archivo_prueba, true))
+                {
+                    sw.WriteLine(texto);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se ha seleccionado ninguna carpeta.");
+            }
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+        #endregion
+
+
+        private async void btnLiqIEdenor_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+
+            // LÓGICA MOVIDA AL CONTROLADOR
+            List<Factura> facturasEdenor = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDENOR");
+
+            if (facturasEdenor.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDENOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+           // exportadorExcel.generarLiquidacionIndividual(facturasEdenor);
+        }
+
+
     }
 }

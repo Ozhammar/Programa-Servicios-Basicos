@@ -16,6 +16,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorEdesur procesadorEdesur;
         //private readonly ProcesadorMetrogas procesadorMetrogas;
         //private readonly ProcesadorTelecom procesadorTelecom;
+
         public ControladorFacturas()
         {
             gestorArchivos = new GestorArchivos();
@@ -24,13 +25,13 @@ namespace Control_de_Facturas.Servicios
             //procesadorTelecom = new ProcesadorTelecom();
         }
 
+        #region Procesamiento de PDFs
         //METODO DE ENTRADA AL PROCESAMIENTO DE DATOS
         public async Task<List<Factura>> ProcesarFacturasEnCarpeta(string carpeta, IProgress<int> progreso = null)
         {
             List<Factura> facturasProcesadas = new List<Factura>();
             IEnumerable<string> archivosPDF = gestorArchivos.ObtenerPDF(carpeta);
 
-            //CONTEO DE PDFS Y VALOR BASE PARA CONTEO DE PROGRESO
             int total = archivosPDF.Count();
             int actual = 0;
 
@@ -38,9 +39,8 @@ namespace Control_de_Facturas.Servicios
             {
                 try
                 {
-                    // Permitir que la UI se actualice
-                    //await Task.Yield();
-                    await Task.Run(() => {
+                    await Task.Run(() =>
+                    {
                         string textoPDF = gestorArchivos.LeerPDF(archivo);
                         Factura factura = IdentificarYProcesarFactura(textoPDF, archivo);
                         if (factura != null)
@@ -51,11 +51,11 @@ namespace Control_de_Facturas.Servicios
                 }
                 catch (Exception ex)
                 {
-                    // Manejar errores de lectura o procesamiento
                     Console.WriteLine($"Error al procesar {archivo}: {ex.Message}");
                 }
-                finally {
-                    actual++; // Incrementar aunque falle para que el progreso continúe
+                finally
+                {
+                    actual++;
                     progreso?.Report(actual);
                 }
             }
@@ -78,70 +78,138 @@ namespace Control_de_Facturas.Servicios
             }
             else
             {
-                //Console.WriteLine($"Empresa no identificada en el archivo: {rutaArchivo}");
                 return null;
             }
         }
+        #endregion
 
-        public void ModificarFactura(
-    List<Factura> facturasCache,
-    int index,
-    string atributo,
-    object valorNuevo
-)
+        #region Filtrado y Ordenamiento
+        public List<Factura> FiltrarPorEmpresa(List<Factura> facturas, string empresa)
         {
-            Factura factura = facturasCache[index];
+            if (facturas == null || facturas.Count == 0)
+                return new List<Factura>();
 
-            var propiedad = typeof(Factura).GetProperty(atributo);
-            if (propiedad == null)
-                throw new Exception("Propiedad inexistente");
+            var facturasFiltradas = facturas
+                .Where(f => f.Empresa.Equals(empresa, StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
-            try
+            return OrdenarSegunEmpresa(facturasFiltradas, empresa);
+        }
+
+        private List<Factura> OrdenarSegunEmpresa(List<Factura> facturas, string empresa)
+        {
+            switch (empresa.ToUpper())
             {
-                object valorConvertido;
+                case "EDESUR":
+                    return facturas
+                        .OrderByDescending(f => f.Tarifa)
+                        .ThenBy(f => f.NumeroCliente)
+                        .ToList();
+                case "EDENOR":
+                    return facturas
+                        .OrderByDescending(f => f.Tarifa)
+                        .ThenBy(f => f.NumeroCliente)
+                        .ToList();
 
-                if (propiedad.PropertyType == typeof(DateTime))
-                {
-                    if (!DateTime.TryParse(valorNuevo?.ToString(), out DateTime fecha))
-                        throw new Exception("Formato de fecha inválido");
+                case "METROGAS":
+                    return facturas
+                        .OrderBy(f => f.FechaEmision)
+                        .ThenBy(f => f.NumeroCliente)
+                        .ToList();
 
-                    valorConvertido = fecha;
-                }
-                else if (propiedad.PropertyType == typeof(int))
-                {
-                    if (!int.TryParse(valorNuevo?.ToString(), out int entero))
-                        throw new Exception("Formato numérico inválido");
+                case "TELECOM":
+                    return facturas
+                        .OrderBy(f => f.NumeroCliente)
+                        .ToList();
 
-                    valorConvertido = entero;
-                }
-                else if (propiedad.PropertyType == typeof(decimal))
-                {
-                    if (!decimal.TryParse(valorNuevo?.ToString(), out decimal dec))
-                        throw new Exception("Formato decimal inválido");
-
-                    valorConvertido = dec;
-                }
-                else
-                {
-                    // string u otros tipos simples
-                    valorConvertido = Convert.ChangeType(
-                        valorNuevo,
-                        propiedad.PropertyType
-                    );
-                }
-
-                propiedad.SetValue(factura, valorConvertido);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(
-                    $"Error al modificar '{atributo}': {ex.Message}"
-                );
+                default:
+                    // Orden por defecto: por fecha de emisión
+                    return facturas
+                        .OrderBy(f => f.FechaEmision)
+                        .ToList();
             }
         }
 
+        public List<string> ObtenerEmpresas(List<Factura> facturas)
+        {
+            if (facturas == null || facturas.Count == 0)
+                return new List<string>();
 
+            return facturas 
+                .Select(f => f.Empresa)
+                .Distinct()
+                .OrderBy(e => e)
+                .ToList();
+        }
+        #endregion
 
+        #region Modificación de Facturas
+        public void ModificarFactura(List<Factura> facturas, int indice, string nombrePropiedad, object valorNuevo)
+        {
+            if (facturas == null || indice < 0 || indice >= facturas.Count)
+                throw new ArgumentException("Índice de factura inválido");
 
+            var factura = facturas[indice];
+            var propiedad = typeof(Factura).GetProperty(nombrePropiedad);
+
+            if (propiedad == null)
+                throw new ArgumentException($"La propiedad '{nombrePropiedad}' no existe en Factura");
+
+            if (!propiedad.CanWrite)
+                throw new InvalidOperationException($"La propiedad '{nombrePropiedad}' es de solo lectura");
+
+            try
+            {
+                // Convertir el valor al tipo correcto
+                object valorConvertido = ConvertirValor(valorNuevo, propiedad.PropertyType);
+                propiedad.SetValue(factura, valorConvertido);
+
+                // Si se modifica ImportePrimerVencimiento o ImporteSaldoAnterior, recalcular ImporteAbonable
+                if (nombrePropiedad == "ImportePrimerVencimiento" || nombrePropiedad == "ImporteSaldoAnterior")
+                {
+                    factura.ImporteAbonable = factura.CalcularImporteAbonable();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidCastException($"No se pudo convertir '{valorNuevo}' al tipo {propiedad.PropertyType.Name}: {ex.Message}");
+            }
+        }
+
+        private object ConvertirValor(object valor, Type tipoDestino)
+        {
+            if (valor == null)
+                return tipoDestino.IsValueType ? Activator.CreateInstance(tipoDestino) : null;
+
+            string valorStr = valor.ToString();
+
+            if (tipoDestino == typeof(string))
+                return valorStr;
+
+            if (tipoDestino == typeof(int))
+                return int.Parse(valorStr);
+
+            if (tipoDestino == typeof(long))
+                return long.Parse(valorStr);
+
+            if (tipoDestino == typeof(decimal))
+                return decimal.Parse(valorStr, System.Globalization.CultureInfo.InvariantCulture);
+
+            if (tipoDestino == typeof(DateTime))
+                return DateTime.Parse(valorStr);
+
+            if (tipoDestino == typeof(bool))
+                return bool.Parse(valorStr);
+
+            // Para tipos nullable
+            if (Nullable.GetUnderlyingType(tipoDestino) != null)
+            {
+                Type tipoBase = Nullable.GetUnderlyingType(tipoDestino);
+                return ConvertirValor(valor, tipoBase);
+            }
+
+            return Convert.ChangeType(valor, tipoDestino);
+        }
+        #endregion
     }
 }

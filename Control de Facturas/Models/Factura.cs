@@ -22,7 +22,7 @@ namespace Control_de_Facturas.Models
             string pTipoCodigoAutorizacion = "CESP",
             string pCodigoAutorizacion = "",
             DateTime? pVencimientoCodigoAutorizacion = null,
-            //string pArchivo = "",
+            string pArchivo = "",
             string pTipoServicio = "",
             string pTarifa = "")
         {
@@ -43,7 +43,7 @@ namespace Control_de_Facturas.Models
             TipoCodigoAutorizacion = pTipoCodigoAutorizacion;
             CodigoAutorizacion = pCodigoAutorizacion;
             VencimientoCodigoAutorizacion = pVencimientoCodigoAutorizacion ?? DateTime.MinValue;
-            //Archivo = pArchivo;
+            Archivo = pArchivo;
             TipoServicio = pTipoServicio;
             Tarifa = pTarifa;
         }
@@ -65,7 +65,7 @@ namespace Control_de_Facturas.Models
         public string TipoCodigoAutorizacion { get; set; }
         public string CodigoAutorizacion { get; set; }
         public DateTime VencimientoCodigoAutorizacion { get; set; }
-        //public string Archivo { get; set; }
+        public string Archivo { get; set; }
         public string TipoServicio { get; set; }
         public string Tarifa { get; set; } // Solo para Edesur
 
@@ -110,7 +110,7 @@ namespace Control_de_Facturas.Models
                 "tipocodigoautorizacion" => TipoCodigoAutorizacion,
                 "codigoautorizacion" => CodigoAutorizacion,
                 "vencimientocodigoautorizacion" => VencimientoCodigoAutorizacion.ToString("yyyy-MM-dd"),
-                //"archivo" => Archivo,
+                "archivo" => Archivo,
                 "tiposervicio" => TipoServicio,
                 "tarifa" => Tarifa,
                 _ => "",

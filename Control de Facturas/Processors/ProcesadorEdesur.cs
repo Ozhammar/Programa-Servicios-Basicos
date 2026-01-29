@@ -4,11 +4,16 @@ namespace Control_de_Facturas.Processors
 {
     public class ProcesadorEdesur
     {
+        private readonly GestorArchivos gestorArchivos;
+
+        public ProcesadorEdesur()
+        {
+            gestorArchivos = new GestorArchivos();
+
+        }
         public Factura ProcesarFactura(string textoPDF, string rutaArchivo)
         {
             Factura factura = new Factura();
-
-
 
             factura.Empresa = "EDESUR";
             factura.NumeroCliente = ExtraerNumeroCliente(textoPDF);
@@ -17,7 +22,7 @@ namespace Control_de_Facturas.Processors
             factura.NumeroFactura = ExtraerNumeroFactura(textoPDF);
             factura.FechaEmision = ExtraerFechaEmision(textoPDF);
             factura.FechaVencimiento = ExtraerFechaVencimiento(textoPDF);
-            factura.Periodo = factura.FechaVencimiento.ToString("MMMM");
+            factura.Periodo = ExtraerPeriodo(textoPDF);
             factura.ImportePrimerVencimiento = ExtraerImportePrimerVencimiento(textoPDF);
             factura.ImporteSaldoAnterior = ExtraerImporteSaldoAnterior(textoPDF);
             factura.ImporteAbonable = factura.CalcularImporteAbonable();
@@ -26,11 +31,32 @@ namespace Control_de_Facturas.Processors
             factura.CodigoCatalogo = "3.1.1-2390-1"; // Código de catálogo fijo para Edesur
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
-            //factura.Archivo = rutaArchivo;
+            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
             factura.TipoServicio = "ELECTRICIDAD";
             factura.Tarifa = ExtraerTarifa(textoPDF);
 
             return factura;
+        }
+
+        private string ExtraerPeriodo(string textoPDF)
+        {
+            string periodo = "";
+            List<Regex> patrones = new List<Regex>
+           {
+                new Regex(@"estado\s*actual\s*al\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                new Regex(@"Actual\s*Consumo\s*Importe\s*Estados\s*al\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase)
+           };
+
+            foreach (Regex regex in patrones)
+            {
+                Match match = regex.Match(textoPDF);
+                if (match.Success)
+                {
+                    DateTime fecha = Convert.ToDateTime(match.Groups[1].Value);
+                    periodo = fecha.ToString("MMMM").ToUpper();
+                }
+            }
+            return periodo;
         }
 
         private string ExtraerTarifa(string textoPDF)

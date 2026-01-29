@@ -40,7 +40,6 @@
             btnPruebas = new Button();
             folderBrowserDialog1 = new FolderBrowserDialog();
             button1 = new Button();
-            dataGridView1 = new DataGridView();
             button2 = new Button();
             tabControl1 = new TabControl();
             tabCapital = new TabPage();
@@ -68,8 +67,9 @@
             tabTest = new TabPage();
             btnSalir = new Button();
             btnValidar = new Button();
+            groupBox5 = new GroupBox();
+            dataGridView1 = new DataGridView();
             groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             tabControl1.SuspendLayout();
             tabCapital.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -77,6 +77,8 @@
             groupBox2.SuspendLayout();
             tabEdenor.SuspendLayout();
             tabTest.SuspendLayout();
+            groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
@@ -192,21 +194,6 @@
             button1.TabIndex = 5;
             button1.Text = "PRUEBA FACTURAS A UN DATAGRID";
             button1.UseVisualStyleBackColor = false;
-            // 
-            // dataGridView1
-            // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(12, 187);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(1027, 239);
-            dataGridView1.TabIndex = 6;
-            dataGridView1.CellDoubleClick += modificarDatosFactura;
-            dataGridView1.CellValueChanged += modificarDatosFactura;
-            dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
             // button2
             // 
@@ -338,6 +325,7 @@
             btnLiqIEdenor.TabIndex = 10;
             btnLiqIEdenor.Text = "Individual";
             btnLiqIEdenor.UseVisualStyleBackColor = true;
+            btnLiqIEdenor.Click += btnLiqIEdenor_Click;
             // 
             // btnInformeEdenor
             // 
@@ -379,6 +367,7 @@
             btnLiqUEdesur.TabIndex = 11;
             btnLiqUEdesur.Text = "Unificada";
             btnLiqUEdesur.UseVisualStyleBackColor = true;
+            btnLiqUEdesur.Click += btnLiqUEdesur_Click;
             // 
             // btnLiqIEdesur
             // 
@@ -473,7 +462,8 @@
             // 
             // btnSalir
             // 
-            btnSalir.Location = new Point(963, 432);
+            btnSalir.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnSalir.Location = new Point(964, 457);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(75, 23);
             btnSalir.TabIndex = 9;
@@ -483,8 +473,9 @@
             // 
             // btnValidar
             // 
+            btnValidar.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnValidar.BackColor = SystemColors.Control;
-            btnValidar.Location = new Point(882, 432);
+            btnValidar.Location = new Point(940, 246);
             btnValidar.Name = "btnValidar";
             btnValidar.Size = new Size(75, 23);
             btnValidar.TabIndex = 10;
@@ -492,22 +483,46 @@
             btnValidar.UseVisualStyleBackColor = false;
             btnValidar.Click += btnValidar_Click;
             // 
+            // groupBox5
+            // 
+            groupBox5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox5.Controls.Add(dataGridView1);
+            groupBox5.Controls.Add(btnValidar);
+            groupBox5.Location = new Point(12, 172);
+            groupBox5.Name = "groupBox5";
+            groupBox5.Size = new Size(1023, 279);
+            groupBox5.TabIndex = 11;
+            groupBox5.TabStop = false;
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(6, 14);
+            dataGridView1.MultiSelect = false;
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.Size = new Size(1009, 220);
+            dataGridView1.TabIndex = 7;
+            dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1050, 465);
-            Controls.Add(btnValidar);
-            Controls.Add(btnSalir);
+            ClientSize = new Size(1046, 492);
+            Controls.Add(groupBox5);
             Controls.Add(tabControl1);
-            Controls.Add(dataGridView1);
+            Controls.Add(btnSalir);
             Controls.Add(groupBox1);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             tabControl1.ResumeLayout(false);
             tabCapital.ResumeLayout(false);
             groupBox4.ResumeLayout(false);
@@ -518,6 +533,8 @@
             groupBox2.PerformLayout();
             tabEdenor.ResumeLayout(false);
             tabTest.ResumeLayout(false);
+            groupBox5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
 
@@ -532,7 +549,6 @@
         private Button btnLimpiarPath;
         private Button btnPruebas;
         private Button button1;
-        private DataGridView dataGridView1;
         private Label labelPorcentaje;
         private ProgressBar progressBar1;
         private Button button2;
@@ -563,5 +579,7 @@
         private Button btnInformeEdesur;
         private Button btnSalir;
         private Button btnValidar;
+        private GroupBox groupBox5;
+        private DataGridView dataGridView1;
     }
 }
