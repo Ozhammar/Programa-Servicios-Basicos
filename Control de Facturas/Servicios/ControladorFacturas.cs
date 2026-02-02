@@ -135,7 +135,7 @@ namespace Control_de_Facturas.Servicios
             if (facturas == null || facturas.Count == 0)
                 return new List<string>();
 
-            return facturas 
+            return facturas
                 .Select(f => f.Empresa)
                 .Distinct()
                 .OrderBy(e => e)
@@ -179,27 +179,56 @@ namespace Control_de_Facturas.Servicios
         private object ConvertirValor(object valor, Type tipoDestino)
         {
             if (valor == null)
+            {
                 return tipoDestino.IsValueType ? Activator.CreateInstance(tipoDestino) : null;
+            }
 
             string valorStr = valor.ToString();
 
             if (tipoDestino == typeof(string))
+            {
                 return valorStr;
+            }
 
             if (tipoDestino == typeof(int))
+            {
                 return int.Parse(valorStr);
+            }
 
             if (tipoDestino == typeof(long))
+            {
                 return long.Parse(valorStr);
+            }
 
             if (tipoDestino == typeof(decimal))
-                return decimal.Parse(valorStr, System.Globalization.CultureInfo.InvariantCulture);
+            {
+                decimal resultado;
+
+                // Cultura explícita española (coma decimal)
+                var culturaAR = CultureInfo.GetCultureInfo("es-AR");
+
+                if (decimal.TryParse(valorStr, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, culturaAR, out resultado))
+                {
+                    return resultado;
+                }
+
+                // Soporte punto decimal (Invariant)
+                if (decimal.TryParse(valorStr, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out resultado))
+                {
+                    return resultado;
+                }
+
+            }
 
             if (tipoDestino == typeof(DateTime))
+            {
                 return DateTime.Parse(valorStr);
+            }
 
             if (tipoDestino == typeof(bool))
+            {
                 return bool.Parse(valorStr);
+            }
 
             // Para tipos nullable
             if (Nullable.GetUnderlyingType(tipoDestino) != null)

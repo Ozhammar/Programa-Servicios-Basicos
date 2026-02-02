@@ -507,6 +507,7 @@
             dataGridView1.ReadOnly = true;
             dataGridView1.Size = new Size(1009, 220);
             dataGridView1.TabIndex = 7;
+            dataGridView1.CellContentClick += modificarDatosFactura;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
             // Form1

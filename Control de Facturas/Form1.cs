@@ -118,6 +118,7 @@ namespace Control_de_Facturas
                 // Procesar facturas
                 facturasCache = await controladorFacturas.ProcesarFacturasEnCarpeta(path, progreso);
                 dataGridView1.DataSource = facturasCache;
+                FormatearColumnasDecimales();
 
                 // Rehabilitar controles
                 button1.Enabled = true;
@@ -218,6 +219,7 @@ namespace Control_de_Facturas
                 // Refrescar DataGridView
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = facturasCache;
+                FormatearColumnasDecimales();
             }
             catch (Exception ex)
             {
@@ -243,6 +245,24 @@ namespace Control_de_Facturas
                     e.RowBounds.Left + 10,
                     e.RowBounds.Top + 4
                 );
+            }
+        }
+        private void FormatearColumnasDecimales()
+        {
+            string[] columnasDecimales =
+            {
+        "ImportePrimerVencimiento",
+        "ImporteSaldoAnterior",
+        "ImporteAbonable"
+    };
+
+            foreach (string col in columnasDecimales)
+            {
+                if (dataGridView1.Columns.Contains(col))
+                {
+                    dataGridView1.Columns[col].DefaultCellStyle.Format = "N2";
+                    dataGridView1.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
             }
         }
 
