@@ -82,10 +82,10 @@ namespace Control_de_Facturas.Models
         public decimal CalcularImporteAbonable()
         {
             decimal ImporteAbonable = ImportePrimerVencimiento - Math.Abs(ImporteSaldoAnterior);
-            //if (ImporteAbonable < 0)
-            //{
-            //    ImporteAbonable = 0;
-            //}
+            if (ImporteAbonable < 0)
+            {
+                ImporteAbonable = 0;
+            }
             return ImporteAbonable;
         }
 

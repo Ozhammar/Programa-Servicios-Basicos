@@ -266,6 +266,7 @@
             btnLiqUInterior.TabIndex = 11;
             btnLiqUInterior.Text = "Unificada";
             btnLiqUInterior.UseVisualStyleBackColor = true;
+            btnLiqUInterior.Click += btnLiqUInterior_Click;
             // 
             // btnLiqIInterior
             // 
@@ -275,6 +276,7 @@
             btnLiqIInterior.TabIndex = 10;
             btnLiqIInterior.Text = "Individual";
             btnLiqIInterior.UseVisualStyleBackColor = true;
+            btnLiqIInterior.Click += btnLiqIInterior_Click;
             // 
             // btnInformeInterior
             // 
@@ -316,6 +318,7 @@
             btnLiqUEdenor.TabIndex = 11;
             btnLiqUEdenor.Text = "Unificada";
             btnLiqUEdenor.UseVisualStyleBackColor = true;
+            btnLiqUEdenor.Click += btnLiqUEdenor_Click;
             // 
             // btnLiqIEdenor
             // 
@@ -335,6 +338,7 @@
             btnInformeEdenor.TabIndex = 9;
             btnInformeEdenor.Text = "Informe";
             btnInformeEdenor.UseVisualStyleBackColor = true;
+            btnInformeEdenor.Click += btnInformeEdenor_Click;
             // 
             // groupBox2
             // 
@@ -387,6 +391,7 @@
             btnInformeEdesur.TabIndex = 9;
             btnInformeEdesur.Text = "Informe";
             btnInformeEdesur.UseVisualStyleBackColor = true;
+            btnInformeEdesur.Click += btnInformeEdesur_Click;
             // 
             // tabEdenor
             // 

@@ -231,7 +231,7 @@ namespace Control_de_Facturas.Servicios
                 detalle_financiero.Cell($"AJ{filaDetalleFinanciero}").Value = factura.ImporteAbonable;
                 ++filaDetalleFinanciero;
             }
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturas[0].Empresa}Exportadas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturas[0].Empresa}_Exportadas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
 
@@ -351,7 +351,7 @@ namespace Control_de_Facturas.Servicios
                 factura = null;
             }
 
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturasPorPeriodo[0][0].Empresa}Exportadas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturasPorPeriodo[0][0].Empresa}_Exportadas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
     }

@@ -144,12 +144,8 @@ namespace Control_de_Facturas
         }
         #endregion
 
-        #region Exportación de Liquidaciones
-        private async void button2_Click(object sender, EventArgs e)
-        {
-            await comprobacionCache();
-            exportadorExcel.generarLiquidacionIndividual(facturasCache, "1.0.0.1.0");
-        }
+        #region Exportación de Liquidaciones Electricidad
+
 
         //LIQUIDACION EDESUR INDIVIDUAL
         private async void btnLiqIEdesur_Click(object sender, EventArgs e)
@@ -180,11 +176,59 @@ namespace Control_de_Facturas
                 MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-
             exportadorExcel.generarLiquidacionUnificada(facturasEdesur, "1.0.0.1.0");
-
+        }
+        //INFORME EDESUR
+        private void btnInformeEdesur_Click(object sender, EventArgs e)
+        {
 
         }
+        //INFORME EDENOR
+        private void btnInformeEdenor_Click(object sender, EventArgs e)
+        {
+
+        }
+        //LIQUIDACION EDENOR INDIVIDUAL
+        private async void btnLiqIEdenor_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+
+            // LÓGICA MOVIDA AL CONTROLADOR
+            List<Factura> facturasEdenor = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDENOR");
+
+            if (facturasEdenor.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDENOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            exportadorExcel.generarLiquidacionIndividual(facturasEdenor, "1.0.0.1.0");
+        }
+        //LIQUIDACION EDENOR UNIFICADA
+        private async void btnLiqUEdenor_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasEdenor = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDENOR");
+
+            if (facturasEdenor.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionUnificada(facturasEdenor, "1.0.0.1.0");
+        }
+
+        #region Electricidad_Interior
+        private void btnLiqIInterior_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnLiqUInterior_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
         #endregion
 
         #region Modificación de Datos
@@ -297,25 +341,22 @@ namespace Control_de_Facturas
         {
             Close();
         }
+
+        //BOTON PRUEBAS EXCEL TESTING
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            exportadorExcel.generarLiquidacionIndividual(facturasCache, "1.0.0.1.0");
+        }
         #endregion
 
 
-        private async void btnLiqIEdenor_Click(object sender, EventArgs e)
-        {
-            await comprobacionCache();
-
-            // LÓGICA MOVIDA AL CONTROLADOR
-            List<Factura> facturasEdenor = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDENOR");
-
-            if (facturasEdenor.Count == 0)
-            {
-                MessageBox.Show("No se encontraron facturas de EDENOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-           // exportadorExcel.generarLiquidacionIndividual(facturasEdenor);
-        }
 
 
+
+
+
+
+ 
     }
 }
