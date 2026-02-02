@@ -144,8 +144,8 @@ namespace Control_de_Facturas
         }
         #endregion
 
-        #region Exportación de Liquidaciones Electricidad
-
+        #region Exportación de Liquidaciones 
+        #region ELECTRICIDAD
 
         //LIQUIDACION EDESUR INDIVIDUAL
         private async void btnLiqIEdesur_Click(object sender, EventArgs e)
@@ -218,7 +218,7 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionUnificada(facturasEdenor, "1.0.0.1.0");
         }
 
-        #region Electricidad_Interior
+
         private void btnLiqIInterior_Click(object sender, EventArgs e)
         {
 
@@ -228,6 +228,35 @@ namespace Control_de_Facturas
         {
 
         }
+        #endregion
+
+        #region AGUA
+        private async void btnLiqIAYSA_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasAysa = controladorFacturas.FiltrarPorEmpresa(facturasCache, "AYSA");
+
+            if (facturasAysa.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionIndividual(facturasAysa, "1.0.0.1.0");
+        }
+
+        private async void btnLiqUAYSA_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasAysa = controladorFacturas.FiltrarPorEmpresa(facturasCache, "AYSA");
+
+            if (facturasAysa.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionUnificada(facturasAysa, "1.0.0.1.0");
+        }
+
         #endregion
         #endregion
 
@@ -357,6 +386,12 @@ namespace Control_de_Facturas
 
 
 
- 
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }
