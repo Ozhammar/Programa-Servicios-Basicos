@@ -1,4 +1,6 @@
-﻿namespace Control_de_Facturas.Models
+﻿using NPOI.SS.Formula.Functions;
+
+namespace Control_de_Facturas.Models
 {
     public class Factura
     {
@@ -20,7 +22,7 @@
             string pTipoCodigoAutorizacion = "CESP",
             string pCodigoAutorizacion = "",
             DateTime? pVencimientoCodigoAutorizacion = null,
-            //string pArchivo = "",
+            string pArchivo = "",
             string pTipoServicio = "",
             string pTarifa = "")
         {
@@ -41,7 +43,7 @@
             TipoCodigoAutorizacion = pTipoCodigoAutorizacion;
             CodigoAutorizacion = pCodigoAutorizacion;
             VencimientoCodigoAutorizacion = pVencimientoCodigoAutorizacion ?? DateTime.MinValue;
-            //Archivo = pArchivo;
+            Archivo = pArchivo;
             TipoServicio = pTipoServicio;
             Tarifa = pTarifa;
         }
@@ -63,7 +65,7 @@
         public string TipoCodigoAutorizacion { get; set; }
         public string CodigoAutorizacion { get; set; }
         public DateTime VencimientoCodigoAutorizacion { get; set; }
-        //public string Archivo { get; set; }
+        public string Archivo { get; set; }
         public string TipoServicio { get; set; }
         public string Tarifa { get; set; } // Solo para Edesur
 
@@ -85,6 +87,34 @@
                 ImporteAbonable = 0;
             }
             return ImporteAbonable;
+        }
+
+        public string obtenerAtributo(string atributo)
+        {
+            return atributo switch
+            {
+                "empresa" => Empresa,
+                "numerocliente" => NumeroCliente,
+                "tipofactura" => TipoFactura,
+                "puntoventa" => PuntoVenta,
+                "numerofactura" => NumeroFactura,
+                "fechaemision" => FechaEmision.ToString("yyyy-MM-dd"),
+                "fechavencimiento" => FechaVencimiento.ToString("yyyy-MM-dd"),
+                "periodo" => Periodo,
+                "importeprimervencimiento" => ImportePrimerVencimiento.ToString("F2"),
+                "importesaldoanterior" => ImporteSaldoAnterior.ToString("F2"),
+                "importeabonable" => ImporteAbonable.ToString("F2"),
+                "cuit" => CUIT.ToString(),
+                "objetogasto" => ObjetoGasto,
+                "codigocatalogo" => CodigoCatalogo,
+                "tipocodigoautorizacion" => TipoCodigoAutorizacion,
+                "codigoautorizacion" => CodigoAutorizacion,
+                "vencimientocodigoautorizacion" => VencimientoCodigoAutorizacion.ToString("yyyy-MM-dd"),
+                "archivo" => Archivo,
+                "tiposervicio" => TipoServicio,
+                "tarifa" => Tarifa,
+                _ => "",
+            };
         }
     }
 }

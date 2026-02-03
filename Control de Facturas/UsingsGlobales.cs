@@ -48,3 +48,4 @@ global using NPOI.HSSF.UserModel;               // NPOI: soporte para .xls (HSSF
 global using NPOI.XSSF.UserModel;               // NPOI: soporte para .xlsx (XSSF)
 global using NPOI.SS.UserModel;                 // Interfaces comunes de NPOI (IWorkbook, ISheet)
 global using System.Globalization;              // Cultura e internacionalización
+global using Microsoft.VisualBasic;
