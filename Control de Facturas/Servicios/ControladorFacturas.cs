@@ -16,7 +16,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorEdesur procesadorEdesur;
         private readonly ProcesadorEdenor procesadorEdenor;
         private readonly ProcesadorAYSA procesadorAYSA;
-        //private readonly ProcesadorMetrogas procesadorMetrogas;
+        private readonly ProcesadorMetrogasGrandes procesadorMetrogasGrandes;
         //private readonly ProcesadorTelecom procesadorTelecom;
 
         public ControladorFacturas()
@@ -25,7 +25,7 @@ namespace Control_de_Facturas.Servicios
             procesadorEdesur = new ProcesadorEdesur();
             procesadorEdenor = new ProcesadorEdenor();
             procesadorAYSA = new ProcesadorAYSA();
-            //procesadorMetrogas = new ProcesadorMetrogas();
+            procesadorMetrogasGrandes = new ProcesadorMetrogasGrandes();
             //procesadorTelecom = new ProcesadorTelecom();
         }
 
@@ -80,6 +80,10 @@ namespace Control_de_Facturas.Servicios
             {
                 return procesadorAYSA.ProcesarFactura(textoPDF, rutaArchivo);
             }
+            else if (textoPDF.Contains("Metrogas Grandes Clientes") || textoPDF.Contains("grandesclientes"))
+            {
+                return procesadorMetrogasGrandes.ProcesarFactura(textoPDF, rutaArchivo);
+            }
             else if (textoPDF.Contains("Telecom"))
             {
                 return null;// procesadorTelecom.ProcesarFactura(textoPDF, rutaArchivo);
@@ -119,10 +123,10 @@ namespace Control_de_Facturas.Servicios
                         .ThenBy(f => f.NumeroCliente)
                         .ToList();
 
-                case "METROGAS":
+                case "METROGAS GRANDES CLIENTES":
                     return facturas
-                        .OrderBy(f => f.FechaEmision)
-                        .ThenBy(f => f.NumeroCliente)
+                        .OrderBy(f => f.NumeroCliente)
+                        .ThenBy(f => f.FechaEmision)
                         .ToList();
 
                 case "TELECOM":

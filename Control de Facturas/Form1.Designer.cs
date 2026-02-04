@@ -77,13 +77,13 @@
             button17 = new Button();
             groupBox9 = new GroupBox();
             label9 = new Label();
-            button12 = new Button();
-            button13 = new Button();
+            btnLiqUMetrogasG = new Button();
+            btnLiqIMetrogasG = new Button();
             button14 = new Button();
             groupBox8 = new GroupBox();
             label8 = new Label();
-            button9 = new Button();
-            button10 = new Button();
+            btnLiqUMetrogasC = new Button();
+            btnLiqIMetrogasC = new Button();
             button11 = new Button();
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
@@ -603,8 +603,8 @@
             // groupBox9
             // 
             groupBox9.Controls.Add(label9);
-            groupBox9.Controls.Add(button12);
-            groupBox9.Controls.Add(button13);
+            groupBox9.Controls.Add(btnLiqUMetrogasG);
+            groupBox9.Controls.Add(btnLiqIMetrogasG);
             groupBox9.Controls.Add(button14);
             groupBox9.Location = new Point(182, 6);
             groupBox9.Name = "groupBox9";
@@ -623,23 +623,25 @@
             label9.TabIndex = 10;
             label9.Text = "Liquidaciones";
             // 
-            // button12
+            // btnLiqUMetrogasG
             // 
-            button12.Location = new Point(89, 71);
-            button12.Name = "button12";
-            button12.Size = new Size(75, 23);
-            button12.TabIndex = 11;
-            button12.Text = "Unificada";
-            button12.UseVisualStyleBackColor = true;
+            btnLiqUMetrogasG.Location = new Point(89, 71);
+            btnLiqUMetrogasG.Name = "btnLiqUMetrogasG";
+            btnLiqUMetrogasG.Size = new Size(75, 23);
+            btnLiqUMetrogasG.TabIndex = 11;
+            btnLiqUMetrogasG.Text = "Unificada";
+            btnLiqUMetrogasG.UseVisualStyleBackColor = true;
+            btnLiqUMetrogasG.Click += btnLiqUMetrogasG_Click;
             // 
-            // button13
+            // btnLiqIMetrogasG
             // 
-            button13.Location = new Point(6, 71);
-            button13.Name = "button13";
-            button13.Size = new Size(75, 23);
-            button13.TabIndex = 10;
-            button13.Text = "Individual";
-            button13.UseVisualStyleBackColor = true;
+            btnLiqIMetrogasG.Location = new Point(6, 71);
+            btnLiqIMetrogasG.Name = "btnLiqIMetrogasG";
+            btnLiqIMetrogasG.Size = new Size(75, 23);
+            btnLiqIMetrogasG.TabIndex = 10;
+            btnLiqIMetrogasG.Text = "Individual";
+            btnLiqIMetrogasG.UseVisualStyleBackColor = true;
+            btnLiqIMetrogasG.Click += btnLiqIMetrogasG_Click;
             // 
             // button14
             // 
@@ -653,8 +655,8 @@
             // groupBox8
             // 
             groupBox8.Controls.Add(label8);
-            groupBox8.Controls.Add(button9);
-            groupBox8.Controls.Add(button10);
+            groupBox8.Controls.Add(btnLiqUMetrogasC);
+            groupBox8.Controls.Add(btnLiqIMetrogasC);
             groupBox8.Controls.Add(button11);
             groupBox8.Location = new Point(6, 6);
             groupBox8.Name = "groupBox8";
@@ -673,23 +675,23 @@
             label8.TabIndex = 10;
             label8.Text = "Liquidaciones";
             // 
-            // button9
+            // btnLiqUMetrogasC
             // 
-            button9.Location = new Point(89, 71);
-            button9.Name = "button9";
-            button9.Size = new Size(75, 23);
-            button9.TabIndex = 11;
-            button9.Text = "Unificada";
-            button9.UseVisualStyleBackColor = true;
+            btnLiqUMetrogasC.Location = new Point(89, 71);
+            btnLiqUMetrogasC.Name = "btnLiqUMetrogasC";
+            btnLiqUMetrogasC.Size = new Size(75, 23);
+            btnLiqUMetrogasC.TabIndex = 11;
+            btnLiqUMetrogasC.Text = "Unificada";
+            btnLiqUMetrogasC.UseVisualStyleBackColor = true;
             // 
-            // button10
+            // btnLiqIMetrogasC
             // 
-            button10.Location = new Point(6, 71);
-            button10.Name = "button10";
-            button10.Size = new Size(75, 23);
-            button10.TabIndex = 10;
-            button10.Text = "Individual";
-            button10.UseVisualStyleBackColor = true;
+            btnLiqIMetrogasC.Location = new Point(6, 71);
+            btnLiqIMetrogasC.Name = "btnLiqIMetrogasC";
+            btnLiqIMetrogasC.Size = new Size(75, 23);
+            btnLiqIMetrogasC.TabIndex = 10;
+            btnLiqIMetrogasC.Text = "Individual";
+            btnLiqIMetrogasC.UseVisualStyleBackColor = true;
             // 
             // button11
             // 
@@ -892,13 +894,13 @@
         private Button button17;
         private GroupBox groupBox9;
         private Label label9;
-        private Button button12;
-        private Button button13;
+        private Button btnLiqUMetrogasG;
+        private Button btnLiqIMetrogasG;
         private Button button14;
         private GroupBox groupBox8;
         private Label label8;
-        private Button button9;
-        private Button button10;
+        private Button btnLiqUMetrogasC;
+        private Button btnLiqIMetrogasC;
         private Button button11;
     }
 }

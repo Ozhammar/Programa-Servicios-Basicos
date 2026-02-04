@@ -238,7 +238,7 @@ namespace Control_de_Facturas
 
             if (facturasAysa.Count == 0)
             {
-                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se encontraron facturas de AYSA", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             exportadorExcel.generarLiquidacionIndividual(facturasAysa, "1.0.0.1.0");
@@ -251,13 +251,44 @@ namespace Control_de_Facturas
 
             if (facturasAysa.Count == 0)
             {
-                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se encontraron facturas de AYSA", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             exportadorExcel.generarLiquidacionUnificada(facturasAysa, "1.0.0.1.0");
         }
 
         #endregion
+
+        #region GAS
+        private async void btnLiqIMetrogasG_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasG = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS GRANDES CLIENTES");
+
+            if (facturasMetrogasG.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS GRANDES CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionIndividual(facturasMetrogasG, "1.0.0.1.0");
+        }
+
+        private async void btnLiqUMetrogasG_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasG = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS GRANDES CLIENTES");
+
+            if (facturasMetrogasG.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS GRANDES CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionUnificada(facturasMetrogasG, "1.0.0.1.0");
+        }
+
+        #endregion
+
+        /// <summary>        /// /////
         #endregion
 
         #region Modificación de Datos
