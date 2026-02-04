@@ -17,6 +17,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorEdenor procesadorEdenor;
         private readonly ProcesadorAYSA procesadorAYSA;
         private readonly ProcesadorMetrogasGrandes procesadorMetrogasGrandes;
+        private readonly ProcesadorMetrogasPequenios procesadorMetrogasPequenios;
         //private readonly ProcesadorTelecom procesadorTelecom;
 
         public ControladorFacturas()
@@ -26,6 +27,7 @@ namespace Control_de_Facturas.Servicios
             procesadorEdenor = new ProcesadorEdenor();
             procesadorAYSA = new ProcesadorAYSA();
             procesadorMetrogasGrandes = new ProcesadorMetrogasGrandes();
+            procesadorMetrogasPequenios = new ProcesadorMetrogasPequenios();
             //procesadorTelecom = new ProcesadorTelecom();
         }
 
@@ -84,6 +86,11 @@ namespace Control_de_Facturas.Servicios
             {
                 return procesadorMetrogasGrandes.ProcesarFactura(textoPDF, rutaArchivo);
             }
+            else if (textoPDF.Contains("30-65786367-6") && !textoPDF.Contains("grandesclientes"))
+            {
+                return procesadorMetrogasPequenios.ProcesarFactura(textoPDF, rutaArchivo);
+            }
+
             else if (textoPDF.Contains("Telecom"))
             {
                 return null;// procesadorTelecom.ProcesarFactura(textoPDF, rutaArchivo);

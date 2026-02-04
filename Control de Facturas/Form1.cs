@@ -286,6 +286,32 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasG, "1.0.0.1.0");
         }
 
+        private async void btnLiqIMetrogasC_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasP = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS PEQUEÑOS CLIENTES");
+
+            if (facturasMetrogasP.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS PEQUEÑOS CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionIndividual(facturasMetrogasP, "1.0.0.1.0");
+        }
+
+        private async void btnLiqUMetrogasC_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasP = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS PEQUEÑOS CLIENTES");
+
+            if (facturasMetrogasP.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS PEQUEÑOS CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionUnificada(facturasMetrogasP, "1.0.0.1.0");
+        }
+
         #endregion
 
         /// <summary>        /// /////

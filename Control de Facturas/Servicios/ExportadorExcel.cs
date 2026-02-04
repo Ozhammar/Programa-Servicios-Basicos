@@ -172,7 +172,7 @@ namespace Control_de_Facturas.Servicios
                 cabecera.Cell($"AA{filaCabecera}").Value = config.Cotizacion;
                 cabecera.Cell($"AB{filaCabecera}").Value = config.MedioPago;
                 cabecera.Cell($"AF{filaCabecera}").Value = factura.FechaEmision.ToString("dd/MM/yyyy");
-                cabecera.Cell($"AG{filaCabecera}").Value = factura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy");
+                cabecera.Cell($"AG{filaCabecera}").Value = factura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy"); //SE AÑADO DE FORMA GENERICA LA FECHA DE EMISION MAS 3 DIAS, COMO PARAMETRO DE DESARROLLO BASE. LA IDEA ES QUE EN CASO DE TENER QUE SER MODIFICADA, SE LO HAGA DESDE EL ARCHIVO EXPORTADO
                 cabecera.Cell($"AI{filaCabecera}").Value = factura.ImporteAbonable;
                 cabecera.Cell($"AJ{filaCabecera}").Value = $"SERVICIO DE {factura.TipoServicio} CORRESPONDIENTE A {factura.Empresa}, CLIENTE: {factura.NumeroCliente} - FACTURA N°: {factura.PuntoVenta}-{factura.NumeroFactura} - PERIODO: {factura.Periodo} - IMPORTE: $ {factura.ImporteAbonable}";
                 ++filaCabecera;

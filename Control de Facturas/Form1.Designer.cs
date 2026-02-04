@@ -683,6 +683,7 @@
             btnLiqUMetrogasC.TabIndex = 11;
             btnLiqUMetrogasC.Text = "Unificada";
             btnLiqUMetrogasC.UseVisualStyleBackColor = true;
+            btnLiqUMetrogasC.Click += btnLiqUMetrogasC_Click;
             // 
             // btnLiqIMetrogasC
             // 
@@ -692,6 +693,7 @@
             btnLiqIMetrogasC.TabIndex = 10;
             btnLiqIMetrogasC.Text = "Individual";
             btnLiqIMetrogasC.UseVisualStyleBackColor = true;
+            btnLiqIMetrogasC.Click += btnLiqIMetrogasC_Click;
             // 
             // button11
             // 
