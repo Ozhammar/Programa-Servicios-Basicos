@@ -46,7 +46,7 @@ namespace Control_de_Facturas.Processors
             string periodo = "";
             List<Regex> patrones = new List<Regex>
             {
-                 new Regex(@"Per[íi]odo\s*de\s*facturaci[oó]n\s*cargos\s*fijos\s+\d{2}/\d{2}/\d{4}\s*AL\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                 new Regex(@"Per[íi]odo\s*de\s*facturaci[oó]n\s*cargos\s*fijos\s*\d{2}/\d{2}/\d{4}\s*AL\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
             };
 
             foreach (Regex regex in patrones)
@@ -117,9 +117,9 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
-                   new Regex(@"C\.E\.S\.P\.\s*N[º°]\s*\d{14}\s*Fecha\s*de\s*Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
-                   new Regex(@"C\.E\.S\.P\:?\s*\d{14}\s*Fecha\s*Vto\s*\.?\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
-                   new Regex(@"C\.E\.S\.P\s*N[º°]\s*\d{14}\s*Fecha\s*de\s*Vencimiento\s*\:\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase)
+                   //new Regex(@"C\.E\.S\.P\.\s*N[º°]\s*\d{14}\s*Fecha\s*de\s*Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                   new Regex(@"C\.E\.S\.P\:\s*\d{14}\s*\|?\s*Fecha\s*Vto\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                   //new Regex(@"C\.E\.S\.P\s*N[º°]\s*\d{14}\s*Fecha\s*de\s*Vencimiento\s*\:\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase)
             };
             DateTime fechaVencimientoAut = DateTime.MinValue;
 
@@ -162,6 +162,7 @@ namespace Control_de_Facturas.Processors
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"Total\s*a\s*pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),
+                new Regex(@"Total\s*a\s*debitar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),
 
             };
             decimal ImportePrimerVencimiento = 0;
@@ -231,7 +232,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Liquidaci[óo]n\s*de\s*Servicio\s*P[úu]blicos\s*(B)\s*18\s*N[º°]\d{4}B(\d{8})", RegexOptions.IgnoreCase)
+                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*18\s*N[º°]\d{4}\s*B\s*(\d{8})", RegexOptions.IgnoreCase)
             };
 
             foreach (Regex regex in patrones)
@@ -251,7 +252,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Liquidaci[óo]n\s*de\s*Servicio\s*P[úu]blicos\s*(B)\s*18\s*N[º°](\d{4})B", RegexOptions.IgnoreCase)
+                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*18\s*N[º°](\d{4})B", RegexOptions.IgnoreCase)
 
             };
 
@@ -275,7 +276,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Liquidaci[óo]n\s*de\s*Servicio\s*P[úu]blicos\s*(B)\s*18", RegexOptions.IgnoreCase),
+                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*(B)\s*18", RegexOptions.IgnoreCase),
             };
 
             foreach (Regex regex in patrones)
