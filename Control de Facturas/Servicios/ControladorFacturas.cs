@@ -18,6 +18,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorAYSA procesadorAYSA;
         private readonly ProcesadorMetrogasGrandes procesadorMetrogasGrandes;
         private readonly ProcesadorMetrogasPequenios procesadorMetrogasPequenios;
+        private readonly ProcesadorGasInterior procesadorGasInterior;
         //private readonly ProcesadorTelecom procesadorTelecom;
 
         public ControladorFacturas()
@@ -28,6 +29,7 @@ namespace Control_de_Facturas.Servicios
             procesadorAYSA = new ProcesadorAYSA();
             procesadorMetrogasGrandes = new ProcesadorMetrogasGrandes();
             procesadorMetrogasPequenios = new ProcesadorMetrogasPequenios();
+            procesadorGasInterior = new ProcesadorGasInterior();
             //procesadorTelecom = new ProcesadorTelecom();
         }
 
@@ -90,7 +92,10 @@ namespace Control_de_Facturas.Servicios
             {
                 return procesadorMetrogasPequenios.ProcesarFactura(textoPDF, rutaArchivo);
             }
-
+            else if (corroborarInterior(textoPDF))
+            {
+                return procesadorGasInterior.ProcesarFactura(textoPDF, rutaArchivo);
+            }
             else if (textoPDF.Contains("Telecom"))
             {
                 return null;// procesadorTelecom.ProcesarFactura(textoPDF, rutaArchivo);
@@ -100,6 +105,8 @@ namespace Control_de_Facturas.Servicios
                 return null;
             }
         }
+
+
         #endregion
 
         #region Filtrado y Ordenamiento
@@ -113,6 +120,27 @@ namespace Control_de_Facturas.Servicios
                 .ToList();
 
             return OrdenarSegunEmpresa(facturasFiltradas, empresa);
+        }
+
+        private bool corroborarInterior(string textoPDF)
+        {
+            string[] palabrasClave = 
+            {
+                "redengas",
+                "30-67775026-6"
+            };
+            bool existe = false;
+            
+            foreach (string palabra in palabrasClave)
+            {
+                if (textoPDF.Contains(palabra))
+                {
+                   
+                    existe = true;
+                    break;
+                }
+            }
+            return existe;
         }
 
         private List<Factura> OrdenarSegunEmpresa(List<Factura> facturas, string empresa)
