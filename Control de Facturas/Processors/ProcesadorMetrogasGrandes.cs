@@ -34,7 +34,7 @@ namespace Control_de_Facturas.Processors
             factura.CodigoCatalogo = "3.1.3-2392-1"; // Código de catálogo fijo para METROGAS
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
-            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
+            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
             factura.TipoServicio = "GAS";
             factura.Tarifa = ExtraerTarifa(textoPDF);
 

@@ -127,7 +127,9 @@ namespace Control_de_Facturas.Servicios
             string[] palabrasClave = 
             {
                 "redengas",
-                "30-67775026-6"
+                "30-67775026-6",
+                "naturgynoa",
+                "30-65786572-5",
             };
             bool existe = false;
             
