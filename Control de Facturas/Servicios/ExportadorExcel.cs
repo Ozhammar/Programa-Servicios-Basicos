@@ -221,7 +221,7 @@ namespace Control_de_Facturas.Servicios
                 detalle_financiero.Cell($"W{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[2]);
                 detalle_financiero.Cell($"X{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[3]);
                 detalle_financiero.Cell($"Y{filaDetalleFinanciero       }").Value = config.FuenteFinanciamiento;
-                detalle_financiero.Cell($"Z{    filaDetalleFinanciero}").Value = config.Moneda;
+                detalle_financiero.Cell($"Z{filaDetalleFinanciero}").Value = config.Moneda;
                 detalle_financiero.Cell($"AB{filaDetalleFinanciero}").Value = config.PEX;
                 detalle_financiero.Cell($"AC{filaDetalleFinanciero}").Value = config.BAPIN;
                 detalle_financiero.Cell($"AE{filaDetalleFinanciero}").Value = config.CodigoGanancias;

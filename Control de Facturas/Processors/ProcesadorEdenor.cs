@@ -163,8 +163,8 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Total\s*a\s*pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),
-                new Regex(@"([\d.,]+)\s*Por\s*pago\s*posterior", RegexOptions.IgnoreCase)
+                new Regex(@"Total\s*a\s*pagar\s*\$\s*(-?[\d.,]+)", RegexOptions.IgnoreCase),
+                new Regex(@"(-?[\d.,]+)\s*Por\s*pago\s*posterior", RegexOptions.IgnoreCase)
 
             };
             decimal ImportePrimerVencimiento = 0;
@@ -189,7 +189,7 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Hasta\s*el\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                new Regex(@"Hasta\s*el:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"Vencimiento\s*\:\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
             };
             DateTime fechaVencimiento = DateTime.MinValue;

@@ -5,7 +5,7 @@ namespace Control_de_Facturas
     public partial class Form1 : Form
     {
         //VARIABLES GLOBALES
-        string path = "";
+        string path = "E:\\Programa Facturas - Lucas\\AYSAEDESUR\\UNICA FACTURA"; //ELIMINAR RUTA PARA RELEASE
         private GestorArchivos gestorArchivos;
         private ControladorFacturas controladorFacturas;
         private ExportadorExcel exportadorExcel;
@@ -25,6 +25,8 @@ namespace Control_de_Facturas
             tabControl1.Enabled = false;
             btnValidar.Enabled = false;
             btnEjecutar.Enabled = false;
+
+            btnEjecutar.Enabled = true; //ELIMINAR CUANDO NO SE QUIERA PROBAR LA CARGA AUTOMÁTICA DE LA CARPETA PREDEFINIDA
         }
         #endregion
 

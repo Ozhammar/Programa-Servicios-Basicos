@@ -130,6 +130,11 @@ namespace Control_de_Facturas.Servicios
                 "30-67775026-6",
                 "naturgynoa",
                 "30-65786572-5",
+                "www.naturgy.com.ar",
+                "30-65786633-0",
+                "litoralgas",
+                "gasnea",
+                "30-66554905-0"
             };
             bool existe = false;
             
