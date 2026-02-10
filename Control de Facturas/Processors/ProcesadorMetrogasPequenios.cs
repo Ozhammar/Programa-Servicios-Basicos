@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Control_de_Facturas.Processors
 {
-    public class ProcesadorAYSA
+    internal class ProcesadorMetrogasPequenios
     {
         private readonly GestorArchivos gestorArchivos;
 
-        public ProcesadorAYSA()
+        public ProcesadorMetrogasPequenios()
         {
             gestorArchivos = new GestorArchivos();
         }
@@ -17,36 +17,38 @@ namespace Control_de_Facturas.Processors
         {
             Factura factura = new Factura();
 
-            factura.Empresa = "AYSA";
-            factura.NumeroCliente = ExtraerNumeroCliente(textoPDF);
-            factura.TipoFactura = ExtraerTipoFactura(textoPDF);
-            factura.PuntoVenta = ExtraerPuntoVenta(textoPDF);
-            factura.NumeroFactura = ExtraerNumeroFactura(textoPDF);
-            factura.FechaEmision = ExtraerFechaEmision(textoPDF);
-            factura.FechaVencimiento = ExtraerFechaVencimiento(textoPDF);
-            factura.Periodo = ExtraerPeriodo(textoPDF);
+            factura.Empresa = "METROGAS PEQUEÑOS CLIENTES";//
+            factura.NumeroCliente = ExtraerNumeroCliente(textoPDF);//
+            factura.TipoFactura = ExtraerTipoFactura(textoPDF);//
+            factura.PuntoVenta = ExtraerPuntoVenta(textoPDF);//
+            factura.NumeroFactura = ExtraerNumeroFactura(textoPDF);//
+            factura.FechaEmision = ExtraerFechaEmision(textoPDF);//
+            factura.FechaVencimiento = ExtraerFechaVencimiento(textoPDF);//
+            //REFACTORIZAR EVENTUALMENTE
+            factura.Periodo = ExtraerFechaVencimiento(textoPDF).ToString("MMMM").ToUpper(); //ExtraerPeriodo(textoPDF);
             factura.ImportePrimerVencimiento = ExtraerImportePrimerVencimiento(textoPDF);
-            factura.ImporteSaldoAnterior = 0;//ExtraerImporteSaldoAnterior(textoPDF);
-            factura.ImporteAbonable = factura.ImportePrimerVencimiento;//factura.CalcularImporteAbonable();
-            factura.CUIT = 30709565075; // CUIT fijo de AYSA
-            factura.ObjetoGasto = "3.1.2.0"; // Objeto de gasto fijo para AYSA
-            factura.CodigoCatalogo = "3.1.2-2391-1"; // Código de catálogo fijo para AYSA
+            factura.ImporteSaldoAnterior = 0; // ExtraerImporteSaldoAnterior(textoPDF);
+            factura.ImporteAbonable = factura.CalcularImporteAbonable();
+            factura.CUIT = 30657863676; // CUIT fijo de METROGAS
+            factura.ObjetoGasto = "3.1.3.0"; // Objeto de gasto fijo para METROGAS
+            factura.CodigoCatalogo = "3.1.3-2392-1"; // Código de catálogo fijo para METROGAS
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
             factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
-            factura.TipoServicio = "AGUA";
-            //factura.Tarifa = ExtraerTarifa(textoPDF);
+            factura.TipoServicio = "GAS";
+            factura.Tarifa = ExtraerTarifa(textoPDF);
 
             return factura;
         }
 
 
-        private string ExtraerPeriodo(string textoPDF)
+        /*private string ExtraerPeriodo(string textoPDF)
         {
             string periodo = "";
             List<Regex> patrones = new List<Regex>
             {
-                 new Regex(@"Per[íi]odo\s*de\s*facturaci[oó]n\s*cargos\s*fijos\s*\d{2}/\d{2}/\d{4}\s*AL\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                 new Regex(@"Per[íi]odo\s*de\s*consumo\s*\:\d{2}/\d{2}/\d{4}\s*AL\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                 new Regex(@"Per[íi]odo\s*\:\s*(\d{2}/\d{4})", RegexOptions.IgnoreCase),
             };
 
             foreach (Regex regex in patrones)
@@ -59,9 +61,9 @@ namespace Control_de_Facturas.Processors
                 }
             }
             return periodo;
-        }
+        }*/
 
-        /*private string ExtraerTarifa(string textoPDF)
+        private string ExtraerTarifa(string textoPDF)
         {
             string tipoTarifa = "";
 
@@ -81,9 +83,9 @@ namespace Control_de_Facturas.Processors
                 }
             }
             return tipoTarifa;
-        }*/
+        }
 
-        /*private decimal ExtraerImporteSaldoAnterior(string textoPDF)
+        private decimal ExtraerImporteSaldoAnterior(string textoPDF)
         {
             decimal ImporteSaldoAnterior = 0;
 
@@ -111,15 +113,13 @@ namespace Control_de_Facturas.Processors
             }
             return ImporteSaldoAnterior;
 
-        }*/
+        }
 
         private DateTime ExtraerVencimientoCodigoAutorizacion(string textoPDF)
         {
             List<Regex> patrones = new List<Regex>
             {
-                   //new Regex(@"C\.E\.S\.P\.\s*N[º°]\s*\d{14}\s*Fecha\s*de\s*Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
-                   new Regex(@"C\.E\.S\.P\:\s*\d{14}\s*\|?\s*Fecha\s*Vto\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
-                   //new Regex(@"C\.E\.S\.P\s*N[º°]\s*\d{14}\s*Fecha\s*de\s*Vencimiento\s*\:\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase)
+        new Regex(@"Fecha\s*de\s*Vencimiento\s*CESP\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
             };
             DateTime fechaVencimientoAut = DateTime.MinValue;
 
@@ -140,8 +140,8 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"C\.E\.S\.P\.\s*N[º°]\s*(\d{14})", RegexOptions.IgnoreCase),
-                new Regex(@"C\.E\.S\.P\:?\s*(\d{14})", RegexOptions.IgnoreCase)
+                new Regex(@"CESP\s*N[º°]\:?\s*(\d{14})", RegexOptions.IgnoreCase),
+                new Regex(@"C\.E\.S\.P\s*N[º°]\s*(\d{14})", RegexOptions.IgnoreCase)
             };
             string codigoAutorizacion = "";
 
@@ -162,7 +162,7 @@ namespace Control_de_Facturas.Processors
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"Total\s*a\s*pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),
-                new Regex(@"Total\s*a\s*debitar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),
+                new Regex(@"([\d.,]+)\s*Por\s*pago\s*posterior", RegexOptions.IgnoreCase)
 
             };
             decimal ImportePrimerVencimiento = 0;
@@ -187,7 +187,7 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
-                //new Regex(@"Hasta\s*el\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                new Regex(@"Hasta\s*el\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"Vencimiento\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
             };
             DateTime fechaVencimiento = DateTime.MinValue;
@@ -209,7 +209,7 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Fecha\s*de\s*Emisi[óo]n:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                new Regex(@"Fecha\s*de\s*emisi[óo]n\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
             };
 
             DateTime fechaEmision = DateTime.MinValue;
@@ -232,7 +232,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*18\s*N[º°]\d{4}\s*B\s*(\d{8})", RegexOptions.IgnoreCase)
+              new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B-\d{4}-(\d{8})", RegexOptions.IgnoreCase)
             };
 
             foreach (Regex regex in patrones)
@@ -252,8 +252,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*18\s*N[º°](\d{4})B", RegexOptions.IgnoreCase)
-
+                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B-(\d{4})", RegexOptions.IgnoreCase)
             };
 
             foreach (Regex regex in patrones)
@@ -276,7 +275,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*(B)\s*18", RegexOptions.IgnoreCase),
+            new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*(B)", RegexOptions.IgnoreCase)
             };
 
             foreach (Regex regex in patrones)
@@ -285,8 +284,8 @@ namespace Control_de_Facturas.Processors
                 if (match.Success)
                 {
                     tipoFactura = match.Groups[1].Value;
-                    //BYPASS PARA FACTURA A 
-                    if (tipoFactura == "A")
+                    //BYPASS PARA FACTURA A Y PARA TIPO 18 == B
+                    if (tipoFactura == "A" || tipoFactura == "18")
                     {
                         tipoFactura = "B";
                     }
@@ -302,9 +301,7 @@ namespace Control_de_Facturas.Processors
             // Lógica para extraer el número de cliente del texto del PDF
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"Cuenta\s*de\s*Servicios\s*(\d+)", RegexOptions.IgnoreCase),
-
-                //CuentadeServicios
+                new Regex(@"N[úu]mero\s*de\s*cliente\s*\:?\s*(\d{11})", RegexOptions.IgnoreCase),
             };
             string numeroCliente = "";
 
@@ -313,7 +310,7 @@ namespace Control_de_Facturas.Processors
                 Match match = regex.Match(textoPDF);
                 if (match.Success)
                 {
-                    numeroCliente = Regex.Replace(match.Groups[1].Value, @"\s+", "");
+                    numeroCliente = match.Groups[1].Value;
                     break;
                 }
             }

@@ -5,7 +5,7 @@ namespace Control_de_Facturas
     public partial class Form1 : Form
     {
         //VARIABLES GLOBALES
-        string path = "";
+        string path = "E:\\Programa Facturas - Lucas\\AYSAEDESUR\\UNICA FACTURA"; //ELIMINAR RUTA PARA RELEASE
         private GestorArchivos gestorArchivos;
         private ControladorFacturas controladorFacturas;
         private ExportadorExcel exportadorExcel;
@@ -25,6 +25,8 @@ namespace Control_de_Facturas
             tabControl1.Enabled = false;
             btnValidar.Enabled = false;
             btnEjecutar.Enabled = false;
+
+            btnEjecutar.Enabled = true; //ELIMINAR CUANDO NO SE QUIERA PROBAR LA CARGA AUTOMÁTICA DE LA CARPETA PREDEFINIDA
         }
         #endregion
 
@@ -238,7 +240,7 @@ namespace Control_de_Facturas
 
             if (facturasAysa.Count == 0)
             {
-                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se encontraron facturas de AYSA", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             exportadorExcel.generarLiquidacionIndividual(facturasAysa, "1.0.0.1.0");
@@ -251,13 +253,70 @@ namespace Control_de_Facturas
 
             if (facturasAysa.Count == 0)
             {
-                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se encontraron facturas de AYSA", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             exportadorExcel.generarLiquidacionUnificada(facturasAysa, "1.0.0.1.0");
         }
 
         #endregion
+
+        #region GAS
+        private async void btnLiqIMetrogasG_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasG = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS GRANDES CLIENTES");
+
+            if (facturasMetrogasG.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS GRANDES CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionIndividual(facturasMetrogasG, "1.0.0.1.0");
+        }
+
+        private async void btnLiqUMetrogasG_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasG = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS GRANDES CLIENTES");
+
+            if (facturasMetrogasG.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS GRANDES CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionUnificada(facturasMetrogasG, "1.0.0.1.0");
+        }
+
+        private async void btnLiqIMetrogasC_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasP = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS PEQUEÑOS CLIENTES");
+
+            if (facturasMetrogasP.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS PEQUEÑOS CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionIndividual(facturasMetrogasP, "1.0.0.1.0");
+        }
+
+        private async void btnLiqUMetrogasC_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasP = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS PEQUEÑOS CLIENTES");
+
+            if (facturasMetrogasP.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS PEQUEÑOS CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionUnificada(facturasMetrogasP, "1.0.0.1.0");
+        }
+
+        #endregion
+
+        /// <summary>        /// /////
         #endregion
 
         #region Modificación de Datos

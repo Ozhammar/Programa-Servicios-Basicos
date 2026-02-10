@@ -16,7 +16,9 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorEdesur procesadorEdesur;
         private readonly ProcesadorEdenor procesadorEdenor;
         private readonly ProcesadorAYSA procesadorAYSA;
-        //private readonly ProcesadorMetrogas procesadorMetrogas;
+        private readonly ProcesadorMetrogasGrandes procesadorMetrogasGrandes;
+        private readonly ProcesadorMetrogasPequenios procesadorMetrogasPequenios;
+        private readonly ProcesadorGasInterior procesadorGasInterior;
         //private readonly ProcesadorTelecom procesadorTelecom;
 
         public ControladorFacturas()
@@ -25,7 +27,9 @@ namespace Control_de_Facturas.Servicios
             procesadorEdesur = new ProcesadorEdesur();
             procesadorEdenor = new ProcesadorEdenor();
             procesadorAYSA = new ProcesadorAYSA();
-            //procesadorMetrogas = new ProcesadorMetrogas();
+            procesadorMetrogasGrandes = new ProcesadorMetrogasGrandes();
+            procesadorMetrogasPequenios = new ProcesadorMetrogasPequenios();
+            procesadorGasInterior = new ProcesadorGasInterior();
             //procesadorTelecom = new ProcesadorTelecom();
         }
 
@@ -80,6 +84,18 @@ namespace Control_de_Facturas.Servicios
             {
                 return procesadorAYSA.ProcesarFactura(textoPDF, rutaArchivo);
             }
+            else if (textoPDF.Contains("Metrogas Grandes Clientes") || textoPDF.Contains("grandesclientes"))
+            {
+                return procesadorMetrogasGrandes.ProcesarFactura(textoPDF, rutaArchivo);
+            }
+            else if (textoPDF.Contains("30-65786367-6") && !textoPDF.Contains("grandesclientes"))
+            {
+                return procesadorMetrogasPequenios.ProcesarFactura(textoPDF, rutaArchivo);
+            }
+            else if (corroborarInterior(textoPDF))
+            {
+                return procesadorGasInterior.ProcesarFactura(textoPDF, rutaArchivo);
+            }
             else if (textoPDF.Contains("Telecom"))
             {
                 return null;// procesadorTelecom.ProcesarFactura(textoPDF, rutaArchivo);
@@ -89,6 +105,8 @@ namespace Control_de_Facturas.Servicios
                 return null;
             }
         }
+
+
         #endregion
 
         #region Filtrado y Ordenamiento
@@ -102,6 +120,38 @@ namespace Control_de_Facturas.Servicios
                 .ToList();
 
             return OrdenarSegunEmpresa(facturasFiltradas, empresa);
+        }
+
+        private bool corroborarInterior(string textoPDF)
+        {
+            string[] palabrasClave = 
+            {
+                "redengas",
+                "30-67775026-6",
+                "naturgynoa",
+                "30-65786572-5",
+                "www.naturgy.com.ar",
+                "30-65786633-0",
+                "litoralgas",
+                "gasnea",
+                "30-66554905-0",
+                "33-65786527-9",
+                "DISTRIBUIDORA DE GAS DEL CENTRO",
+                "30-67364611-1",
+                "DISTRIGAS"
+            };
+            bool existe = false;
+            
+            foreach (string palabra in palabrasClave)
+            {
+                if (textoPDF.Contains(palabra))
+                {
+                   
+                    existe = true;
+                    break;
+                }
+            }
+            return existe;
         }
 
         private List<Factura> OrdenarSegunEmpresa(List<Factura> facturas, string empresa)
@@ -119,10 +169,10 @@ namespace Control_de_Facturas.Servicios
                         .ThenBy(f => f.NumeroCliente)
                         .ToList();
 
-                case "METROGAS":
+                case "METROGAS GRANDES CLIENTES":
                     return facturas
-                        .OrderBy(f => f.FechaEmision)
-                        .ThenBy(f => f.NumeroCliente)
+                        .OrderBy(f => f.NumeroCliente)
+                        .ThenBy(f => f.FechaEmision)
                         .ToList();
 
                 case "TELECOM":

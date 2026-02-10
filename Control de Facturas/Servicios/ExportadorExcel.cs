@@ -172,7 +172,7 @@ namespace Control_de_Facturas.Servicios
                 cabecera.Cell($"AA{filaCabecera}").Value = config.Cotizacion;
                 cabecera.Cell($"AB{filaCabecera}").Value = config.MedioPago;
                 cabecera.Cell($"AF{filaCabecera}").Value = factura.FechaEmision.ToString("dd/MM/yyyy");
-                cabecera.Cell($"AG{filaCabecera}").Value = factura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy");
+                cabecera.Cell($"AG{filaCabecera}").Value = factura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy"); //SE AÑADO DE FORMA GENERICA LA FECHA DE EMISION MAS 3 DIAS, COMO PARAMETRO DE DESARROLLO BASE. LA IDEA ES QUE EN CASO DE TENER QUE SER MODIFICADA, SE LO HAGA DESDE EL ARCHIVO EXPORTADO
                 cabecera.Cell($"AI{filaCabecera}").Value = factura.ImporteAbonable;
                 cabecera.Cell($"AJ{filaCabecera}").Value = $"SERVICIO DE {factura.TipoServicio} CORRESPONDIENTE A {factura.Empresa}, CLIENTE: {factura.NumeroCliente} - FACTURA N°: {factura.PuntoVenta}-{factura.NumeroFactura} - PERIODO: {factura.Periodo} - IMPORTE: $ {factura.ImporteAbonable}";
                 ++filaCabecera;
@@ -221,7 +221,7 @@ namespace Control_de_Facturas.Servicios
                 detalle_financiero.Cell($"W{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[2]);
                 detalle_financiero.Cell($"X{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[3]);
                 detalle_financiero.Cell($"Y{filaDetalleFinanciero       }").Value = config.FuenteFinanciamiento;
-                detalle_financiero.Cell($"Z{    filaDetalleFinanciero}").Value = config.Moneda;
+                detalle_financiero.Cell($"Z{filaDetalleFinanciero}").Value = config.Moneda;
                 detalle_financiero.Cell($"AB{filaDetalleFinanciero}").Value = config.PEX;
                 detalle_financiero.Cell($"AC{filaDetalleFinanciero}").Value = config.BAPIN;
                 detalle_financiero.Cell($"AE{filaDetalleFinanciero}").Value = config.CodigoGanancias;
@@ -231,7 +231,7 @@ namespace Control_de_Facturas.Servicios
                 detalle_financiero.Cell($"AJ{filaDetalleFinanciero}").Value = factura.ImporteAbonable;
                 ++filaDetalleFinanciero;
             }
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturas[0].Empresa}_Exportadas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturas[0].Empresa}_ExportadasIndividual_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
 
@@ -290,7 +290,7 @@ namespace Control_de_Facturas.Servicios
                 cabecera.Cell($"AF{filaCabecera}").Value = factura.FechaEmision.ToString("dd/MM/yyyy");
                 cabecera.Cell($"AG{filaCabecera}").Value = factura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy");
                 cabecera.Cell($"AI{filaCabecera}").Value = importeTotalPeriodo;
-                cabecera.Cell($"AJ{filaCabecera}").Value = $"SERVICIO DE {factura.TipoServicio} CORRESPONDIENTE A {factura.Empresa}, CLIENTE: {factura.NumeroCliente} - FACTURA N°: {factura.PuntoVenta}-{factura.NumeroFactura} - PERIODO: {factura.Periodo} - IMPORTE: $ {importeTotalPeriodo}";
+                cabecera.Cell($"AJ{filaCabecera}").Value = $"SERVICIO DE {factura.TipoServicio} CORRESPONDIENTE A {factura.Empresa}, PARA LOS CLIENTES INSTITUCIONALES, CORRESPONDIENTE AL PERIODO: {factura.Periodo} - IMPORTE: $ {importeTotalPeriodo}";
                 filaCabecera++;
 
                 //DETALLE CABECERA
@@ -351,7 +351,7 @@ namespace Control_de_Facturas.Servicios
                 factura = null;
             }
 
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturasPorPeriodo[0][0].Empresa}_Exportadas_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturasPorPeriodo[0][0].Empresa}_ExportadasUnidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
     }

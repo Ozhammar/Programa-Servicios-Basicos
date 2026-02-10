@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Plantillas\BENEFICIARIOS AGUA, GAS Y LUZ.xlsx" />
     <None Remove="Assets\Plantillas\PLANTILLA.xlsx" />
   </ItemGroup>
 
@@ -22,6 +23,12 @@
   <ItemGroup>
     <Content Include="Assets\Plantillas\PLANTILLA.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Plantillas\BENEFICIARIOS AGUA, GAS Y LUZ.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
