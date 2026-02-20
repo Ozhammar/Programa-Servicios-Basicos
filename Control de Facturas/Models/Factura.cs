@@ -81,7 +81,14 @@ namespace Control_de_Facturas.Models
         // Método adicional útil para calcular importe abonable
         public decimal CalcularImporteAbonable()
         {
-            decimal ImporteAbonable = ImportePrimerVencimiento - Math.Abs(ImporteSaldoAnterior);
+            decimal SaldoAnterior_paraCalculo = ImporteSaldoAnterior;
+            if (SaldoAnterior_paraCalculo <= 0) 
+            {
+                SaldoAnterior_paraCalculo = 0;
+            }
+
+            decimal ImporteAbonable = ImportePrimerVencimiento - Math.Abs(SaldoAnterior_paraCalculo);
+
             if (ImporteAbonable < 0)
             {
                 ImporteAbonable = 0;
