@@ -259,6 +259,18 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionUnificada(facturasAysa, "1.0.0.1.0");
         }
 
+        private async void btnInformeAYSA_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasAysa = controladorFacturas.FiltrarPorEmpresa(facturasCache, "AYSA");
+
+            if (facturasAysa.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de AYSA", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("AYSA", facturasAysa);
+        }
         #endregion
 
         #region GAS

@@ -126,6 +126,7 @@ namespace Control_de_Facturas.Servicios
         {
             string[] palabrasClave =
             {
+                #region GAS INTERIOR
                 "redengas",
                 "30-67775026-6",
                 "naturgynoa",
@@ -182,7 +183,16 @@ namespace Control_de_Facturas.Servicios
                 "66600940600000934",
                 "74000990300369728",
                 "76000960703428986"
-#endregion  
+                #endregion
+
+                #endregion
+
+                #region AGUA INTERIOR
+
+                #endregion
+                #region LUZ INTERIOR
+
+                #endregion
 
             };
             bool existe = false;

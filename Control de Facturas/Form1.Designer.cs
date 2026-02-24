@@ -536,6 +536,7 @@
             btnInformeAYSA.TabIndex = 9;
             btnInformeAYSA.Text = "Informe";
             btnInformeAYSA.UseVisualStyleBackColor = true;
+            btnInformeAYSA.Click += btnInformeAYSA_Click;
             // 
             // tabPage1
             // 
