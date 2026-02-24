@@ -189,6 +189,7 @@ namespace Control_de_Facturas.Processors
             {
                 //new Regex(@"Hasta\s*el\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"Vencimiento\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+                new Regex(@"A\s*Debitar\s*el\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
             };
             DateTime fechaVencimiento = DateTime.MinValue;
 

@@ -68,6 +68,7 @@ namespace Control_de_Facturas
             tabControl1.Enabled = false;
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = true;
+            facturasCache = null;
         }
 
         private async Task comprobacionCache()
@@ -92,7 +93,7 @@ namespace Control_de_Facturas
             btnValidar.Enabled = true;
         }
 
-        private async Task cargaFacturas()
+        /*private async Task cargaFacturas()
         {
             try
             {
@@ -138,6 +139,68 @@ namespace Control_de_Facturas
                 btnLimpiarPath.Enabled = true;
                 btnSeleccionarCarpeta.Enabled = true;
             }
+        }*/
+
+        private async Task cargaFacturas()
+        {
+            try
+            {
+                // Deshabilitar controles durante procesamiento
+                button1.Enabled = false;
+                btnLimpiarPath.Enabled = false;
+                btnSeleccionarCarpeta.Enabled = false;
+                btnEjecutar.Enabled = false;
+
+                dataGridView1.Rows.Clear();
+
+                int totalPDFS = gestorArchivos.ObtenerPDF(path).Count();
+
+                if (totalPDFS == 0)
+                {
+                    MessageBox.Show("No se encontraron archivos PDF.",
+                                    "Aviso",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Configurar ProgressBar con valores reales
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = totalPDFS;
+                progressBar1.Value = 0;
+
+                var progreso = new Progress<int>(actual =>
+                {
+                    int valorSeguro = Math.Min(actual, totalPDFS);
+
+                    progressBar1.Value = valorSeguro;
+
+                    int porcentaje = (valorSeguro * 100) / totalPDFS;
+                    labelPorcentaje.Text = $"{porcentaje}%";
+                });
+
+                // Procesar facturas
+                facturasCache = await controladorFacturas
+                    .ProcesarFacturasEnCarpeta(path, progreso);
+
+                dataGridView1.DataSource = facturasCache;
+                FormatearColumnasDecimales();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error durante el procesamiento: {ex.Message}",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Rehabilitar controles siempre
+                button1.Enabled = true;
+                btnLimpiarPath.Enabled = true;
+                btnEjecutar.Enabled = true;
+                btnSeleccionarCarpeta.Enabled = true;
+            }
         }
 
         private void btnValidar_Click(object sender, EventArgs e)
@@ -181,9 +244,17 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionUnificada(facturasEdesur, "1.0.0.1.0");
         }
         //INFORME EDESUR
-        private void btnInformeEdesur_Click(object sender, EventArgs e)
+        private async void btnInformeEdesur_Click(object sender, EventArgs e)
         {
+            await comprobacionCache();
+            List<Factura> facturasEdesur = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDESUR");
 
+            if (facturasEdesur.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("EDESUR", facturasEdesur);
         }
         //INFORME EDENOR
         private void btnInformeEdenor_Click(object sender, EventArgs e)
@@ -299,7 +370,18 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasG, "1.0.0.1.0");
         }
+        private async void btnInformeMetrogasG_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasG = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS GRANDES CLIENTES");
 
+            if (facturasMetrogasG.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS GRANDES CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("METROGAS GRANDES CLIENTES", facturasMetrogasG);
+        }
         private async void btnLiqIMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -325,7 +407,18 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasP, "1.0.0.1.0");
         }
+        private async void btnInformeMetrogasC_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasC = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS PEQUEÑOS CLIENTES");
 
+            if (facturasMetrogasC.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS PEQUEÑOS CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("METROGAS PEQUEÑOS CLIENTES", facturasMetrogasC);
+        }
         #endregion
 
         /// <summary>        /// /////
@@ -463,6 +556,6 @@ namespace Control_de_Facturas
 
         }
 
-
+   
     }
 }
