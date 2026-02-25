@@ -68,6 +68,7 @@ namespace Control_de_Facturas
             tabControl1.Enabled = false;
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = true;
+            facturasCache = null;
         }
 
         private async Task comprobacionCache()
@@ -92,7 +93,7 @@ namespace Control_de_Facturas
             btnValidar.Enabled = true;
         }
 
-        private async Task cargaFacturas()
+        /*private async Task cargaFacturas()
         {
             try
             {
@@ -138,7 +139,80 @@ namespace Control_de_Facturas
                 btnLimpiarPath.Enabled = true;
                 btnSeleccionarCarpeta.Enabled = true;
             }
+        }*/
+
+        private async Task cargaFacturas()
+        {
+            try
+            {
+                // Deshabilitar controles durante procesamiento
+                button1.Enabled = false;
+                btnLimpiarPath.Enabled = false;
+                btnSeleccionarCarpeta.Enabled = false;
+                btnEjecutar.Enabled = false;
+
+                dataGridView1.Rows.Clear();
+
+                int totalPDFS = gestorArchivos.ObtenerPDF(path).Count();
+
+                if (totalPDFS == 0)
+                {
+                    MessageBox.Show("No se encontraron archivos PDF.",
+                                    "Aviso",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Configurar ProgressBar con valores reales
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = totalPDFS;
+                progressBar1.Value = 0;
+
+                var progreso = new Progress<int>(actual =>
+                {
+                    int valorSeguro = Math.Min(actual, totalPDFS);
+
+                    progressBar1.Value = valorSeguro;
+
+                    int porcentaje = (valorSeguro * 100) / totalPDFS;
+                    labelPorcentaje.Text = $"{porcentaje}%";
+                });
+
+                // Procesar facturas
+                facturasCache = await controladorFacturas
+                    .ProcesarFacturasEnCarpeta(path, progreso);
+
+                ordenarCache();
+
+                dataGridView1.DataSource = facturasCache;
+                AgregarCheckBoxHeader();
+                foreach (DataGridViewColumn col in dataGridView1.Columns)
+                {
+                    if (col.DataPropertyName != "Seleccionada")
+                        col.ReadOnly = true;
+                }
+
+                FormatearColumnasDecimales();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error durante el procesamiento: {ex.Message}",
+                                "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            finally
+            {
+                // Rehabilitar controles siempre
+                button1.Enabled = true;
+                btnLimpiarPath.Enabled = true;
+                btnEjecutar.Enabled = true;
+                btnSeleccionarCarpeta.Enabled = true;
+            }
         }
+
+
 
         private void btnValidar_Click(object sender, EventArgs e)
         {
@@ -181,14 +255,30 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionUnificada(facturasEdesur, "1.0.0.1.0");
         }
         //INFORME EDESUR
-        private void btnInformeEdesur_Click(object sender, EventArgs e)
+        private async void btnInformeEdesur_Click(object sender, EventArgs e)
         {
+            await comprobacionCache();
+            List<Factura> facturasEdesur = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDESUR");
 
+            if (facturasEdesur.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDESUR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("EDESUR", facturasEdesur);
         }
         //INFORME EDENOR
-        private void btnInformeEdenor_Click(object sender, EventArgs e)
+        private async void btnInformeEdenor_Click(object sender, EventArgs e)
         {
+            await comprobacionCache();
+            List<Factura> facturasEdenor = controladorFacturas.FiltrarPorEmpresa(facturasCache, "EDENOR");
 
+            if (facturasEdenor.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de EDENOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("EDENOR", facturasEdenor);
         }
         //LIQUIDACION EDENOR INDIVIDUAL
         private async void btnLiqIEdenor_Click(object sender, EventArgs e)
@@ -245,7 +335,6 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasAysa, "1.0.0.1.0");
         }
-
         private async void btnLiqUAYSA_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -258,7 +347,18 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasAysa, "1.0.0.1.0");
         }
+        private async void btnInformeAYSA_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasAysa = controladorFacturas.FiltrarPorEmpresa(facturasCache, "AYSA");
 
+            if (facturasAysa.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de AYSA", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("AYSA", facturasAysa);
+        }
         #endregion
 
         #region GAS
@@ -274,7 +374,6 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasMetrogasG, "1.0.0.1.0");
         }
-
         private async void btnLiqUMetrogasG_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -287,7 +386,18 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasG, "1.0.0.1.0");
         }
+        private async void btnInformeMetrogasG_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasG = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS GRANDES CLIENTES");
 
+            if (facturasMetrogasG.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS GRANDES CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("METROGAS GRANDES CLIENTES", facturasMetrogasG);
+        }
         private async void btnLiqIMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -300,7 +410,6 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasMetrogasP, "1.0.0.1.0");
         }
-
         private async void btnLiqUMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -313,17 +422,29 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasP, "1.0.0.1.0");
         }
+        private async void btnInformeMetrogasC_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasMetrogasC = controladorFacturas.FiltrarPorEmpresa(facturasCache, "METROGAS PEQUEÑOS CLIENTES");
 
+            if (facturasMetrogasC.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de METROGAS PEQUEÑOS CLIENTES", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInforme("METROGAS PEQUEÑOS CLIENTES", facturasMetrogasC);
+        }
         #endregion
 
         /// <summary>        /// /////
         #endregion
 
         #region Modificación de Datos
-        private void modificarDatosFactura(object sender, DataGridViewCellEventArgs e)
+
+        private async void modificarDatosFactura(object sender, DataGridViewCellEventArgs e)
         {
             // Validar que no sea el header
-            if (e.RowIndex < 0) return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 1) return;
 
             int fila = e.RowIndex;
             int columna = e.ColumnIndex;
@@ -332,36 +453,137 @@ namespace Control_de_Facturas
             string atributo = dataGridView1.Columns[columna].DataPropertyName;
 
             // InputBox para obtener nuevo valor
-            object valorNuevoStr = Interaction.InputBox(
-                $"Modificando '{atributo}'\n\nValor actual: {celdaActual}\n\nIngrese el nuevo valor:",
-                "Modificador de Datos",
-                celdaActual?.ToString() ?? ""
-            );
+            object valorNuevoStr = Interaction.InputBox($"Modificando '{atributo}'\n\nValor actual: {celdaActual}\n\nIngrese el nuevo valor:", "Modificador de Datos", celdaActual?.ToString() ?? "");
 
-            // Si cancela o deja vacío, no hacer nada
-            if (string.IsNullOrWhiteSpace(valorNuevoStr.ToString()))
+            //List<Factura> facturasSeleccionadas = facturasCache.Where(f => f.Seleccionada == true).ToList();
+            if (facturasCache.Any(f => f.Seleccionada))
             {
-                return;
+                foreach (Factura factura in facturasCache.Where(f => f.Seleccionada))
+                {
+                    // Si cancela o deja vacío, no hacer nada
+                    if (string.IsNullOrWhiteSpace(valorNuevoStr.ToString()))
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        controladorFacturas.ModificarMultiplesFacturas(factura, atributo, valorNuevoStr);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error al modificar la factura:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                // Si cancela o deja vacío, no hacer nada
+                if (string.IsNullOrWhiteSpace(valorNuevoStr.ToString()))
+                {
+                    return;
+                }
+
+                try
+                {
+                    controladorFacturas.ModificarFactura(facturasCache, fila, atributo, valorNuevoStr);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al modificar la factura:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
-            try
-            {
-                controladorFacturas.ModificarFactura(facturasCache, fila, atributo, valorNuevoStr);
+            // Refrescar DataGridView
+            dataGridView1.DataSource = null;
+            ordenarCache();
+            dataGridView1.DataSource = facturasCache;
+            AgregarCheckBoxHeader();
 
-                // Refrescar DataGridView
-                dataGridView1.DataSource = null;
-                dataGridView1.DataSource = facturasCache;
-                FormatearColumnasDecimales();
-            }
-            catch (Exception ex)
+            foreach (DataGridViewColumn col in dataGridView1.Columns)
             {
-                MessageBox.Show($"Error al modificar la factura:\n{ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (col.DataPropertyName != "Seleccionada")
+                    col.ReadOnly = true;
             }
+
+            FormatearColumnasDecimales();
         }
         #endregion
 
         #region Utilidades UI
 
+        //SELECCIONAR ITEMS
+        private CheckBox headerCheckBox = new CheckBox();
+        private bool headerCheckBoxClicked = false;
+
+        private void AgregarCheckBoxHeader()
+        {
+            Rectangle rect = dataGridView1.GetCellDisplayRectangle(0, -1, true);
+
+            headerCheckBox.Size = new Size(15, 15);
+            headerCheckBox.Location = new Point(
+                rect.X + (rect.Width / 2) - 7,
+                rect.Y + (rect.Height / 2) - 7
+            );
+
+            headerCheckBox.CheckedChanged += HeaderCheckBox_CheckedChanged;
+
+            dataGridView1.Controls.Add(headerCheckBox);
+        }
+
+        private void HeaderCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            headerCheckBoxClicked = true;
+
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                row.Cells["Seleccionada"].Value = headerCheckBox.Checked;
+            }
+
+            dataGridView1.RefreshEdit();
+            headerCheckBoxClicked = false;
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (headerCheckBoxClicked)
+                return;
+
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "Seleccionada")
+            {
+                bool allChecked = true;
+
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells["Seleccionada"].Value == null ||
+                        !(bool)row.Cells["Seleccionada"].Value)
+                    {
+                        allChecked = false;
+                        break;
+                    }
+                }
+
+                headerCheckBox.CheckedChanged -= HeaderCheckBox_CheckedChanged;
+                headerCheckBox.Checked = allChecked;
+                headerCheckBox.CheckedChanged += HeaderCheckBox_CheckedChanged;
+            }
+        }
+        private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.IsCurrentCellDirty)
+            {
+                dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        ///////////////////////////
+
+        private void ordenarCache()
+        {
+            facturasCache = facturasCache.OrderBy(f => Path.GetDirectoryName(f.Archivo))
+                                         .ThenByDescending(f => f.Periodo)
+                                         .ToList();
+        }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
@@ -437,19 +659,6 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionIndividual(facturasCache, "1.0.0.1.0");
         }
         #endregion
-
-
-
-
-
-
-
-
-
-        private void button8_Click(object sender, EventArgs e)
-        {
-
-        }
 
 
     }

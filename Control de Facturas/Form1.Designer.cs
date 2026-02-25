@@ -79,12 +79,12 @@
             label9 = new Label();
             btnLiqUMetrogasG = new Button();
             btnLiqIMetrogasG = new Button();
-            button14 = new Button();
+            btnInformeMetrogasG = new Button();
             groupBox8 = new GroupBox();
             label8 = new Label();
             btnLiqUMetrogasC = new Button();
             btnLiqIMetrogasC = new Button();
-            button11 = new Button();
+            btnInformeMetrogasC = new Button();
             tabPage2 = new TabPage();
             tabPage3 = new TabPage();
             tabPage4 = new TabPage();
@@ -483,7 +483,6 @@
             btnInformeInterior_Agua.TabIndex = 9;
             btnInformeInterior_Agua.Text = "Informe";
             btnInformeInterior_Agua.UseVisualStyleBackColor = true;
-            btnInformeInterior_Agua.Click += button8_Click;
             // 
             // groupBox6
             // 
@@ -536,6 +535,7 @@
             btnInformeAYSA.TabIndex = 9;
             btnInformeAYSA.Text = "Informe";
             btnInformeAYSA.UseVisualStyleBackColor = true;
+            btnInformeAYSA.Click += btnInformeAYSA_Click;
             // 
             // tabPage1
             // 
@@ -605,7 +605,7 @@
             groupBox9.Controls.Add(label9);
             groupBox9.Controls.Add(btnLiqUMetrogasG);
             groupBox9.Controls.Add(btnLiqIMetrogasG);
-            groupBox9.Controls.Add(button14);
+            groupBox9.Controls.Add(btnInformeMetrogasG);
             groupBox9.Location = new Point(182, 6);
             groupBox9.Name = "groupBox9";
             groupBox9.Size = new Size(170, 118);
@@ -643,21 +643,22 @@
             btnLiqIMetrogasG.UseVisualStyleBackColor = true;
             btnLiqIMetrogasG.Click += btnLiqIMetrogasG_Click;
             // 
-            // button14
+            // btnInformeMetrogasG
             // 
-            button14.Location = new Point(6, 22);
-            button14.Name = "button14";
-            button14.Size = new Size(75, 23);
-            button14.TabIndex = 9;
-            button14.Text = "Informe";
-            button14.UseVisualStyleBackColor = true;
+            btnInformeMetrogasG.Location = new Point(6, 22);
+            btnInformeMetrogasG.Name = "btnInformeMetrogasG";
+            btnInformeMetrogasG.Size = new Size(75, 23);
+            btnInformeMetrogasG.TabIndex = 9;
+            btnInformeMetrogasG.Text = "Informe";
+            btnInformeMetrogasG.UseVisualStyleBackColor = true;
+            btnInformeMetrogasG.Click += btnInformeMetrogasG_Click;
             // 
             // groupBox8
             // 
             groupBox8.Controls.Add(label8);
             groupBox8.Controls.Add(btnLiqUMetrogasC);
             groupBox8.Controls.Add(btnLiqIMetrogasC);
-            groupBox8.Controls.Add(button11);
+            groupBox8.Controls.Add(btnInformeMetrogasC);
             groupBox8.Location = new Point(6, 6);
             groupBox8.Name = "groupBox8";
             groupBox8.Size = new Size(170, 118);
@@ -695,14 +696,15 @@
             btnLiqIMetrogasC.UseVisualStyleBackColor = true;
             btnLiqIMetrogasC.Click += btnLiqIMetrogasC_Click;
             // 
-            // button11
+            // btnInformeMetrogasC
             // 
-            button11.Location = new Point(6, 22);
-            button11.Name = "button11";
-            button11.Size = new Size(75, 23);
-            button11.TabIndex = 9;
-            button11.Text = "Informe";
-            button11.UseVisualStyleBackColor = true;
+            btnInformeMetrogasC.Location = new Point(6, 22);
+            btnInformeMetrogasC.Name = "btnInformeMetrogasC";
+            btnInformeMetrogasC.Size = new Size(75, 23);
+            btnInformeMetrogasC.TabIndex = 9;
+            btnInformeMetrogasC.Text = "Informe";
+            btnInformeMetrogasC.UseVisualStyleBackColor = true;
+            btnInformeMetrogasC.Click += btnInformeMetrogasC_Click;
             // 
             // tabPage2
             // 
@@ -789,12 +791,12 @@
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(6, 14);
-            dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
             dataGridView1.Size = new Size(1009, 220);
             dataGridView1.TabIndex = 7;
-            dataGridView1.CellContentClick += modificarDatosFactura;
+            dataGridView1.CellContentDoubleClick += modificarDatosFactura;
+            dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
+            dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
             // Form1
@@ -898,11 +900,11 @@
         private Label label9;
         private Button btnLiqUMetrogasG;
         private Button btnLiqIMetrogasG;
-        private Button button14;
+        private Button btnInformeMetrogasG;
         private GroupBox groupBox8;
         private Label label8;
         private Button btnLiqUMetrogasC;
         private Button btnLiqIMetrogasC;
-        private Button button11;
+        private Button btnInformeMetrogasC;
     }
 }

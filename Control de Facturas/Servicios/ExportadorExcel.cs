@@ -9,21 +9,34 @@ namespace Control_de_Facturas.Servicios
     internal class ExportadorExcel
     {
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        private readonly string rutaPlantilla;
+        private readonly string rutaPlantilla_SIDIF;
+        private readonly string rutaPlantillaInfome_AYSA;
+        private readonly string rutaPlantillaInfome_EDESUR;
+        private readonly string rutaPlantillaInfome_MetroGasChicos;
+        private readonly string rutaPlantillaInfome_MetroGasGrandes;
+        private readonly string rutaPlantillaInfome_EDENOR;
         private ControladorFacturas controladorFacturas;
 
         public ExportadorExcel()
         {
-            //PLANTILLA BASE
-            rutaPlantilla = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "PLANTILLA.xlsx");
+            //PLANTILLA BASE SIDIF
+            rutaPlantilla_SIDIF = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "PLANTILLA.xlsx");
+
+            //PLANTILLAS DE INFORMES
+            rutaPlantillaInfome_AYSA = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "AYSA.xlsx");
+            rutaPlantillaInfome_EDESUR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDESUR.xlsx");
+            rutaPlantillaInfome_MetroGasChicos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS PEQUEÑOS.xlsx");
+            rutaPlantillaInfome_MetroGasGrandes = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS GRANDES.xlsx");
+            rutaPlantillaInfome_EDENOR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDENOR.xlsx");
+
             controladorFacturas = new ControladorFacturas();
         }
 
-        public XLWorkbook abrirPlantilla()
+        public XLWorkbook abrirPlantilla(string Plantilla)
         {
             try
             {
-                XLWorkbook libro = new XLWorkbook(rutaPlantilla);
+                XLWorkbook libro = new XLWorkbook(Plantilla);
                 return libro;
             }
             catch (Exception ex)
@@ -34,11 +47,32 @@ namespace Control_de_Facturas.Servicios
 
         private void cargarPlantillaSidif(out XLWorkbook libro, out IXLWorksheet cabecera, out IXLWorksheet detalle_cabecera, out IXLWorksheet detalle_financiero)
         {
-            libro = this.abrirPlantilla();
+            libro = this.abrirPlantilla(rutaPlantilla_SIDIF);
             cabecera = libro.Worksheet("Cabecera-Cpte");
             detalle_cabecera = libro.Worksheet("Detalle Cpte FacGS");
             detalle_financiero = libro.Worksheet("Detalle Presupuestario  FACGS");
         }
+
+        private string obtenerRutaPlantillaInforme(string empresa)
+        {
+            switch (empresa.ToUpper())
+            {
+                case "AYSA":
+                    return rutaPlantillaInfome_AYSA;
+                case "EDESUR":
+                    return rutaPlantillaInfome_EDESUR;
+                case "METROGAS PEQUEÑOS CLIENTES":
+                    return rutaPlantillaInfome_MetroGasChicos;
+                case "METROGAS GRANDES CLIENTES":
+                    return rutaPlantillaInfome_MetroGasGrandes;
+                case "EDENOR":
+                    return rutaPlantillaInfome_EDENOR;
+                default:
+                    throw new Exception("No se ha encontrado una plantilla de informe para la empresa especificada.");
+            }
+        }
+
+
 
         #region PlantillaExportadores
         /*public void generarLiquidacionEdesur(List<Factura> facturasCache)
@@ -161,7 +195,14 @@ namespace Control_de_Facturas.Servicios
                 cabecera.Cell($"C{filaCabecera}").Value = config.Ejercicio;
                 cabecera.Cell($"D{filaCabecera}").Value = "FSB";
                 cabecera.Cell($"E{filaCabecera}").Value = factura.TipoFactura;
-                cabecera.Cell($"F{filaCabecera}").Value = Convert.ToInt32(factura.PuntoVenta);
+                if (int.TryParse(factura.PuntoVenta, out int puntoVenta))
+                {
+                    cabecera.Cell($"F{filaCabecera}").Value = puntoVenta;
+                }
+                else
+                {
+                    cabecera.Cell($"F{filaCabecera}").Value = 0; // o lo que quieras poner si está vacío
+                }
                 cabecera.Cell($"G{filaCabecera}").Value = Convert.ToInt32(factura.NumeroFactura);
                 cabecera.Cell($"K{filaCabecera}").Value = factura.TipoCodigoAutorizacion;
                 cabecera.Cell($"L{filaCabecera}").Value = Convert.ToInt64(factura.CodigoAutorizacion);
@@ -220,7 +261,7 @@ namespace Control_de_Facturas.Servicios
                 detalle_financiero.Cell($"V{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[1]);
                 detalle_financiero.Cell($"W{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[2]);
                 detalle_financiero.Cell($"X{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[3]);
-                detalle_financiero.Cell($"Y{filaDetalleFinanciero       }").Value = config.FuenteFinanciamiento;
+                detalle_financiero.Cell($"Y{filaDetalleFinanciero}").Value = config.FuenteFinanciamiento;
                 detalle_financiero.Cell($"Z{filaDetalleFinanciero}").Value = config.Moneda;
                 detalle_financiero.Cell($"AB{filaDetalleFinanciero}").Value = config.PEX;
                 detalle_financiero.Cell($"AC{filaDetalleFinanciero}").Value = config.BAPIN;
@@ -353,6 +394,76 @@ namespace Control_de_Facturas.Servicios
 
             libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturasPorPeriodo[0][0].Empresa}_ExportadasUnidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
+        }
+
+        public void GenerarInforme(string plantilla, List<Factura> facturas)
+        {
+            int fila = 2;
+
+            //var facturasPorPeriodo = facturas.GroupBy(f => new{Año = f.FechaVencimiento.Year,f.Periodo}).Select(g => g.OrderBy(f => f.FechaVencimiento).ToList()).ToList();
+            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.ToList()).ToList();
+
+            foreach (List<Factura> carpeta in facturasPorCarpeta)
+            {
+                XLWorkbook libro = this.abrirPlantilla(obtenerRutaPlantillaInforme(plantilla));
+                IXLWorksheet informe = libro.Worksheet("Informe de Pago Realizado");
+
+                List<Factura> facturasFiltadas = carpeta;
+                //  Factura factura = null;
+                decimal importeTotalPeriodo = 0;
+
+                foreach (Factura factura in facturasFiltadas)
+                {
+                    long numeroCliente;
+                    numeroCliente = long.Parse(factura.NumeroCliente);
+
+                    importeTotalPeriodo += factura.ImporteAbonable;
+
+                    informe.Cell($"A{fila}").Value = numeroCliente;
+                    informe.Cell($"B{fila}").Value = $"{factura.PuntoVenta}B{factura.NumeroFactura}";
+                    informe.Cell($"C{fila}").Value = factura.FechaVencimiento.ToString("dd/MM/yyyy");
+                    informe.Cell($"D{fila}").Value = factura.ImportePrimerVencimiento;
+                    informe.Cell($"E{fila}").Value = factura.ImporteSaldoAnterior;
+                    informe.Cell($"F{fila}").Value = factura.ImporteAbonable;
+                    informe.Cell($"G{fila}").Value = factura.CUIT;
+                    informe.Cell($"H{fila}").Value = factura.TipoCodigoAutorizacion;
+                    informe.Cell($"I{fila}").Value = factura.CodigoAutorizacion;
+                    informe.Cell($"J{fila}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
+                    informe.Cell($"K{fila}").Value = factura.Tarifa;
+                    fila++;
+
+
+
+                }
+
+                informe.Range($"A{fila}:G{fila}").Merge().Value = "IMPORTE TOTAL";
+                informe.Range($"H{fila}:K{fila}").Merge().Value = importeTotalPeriodo;//importeTotal;
+                informe.Range($"H{fila}:K{fila}").Style.NumberFormat.Format = "$ #,##0.00";
+
+                informe.Range($"A2:K{fila - 1}").Sort(1, XLSortOrder.Ascending);
+
+
+                string pathGuardado = Path.Combine(desktopPath, $"{facturasFiltadas[0].FechaVencimiento.ToString("yyyy")}-{DateTime.ParseExact(facturasFiltadas[0].Periodo, "MMMM", new CultureInfo("es-ES")).Month}-Informe de Pago - {facturasFiltadas[0].Empresa} {facturasFiltadas[0].Periodo}.xlsx");
+
+
+                if (!File.Exists(pathGuardado))
+                {
+                    libro.SaveAs(pathGuardado);
+                    MessageBox.Show($"Informe de {facturasFiltadas[0].Empresa} exportado correctamente. Se ha guardado en {pathGuardado}");
+                }
+                else
+                {
+                    string pathGuardado_Error = Path.Combine(desktopPath, $"{facturasFiltadas[0].FechaVencimiento.ToString("yyyy")}-{DateTime.ParseExact(facturasFiltadas[0].Periodo, "MMMM", new CultureInfo("es-ES")).Month}-Informe de Pago - {facturasFiltadas[0].Empresa} {facturasFiltadas[0].Periodo}_Error_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+                    libro.SaveAs(pathGuardado_Error);
+                    MessageBox.Show($"El informe para el periodo {facturasFiltadas[0].Periodo} ya existe en el escritorio. Se ha guardado, {pathGuardado_Error}  para evitar sobrescribir el archivo existente.");
+                }
+
+
+
+                fila = 2;
+                importeTotalPeriodo = 0;
+                facturasFiltadas.Clear();
+            }
         }
     }
 }

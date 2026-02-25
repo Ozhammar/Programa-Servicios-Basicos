@@ -47,11 +47,11 @@ namespace Control_de_Facturas.Models
             TipoServicio = pTipoServicio;
             Tarifa = pTarifa;
         }
+        public bool Seleccionada { get; set; }
         public string Empresa { get; set; }
         public string NumeroCliente { get; set; }
         public string TipoFactura { get; set; }
         public string PuntoVenta { get; set; }
-
         public string NumeroFactura { get; set; }
         public DateTime FechaEmision { get; set; }
         public DateTime FechaVencimiento { get; set; }
@@ -67,7 +67,8 @@ namespace Control_de_Facturas.Models
         public DateTime VencimientoCodigoAutorizacion { get; set; }
         public string Archivo { get; set; }
         public string TipoServicio { get; set; }
-        public string Tarifa { get; set; } // Solo para Edesur
+        public string Tarifa { get; set; } // Solo para Edesur/EDENOR
+        
 
         // Método de validación
         public bool EsValida()
@@ -81,7 +82,14 @@ namespace Control_de_Facturas.Models
         // Método adicional útil para calcular importe abonable
         public decimal CalcularImporteAbonable()
         {
-            decimal ImporteAbonable = ImportePrimerVencimiento - Math.Abs(ImporteSaldoAnterior);
+            decimal SaldoAnterior_paraCalculo = ImporteSaldoAnterior;
+            if (SaldoAnterior_paraCalculo <= 0) 
+            {
+                SaldoAnterior_paraCalculo = 0;
+            }
+
+            decimal ImporteAbonable = ImportePrimerVencimiento - Math.Abs(SaldoAnterior_paraCalculo);
+
             if (ImporteAbonable < 0)
             {
                 ImporteAbonable = 0;
