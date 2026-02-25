@@ -1,274 +1,124 @@
 # Programa Servicios Básicos
 
-# Descripción
+## 📌 Descripción general
 
-# 
+**Programa Servicios Básicos** es una aplicación de escritorio desarrollada en **C# (.NET – Windows Forms)** cuyo objetivo es **centralizar, procesar y analizar facturas de servicios básicos** como **luz, gas y agua**. El sistema permite cargar facturas, extraer información relevante, organizarla por empresa y período, y generar reportes y archivos de salida (por ejemplo Excel) para su posterior uso administrativo y contable.
 
-# Programa Servicios Básicos es una aplicación de escritorio desarrollada en C# (.NET Windows Forms) orientada al procesamiento, control y análisis de facturas de servicios básicos (electricidad, gas y agua).
+El proyecto surge como una herramienta práctica para **automatizar tareas repetitivas**, reducir errores manuales y facilitar el control de facturación en entornos administrativos.
 
-# 
+---
 
-# La aplicación permite cargar facturas desde archivos PDF, extraer automáticamente información relevante, organizarla por empresa y período, realizar modificaciones manuales controladas y generar informes y exportaciones en formato Excel para uso administrativo y contable.
+## 🎯 Objetivos del sistema
 
-# 
+* Centralizar la gestión de facturas de servicios básicos.
+* Automatizar la **lectura y procesamiento de datos** provenientes de archivos (PDF / texto).
+* Permitir la **edición y validación manual** de facturas cargadas.
+* Organizar facturas por **empresa, tipo de servicio y período**.
+* Generar **reportes y exportaciones a Excel** (ej. SIDIF u otros formatos).
+* Servir como base extensible para futuras mejoras.
 
-# El objetivo principal del sistema es reducir tareas manuales repetitivas, minimizar errores operativos y estructurar el control de facturación de forma escalable.
+---
 
-# 
+## 🛠️ Tecnologías utilizadas
 
-# Funcionalidades actuales
+* **Lenguaje:** C#
+* **Framework:** .NET (Windows)
+* **Tipo de aplicación:** Windows Forms
+* **IDE recomendado:** Visual Studio 2022/2026
+* **Librerías destacadas:**
 
-# Procesamiento de facturas
+  * OpenXML / Excel (para exportaciones)
+  * Expresiones regulares (Regex) para parseo de datos
 
-# 
+---
 
-# Carga masiva desde carpetas.
+## 🧱 Estructura general del proyecto
 
-# 
+* **Forms /**
 
-# Parseo automático mediante expresiones regulares.
+  * Formularios principales (UI, DataGridView, eventos, navegación)
+* **Clases /**
 
-# 
+  * Modelos de dominio (Factura, Empresa, etc.)
+  * Lógica de negocio y servicios
+* **Servicios /**
 
-# Identificación de empresa emisora.
+  * Procesamiento de facturas
+  * Búsquedas (CUIT, períodos, importes, etc.)
+* **Assets /**
 
-# 
+  * Plantillas de Excel
+  * Recursos estáticos
+* **Program.cs / Form1.cs**
 
-# Extracción de:
+  * Punto de entrada y formulario principal
 
-# 
+---
 
-# Períodos
+## ⚙️ Funcionalidades principales
 
-# 
+* 📄 **Carga de facturas** desde archivos
+* 🔍 **Parseo automático de datos** (fechas, importes, CUIT, período)
+* 🧾 **Edición manual de facturas** desde la interfaz
+* 🗂️ **Clasificación por tipo de servicio** mediante pestañas
+* 📊 **Generación de reportes y liquidaciones**
+* 📤 **Exportación a Excel** con plantillas configurables
+* 🧠 Manejo de cultura numérica y fechas (`InvariantCulture`)
 
-# Importes
+---
 
-# 
+## ▶️ Cómo ejecutar el proyecto
 
-# Saldos anteriores
+1. Clonar el repositorio:
 
-# 
+   ```bash
+   git clone https://github.com/Ozhammar/Programa-Servicios-Basicos.git
+   ```
+2. Abrir el archivo de solución en **Visual Studio**.
+3. Verificar que el proyecto apunte a una versión compatible de **.NET Desktop**.
+4. Restaurar dependencias si fuera necesario.
+5. Compilar y ejecutar (`F5`).
 
-# Importe abonable
+---
 
-# 
+## 📦 Requisitos
 
-# CUIT y otros datos fiscales
+* Windows 10/11
+* Visual Studio (con carga de trabajo **Desarrollo de escritorio .NET**)
+* .NET Desktop Runtime compatible
 
-# 
+---
 
-# Empresas soportadas
+## 🚧 Estado del proyecto
 
-# 
+🟡 **En desarrollo activo**
 
-# Edesur
+El proyecto se encuentra en evolución constante, con mejoras continuas en:
 
-# 
+* Robustez del parseo de facturas
+* Modularización del código
+* Experiencia de usuario (UI)
+* Manejo de errores y validaciones
 
-# Edenor
+---
 
-# 
+## 🔮 Mejoras futuras previstas
 
-# Metrogas (segmento chicos y grandes)
+* Soporte para más formatos de factura
+* Persistencia en base de datos
+* Filtros y búsquedas avanzadas
+* Reportes gráficos
+* Instalador y distribución del ejecutable
 
-# 
+---
 
-# AySA
+## 👤 Autor
 
-# 
+**Lucas Povolo**
+GitHub: [https://github.com/Ozhammar](https://github.com/Ozhammar)
 
-# Camuzzi Gas del Sur
+---
 
-# 
+## 📄 Licencia
 
-# Camuzzi Gas Pampeana
-
-# 
-
-# Edición y control
-
-# 
-
-# Modificación individual de facturas desde el DataGridView.
-
-# 
-
-# Implementación de modificación múltiple sobre facturas seleccionadas.
-
-# 
-
-# Recalculo automático de importe abonable cuando corresponde.
-
-# 
-
-# Corrección en la lógica de cálculo para evitar errores con saldos negativos.
-
-# 
-
-# Informes
-
-# 
-
-# Generación de informes estructurados por período.
-
-# 
-
-# Reestructuración del algoritmo para contemplar división por períodos.
-
-# 
-
-# Exportaciones a Excel mediante plantillas.
-
-# 
-
-# Exportador específico para Edenor.
-
-# 
-
-# Nota: actualmente existe una limitación en el cotejo de múltiples carpetas de distintos años cuando los períodos se superponen. Se encuentra pendiente una mejora en el algoritmo de validación.
-
-# 
-
-# Arquitectura general
-
-# 
-
-# El proyecto sigue una estructura modular basada en separación de responsabilidades:
-
-# 
-
-# Forms: Interfaz gráfica y eventos.
-
-# 
-
-# Clases: Modelos de dominio (Factura y entidades asociadas).
-
-# 
-
-# Servicios / Procesadores: Lógica de negocio y procesamiento de archivos.
-
-# 
-
-# Controladores: Coordinación entre UI y modelo.
-
-# 
-
-# Assets: Plantillas Excel y recursos estáticos.
-
-# 
-
-# La lógica de modificación de entidades se encuentra centralizada en el controlador, utilizando reflexión para permitir edición genérica de propiedades sin acoplar la UI al modelo.
-
-# 
-
-# Tecnologías
-
-# 
-
-# C#
-
-# 
-
-# .NET Desktop (Windows Forms)
-
-# 
-
-# OpenXML para exportación a Excel
-
-# 
-
-# Expresiones Regulares (Regex) para parseo de texto
-
-# 
-
-# CultureInfo controlado para manejo consistente de importes y fechas
-
-# 
-
-# Cómo ejecutar
-
-# 
-
-# Clonar el repositorio:
-
-# git clone https://github.com/Ozhammar/Programa-Servicios-Basicos.git
-
-# 
-
-# Abrir la solución en Visual Studio.
-
-# 
-
-# Verificar que el proyecto apunte a una versión compatible de .NET Desktop.
-
-# 
-
-# Restaurar dependencias si fuese necesario.
-
-# 
-
-# Compilar y ejecutar.
-
-# 
-
-# Estado del proyecto
-
-# 
-
-# En desarrollo activo.
-
-# 
-
-# Actualmente el foco está en:
-
-# 
-
-# Mejorar robustez del algoritmo de informes.
-
-# 
-
-# Optimizar separación de responsabilidades.
-
-# 
-
-# Reducir duplicación de lógica.
-
-# 
-
-# Preparar la base para futura persistencia en base de datos.
-
-# 
-
-# Próximas mejoras
-
-# 
-
-# Persistencia en base de datos.
-
-# 
-
-# Mejor manejo de superposición de períodos entre años.
-
-# 
-
-# Filtros y búsquedas avanzadas.
-
-# 
-
-# Reportes gráficos.
-
-# 
-
-# Instalador para distribución.
-
-# 
-
-# Autor
-
-# 
-
-# Lucas Povolo
-
-# https://github.com/Ozhammar
-
+Este proyecto se distribuye con fines educativos y prácticos. La licencia podrá definirse en futuras versiones.
