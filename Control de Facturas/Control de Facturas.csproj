@@ -13,6 +13,7 @@
     <None Remove="Assets\Plantillas\BENEFICIARIOS AGUA, GAS Y LUZ.xlsx" />
     <None Remove="Assets\Plantillas\PLANTILLA.xlsx" />
     <None Remove="Assets\Plantillas\Plantillas Pagos\AYSA.xlsx" />
+    <None Remove="Assets\Plantillas\Plantillas Pagos\EDENOR.xlsx" />
     <None Remove="Assets\Plantillas\Plantillas Pagos\EDESUR.xlsx" />
     <None Remove="Assets\Plantillas\Plantillas Pagos\METROGAS PEQUEÑOS.xlsx" />
   </ItemGroup>
@@ -34,6 +35,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Plantillas\Plantillas Pagos\AYSA.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Plantillas\Plantillas Pagos\EDENOR.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Plantillas\Plantillas Pagos\EDESUR.xlsx">

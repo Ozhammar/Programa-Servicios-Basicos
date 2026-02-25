@@ -288,6 +288,32 @@ namespace Control_de_Facturas.Servicios
             }
         }
 
+        public void ModificarMultiplesFacturas(Factura factura, string nombrePropiedad, object valorNuevo)
+        {
+            var propiedad = typeof(Factura).GetProperty(nombrePropiedad);
+
+            if (propiedad == null)
+                throw new ArgumentException($"La propiedad '{nombrePropiedad}' no existe en Factura");
+
+            if (!propiedad.CanWrite)
+                throw new InvalidOperationException($"La propiedad '{nombrePropiedad}' es de solo lectura");
+            try
+            {
+                // Convertir el valor al tipo correcto
+                object valorConvertido = ConvertirValor(valorNuevo, propiedad.PropertyType);
+                propiedad.SetValue(factura, valorConvertido);
+
+                // Si se modifica ImportePrimerVencimiento o ImporteSaldoAnterior, recalcular ImporteAbonable
+                if (nombrePropiedad == "ImportePrimerVencimiento" || nombrePropiedad == "ImporteSaldoAnterior")
+                {
+                    factura.ImporteAbonable = factura.CalcularImporteAbonable();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidCastException($"No se pudo convertir '{valorNuevo}' al tipo {propiedad.PropertyType.Name}: {ex.Message}");
+            }
+        }
         private object ConvertirValor(object valor, Type tipoDestino)
         {
             if (valor == null)

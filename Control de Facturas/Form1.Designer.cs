@@ -483,7 +483,6 @@
             btnInformeInterior_Agua.TabIndex = 9;
             btnInformeInterior_Agua.Text = "Informe";
             btnInformeInterior_Agua.UseVisualStyleBackColor = true;
-            btnInformeInterior_Agua.Click += button8_Click;
             // 
             // groupBox6
             // 
@@ -792,12 +791,12 @@
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Location = new Point(6, 14);
-            dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
             dataGridView1.Size = new Size(1009, 220);
             dataGridView1.TabIndex = 7;
-            dataGridView1.CellContentClick += modificarDatosFactura;
+            dataGridView1.CellContentDoubleClick += modificarDatosFactura;
+            dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
+            dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
             // Form1

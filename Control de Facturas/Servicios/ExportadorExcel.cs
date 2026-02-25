@@ -14,6 +14,7 @@ namespace Control_de_Facturas.Servicios
         private readonly string rutaPlantillaInfome_EDESUR;
         private readonly string rutaPlantillaInfome_MetroGasChicos;
         private readonly string rutaPlantillaInfome_MetroGasGrandes;
+        private readonly string rutaPlantillaInfome_EDENOR;
         private ControladorFacturas controladorFacturas;
 
         public ExportadorExcel()
@@ -26,6 +27,7 @@ namespace Control_de_Facturas.Servicios
             rutaPlantillaInfome_EDESUR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDESUR.xlsx");
             rutaPlantillaInfome_MetroGasChicos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS PEQUEÑOS.xlsx");
             rutaPlantillaInfome_MetroGasGrandes = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS GRANDES.xlsx");
+            rutaPlantillaInfome_EDENOR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDENOR.xlsx");
 
             controladorFacturas = new ControladorFacturas();
         }
@@ -62,7 +64,9 @@ namespace Control_de_Facturas.Servicios
                 case "METROGAS PEQUEÑOS CLIENTES":
                     return rutaPlantillaInfome_MetroGasChicos;
                 case "METROGAS GRANDES CLIENTES":
-                    return rutaPlantillaInfome_MetroGasChicos;
+                    return rutaPlantillaInfome_MetroGasGrandes;
+                case "EDENOR":
+                    return rutaPlantillaInfome_EDENOR;
                 default:
                     throw new Exception("No se ha encontrado una plantilla de informe para la empresa especificada.");
             }
@@ -397,36 +401,35 @@ namespace Control_de_Facturas.Servicios
             int fila = 2;
 
             //var facturasPorPeriodo = facturas.GroupBy(f => new{Año = f.FechaVencimiento.Year,f.Periodo}).Select(g => g.OrderBy(f => f.FechaVencimiento).ToList()).ToList();
-            List<List<Factura>> facturasPorPeriodo = facturas.GroupBy(f => f.Periodo).Select(g => g.ToList()).ToList();
+            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.ToList()).ToList();
 
-            foreach (List<Factura> periodo in facturasPorPeriodo)
+            foreach (List<Factura> carpeta in facturasPorCarpeta)
             {
                 XLWorkbook libro = this.abrirPlantilla(obtenerRutaPlantillaInforme(plantilla));
                 IXLWorksheet informe = libro.Worksheet("Informe de Pago Realizado");
 
-                List<Factura> facturasFiltadas = periodo;
+                List<Factura> facturasFiltadas = carpeta;
                 //  Factura factura = null;
-                facturasFiltadas = facturasFiltadas.OrderBy(f => f.FechaVencimiento).ToList();
                 decimal importeTotalPeriodo = 0;
 
-                foreach (Factura facturaPeriodo in facturasFiltadas)
+                foreach (Factura factura in facturasFiltadas)
                 {
                     long numeroCliente;
-                    numeroCliente = long.Parse(facturaPeriodo.NumeroCliente);
+                    numeroCliente = long.Parse(factura.NumeroCliente);
 
-                    importeTotalPeriodo += facturaPeriodo.ImporteAbonable;
+                    importeTotalPeriodo += factura.ImporteAbonable;
 
                     informe.Cell($"A{fila}").Value = numeroCliente;
-                    informe.Cell($"B{fila}").Value = $"{facturaPeriodo.PuntoVenta}B{facturaPeriodo.NumeroFactura}";
-                    informe.Cell($"C{fila}").Value = facturaPeriodo.FechaVencimiento.ToString("dd/MM/yyyy");
-                    informe.Cell($"D{fila}").Value = facturaPeriodo.ImportePrimerVencimiento;
-                    informe.Cell($"E{fila}").Value = facturaPeriodo.ImporteSaldoAnterior;
-                    informe.Cell($"F{fila}").Value = facturaPeriodo.ImporteAbonable;
-                    informe.Cell($"G{fila}").Value = facturaPeriodo.CUIT;
-                    informe.Cell($"H{fila}").Value = facturaPeriodo.TipoCodigoAutorizacion;
-                    informe.Cell($"I{fila}").Value = facturaPeriodo.CodigoAutorizacion;
-                    informe.Cell($"J{fila}").Value = facturaPeriodo.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
-                    informe.Cell($"K{fila}").Value = facturaPeriodo.Tarifa;
+                    informe.Cell($"B{fila}").Value = $"{factura.PuntoVenta}B{factura.NumeroFactura}";
+                    informe.Cell($"C{fila}").Value = factura.FechaVencimiento.ToString("dd/MM/yyyy");
+                    informe.Cell($"D{fila}").Value = factura.ImportePrimerVencimiento;
+                    informe.Cell($"E{fila}").Value = factura.ImporteSaldoAnterior;
+                    informe.Cell($"F{fila}").Value = factura.ImporteAbonable;
+                    informe.Cell($"G{fila}").Value = factura.CUIT;
+                    informe.Cell($"H{fila}").Value = factura.TipoCodigoAutorizacion;
+                    informe.Cell($"I{fila}").Value = factura.CodigoAutorizacion;
+                    informe.Cell($"J{fila}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
+                    informe.Cell($"K{fila}").Value = factura.Tarifa;
                     fila++;
 
 
