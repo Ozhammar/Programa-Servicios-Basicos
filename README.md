@@ -2,7 +2,7 @@
 
 ## 📌 Descripción general
 
-**Programa Servicios Básicos** es una aplicación de escritorio desarrollada en **C# (.NET – Windows Forms)** cuyo objetivo es **centralizar, procesar y analizar facturas de servicios básicos** como **luz, gas y agua**. El sistema permite cargar facturas, extraer información relevante, organizarla por empresa y período, y generar reportes y archivos de salida (por ejemplo Excel) para su posterior uso administrativo y contable.
+**Programa Servicios Básicos** es una aplicación de escritorio desarrollada en **C# (.NET – Windows Forms)** cuyo objetivo es **centralizar, procesar y analizar facturas de servicios básicos** como **luz, gas y agua**. El sistema permite cargar facturas, extraer información relevante, organizarla por empresa y período, editar datos manualmente y generar reportes y archivos de salida (por ejemplo Excel) para su posterior uso administrativo y contable.
 
 El proyecto surge como una herramienta práctica para **automatizar tareas repetitivas**, reducir errores manuales y facilitar el control de facturación en entornos administrativos.
 
@@ -12,9 +12,10 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
 
 * Centralizar la gestión de facturas de servicios básicos.
 * Automatizar la **lectura y procesamiento de datos** provenientes de archivos (PDF / texto).
-* Permitir la **edición y validación manual** de facturas cargadas.
+* Permitir la **edición individual y múltiple** de facturas cargadas.
 * Organizar facturas por **empresa, tipo de servicio y período**.
-* Generar **reportes y exportaciones a Excel** (ej. SIDIF u otros formatos).
+* Generar **reportes estructurados por período**.
+* Exportar información a **Excel** (SIDIF y otros formatos).
 * Servir como base extensible para futuras mejoras.
 
 ---
@@ -22,13 +23,14 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
 ## 🛠️ Tecnologías utilizadas
 
 * **Lenguaje:** C#
-* **Framework:** .NET (Windows)
+* **Framework:** .NET (Windows Desktop)
 * **Tipo de aplicación:** Windows Forms
 * **IDE recomendado:** Visual Studio 2022/2026
 * **Librerías destacadas:**
 
   * OpenXML / Excel (para exportaciones)
   * Expresiones regulares (Regex) para parseo de datos
+  * Uso de reflexión (`Reflection`) para edición dinámica de propiedades
 
 ---
 
@@ -37,14 +39,20 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
 * **Forms /**
 
   * Formularios principales (UI, DataGridView, eventos, navegación)
+  * Gestión de selección y modificación múltiple
 * **Clases /**
 
   * Modelos de dominio (Factura, Empresa, etc.)
-  * Lógica de negocio y servicios
+  * Lógica de negocio
+* **Controladores /**
+
+  * Coordinación entre UI y modelo
+  * Modificación dinámica de facturas
 * **Servicios /**
 
-  * Procesamiento de facturas
-  * Búsquedas (CUIT, períodos, importes, etc.)
+  * Procesamiento de facturas por empresa
+  * Generación de informes
+  * Exportadores específicos
 * **Assets /**
 
   * Plantillas de Excel
@@ -57,13 +65,34 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
 
 ## ⚙️ Funcionalidades principales
 
-* 📄 **Carga de facturas** desde archivos
+* 📄 **Carga masiva de facturas** desde carpetas
+
 * 🔍 **Parseo automático de datos** (fechas, importes, CUIT, período)
-* 🧾 **Edición manual de facturas** desde la interfaz
-* 🗂️ **Clasificación por tipo de servicio** mediante pestañas
-* 📊 **Generación de reportes y liquidaciones**
+
+* 🏢 Soporte para múltiples empresas:
+
+  * Edesur
+  * Edenor
+  * Metrogas (segmentos chicos y grandes)
+  * AySA
+  * Camuzzi Gas del Sur
+  * Camuzzi Gas Pampeana
+
+* 🧾 **Edición manual individual** mediante doble click en el grid
+
+* ✅ **Modificación múltiple** de facturas seleccionadas
+
+* 🔄 Recalculo automático de **ImporteAbonable**
+
+* 🧠 Corrección de cálculo cuando el saldo anterior es negativo
+
+* 📊 **Generación de informes divididos por período**
+
 * 📤 **Exportación a Excel** con plantillas configurables
-* 🧠 Manejo de cultura numérica y fechas (`InvariantCulture`)
+
+* ⚡ Exportador específico para Edenor
+
+* 🌍 Manejo de cultura numérica y fechas (`InvariantCulture`)
 
 ---
 
@@ -74,9 +103,13 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
    ```bash
    git clone https://github.com/Ozhammar/Programa-Servicios-Basicos.git
    ```
+
 2. Abrir el archivo de solución en **Visual Studio**.
+
 3. Verificar que el proyecto apunte a una versión compatible de **.NET Desktop**.
+
 4. Restaurar dependencias si fuera necesario.
+
 5. Compilar y ejecutar (`F5`).
 
 ---
@@ -95,17 +128,18 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
 
 El proyecto se encuentra en evolución constante, con mejoras continuas en:
 
-* Robustez del parseo de facturas
-* Modularización del código
+* Optimización del algoritmo de informes por período
+* Mejora en el control de superposición de períodos entre años
+* Modularización y separación de responsabilidades
 * Experiencia de usuario (UI)
-* Manejo de errores y validaciones
+* Validaciones y manejo de errores
 
 ---
 
 ## 🔮 Mejoras futuras previstas
 
-* Soporte para más formatos de factura
 * Persistencia en base de datos
+* Mejor manejo de carpetas con múltiples años y períodos superpuestos
 * Filtros y búsquedas avanzadas
 * Reportes gráficos
 * Instalador y distribución del ejecutable
@@ -122,3 +156,6 @@ GitHub: [https://github.com/Ozhammar](https://github.com/Ozhammar)
 ## 📄 Licencia
 
 Este proyecto se distribuye con fines educativos y prácticos. La licencia podrá definirse en futuras versiones.
+---
+
+
