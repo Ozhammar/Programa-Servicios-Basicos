@@ -7,7 +7,7 @@ namespace Control_de_Facturas.Models
         public Factura(
             string pEmpresa = "",
             string pNumeroCliente = "",
-            string pTipoFactura = "",
+            string pTipoFactura = "B",
             string pPuntoVenta = "",
             string pNumeroFactura = "",
             DateTime? pFechaEmision = null,
@@ -123,6 +123,14 @@ namespace Control_de_Facturas.Models
                 "tarifa" => Tarifa,
                 _ => "",
             };
+        }
+
+        private void comprobarCESP()
+        {
+            if(this.CodigoAutorizacion == "")
+            {
+                this.TipoCodigoAutorizacion = "NA";
+            }
         }
     }
 }
