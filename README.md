@@ -1,274 +1,161 @@
 # Programa Servicios Básicos
 
-# Descripción
+## 📌 Descripción general
 
-# 
+**Programa Servicios Básicos** es una aplicación de escritorio desarrollada en **C# (.NET – Windows Forms)** cuyo objetivo es **centralizar, procesar y analizar facturas de servicios básicos** como **luz, gas y agua**. El sistema permite cargar facturas, extraer información relevante, organizarla por empresa y período, editar datos manualmente y generar reportes y archivos de salida (por ejemplo Excel) para su posterior uso administrativo y contable.
 
-# Programa Servicios Básicos es una aplicación de escritorio desarrollada en C# (.NET Windows Forms) orientada al procesamiento, control y análisis de facturas de servicios básicos (electricidad, gas y agua).
+El proyecto surge como una herramienta práctica para **automatizar tareas repetitivas**, reducir errores manuales y facilitar el control de facturación en entornos administrativos.
 
-# 
+---
 
-# La aplicación permite cargar facturas desde archivos PDF, extraer automáticamente información relevante, organizarla por empresa y período, realizar modificaciones manuales controladas y generar informes y exportaciones en formato Excel para uso administrativo y contable.
+## 🎯 Objetivos del sistema
 
-# 
+* Centralizar la gestión de facturas de servicios básicos.
+* Automatizar la **lectura y procesamiento de datos** provenientes de archivos (PDF / texto).
+* Permitir la **edición individual y múltiple** de facturas cargadas.
+* Organizar facturas por **empresa, tipo de servicio y período**.
+* Generar **reportes estructurados por período**.
+* Exportar información a **Excel** (SIDIF y otros formatos).
+* Servir como base extensible para futuras mejoras.
 
-# El objetivo principal del sistema es reducir tareas manuales repetitivas, minimizar errores operativos y estructurar el control de facturación de forma escalable.
+---
 
-# 
+## 🛠️ Tecnologías utilizadas
 
-# Funcionalidades actuales
+* **Lenguaje:** C#
+* **Framework:** .NET (Windows Desktop)
+* **Tipo de aplicación:** Windows Forms
+* **IDE recomendado:** Visual Studio 2022/2026
+* **Librerías destacadas:**
 
-# Procesamiento de facturas
+  * OpenXML / Excel (para exportaciones)
+  * Expresiones regulares (Regex) para parseo de datos
+  * Uso de reflexión (`Reflection`) para edición dinámica de propiedades
 
-# 
+---
 
-# Carga masiva desde carpetas.
+## 🧱 Estructura general del proyecto
 
-# 
+* **Forms /**
 
-# Parseo automático mediante expresiones regulares.
+  * Formularios principales (UI, DataGridView, eventos, navegación)
+  * Gestión de selección y modificación múltiple
+* **Clases /**
 
-# 
+  * Modelos de dominio (Factura, Empresa, etc.)
+  * Lógica de negocio
+* **Controladores /**
 
-# Identificación de empresa emisora.
+  * Coordinación entre UI y modelo
+  * Modificación dinámica de facturas
+* **Servicios /**
 
-# 
+  * Procesamiento de facturas por empresa
+  * Generación de informes
+  * Exportadores específicos
+* **Assets /**
 
-# Extracción de:
+  * Plantillas de Excel
+  * Recursos estáticos
+* **Program.cs / Form1.cs**
 
-# 
+  * Punto de entrada y formulario principal
 
-# Períodos
+---
 
-# 
+## ⚙️ Funcionalidades principales
 
-# Importes
+* 📄 **Carga masiva de facturas** desde carpetas
 
-# 
+* 🔍 **Parseo automático de datos** (fechas, importes, CUIT, período)
 
-# Saldos anteriores
+* 🏢 Soporte para múltiples empresas:
 
-# 
+  * Edesur
+  * Edenor
+  * Metrogas (segmentos chicos y grandes)
+  * AySA
+  * Camuzzi Gas del Sur
+  * Camuzzi Gas Pampeana
 
-# Importe abonable
+* 🧾 **Edición manual individual** mediante doble click en el grid
 
-# 
+* ✅ **Modificación múltiple** de facturas seleccionadas
 
-# CUIT y otros datos fiscales
+* 🔄 Recalculo automático de **ImporteAbonable**
 
-# 
+* 🧠 Corrección de cálculo cuando el saldo anterior es negativo
 
-# Empresas soportadas
+* 📊 **Generación de informes divididos por período**
 
-# 
+* 📤 **Exportación a Excel** con plantillas configurables
 
-# Edesur
+* ⚡ Exportador específico para Edenor
 
-# 
+* 🌍 Manejo de cultura numérica y fechas (`InvariantCulture`)
 
-# Edenor
+---
 
-# 
+## ▶️ Cómo ejecutar el proyecto
 
-# Metrogas (segmento chicos y grandes)
+1. Clonar el repositorio:
 
-# 
+   ```bash
+   git clone https://github.com/Ozhammar/Programa-Servicios-Basicos.git
+   ```
 
-# AySA
+2. Abrir el archivo de solución en **Visual Studio**.
 
-# 
+3. Verificar que el proyecto apunte a una versión compatible de **.NET Desktop**.
 
-# Camuzzi Gas del Sur
+4. Restaurar dependencias si fuera necesario.
 
-# 
+5. Compilar y ejecutar (`F5`).
 
-# Camuzzi Gas Pampeana
+---
 
-# 
+## 📦 Requisitos
 
-# Edición y control
+* Windows 10/11
+* Visual Studio (con carga de trabajo **Desarrollo de escritorio .NET**)
+* .NET Desktop Runtime compatible
 
-# 
+---
 
-# Modificación individual de facturas desde el DataGridView.
+## 🚧 Estado del proyecto
 
-# 
+🟡 **En desarrollo activo**
 
-# Implementación de modificación múltiple sobre facturas seleccionadas.
+El proyecto se encuentra en evolución constante, con mejoras continuas en:
 
-# 
+* Optimización del algoritmo de informes por período
+* Mejora en el control de superposición de períodos entre años
+* Modularización y separación de responsabilidades
+* Experiencia de usuario (UI)
+* Validaciones y manejo de errores
 
-# Recalculo automático de importe abonable cuando corresponde.
+---
 
-# 
+## 🔮 Mejoras futuras previstas
 
-# Corrección en la lógica de cálculo para evitar errores con saldos negativos.
+* Persistencia en base de datos
+* Mejor manejo de carpetas con múltiples años y períodos superpuestos
+* Filtros y búsquedas avanzadas
+* Reportes gráficos
+* Instalador y distribución del ejecutable
 
-# 
+---
 
-# Informes
+## 👤 Autor
 
-# 
+**Lucas Povolo**
+GitHub: [https://github.com/Ozhammar](https://github.com/Ozhammar)
 
-# Generación de informes estructurados por período.
+---
 
-# 
+## 📄 Licencia
 
-# Reestructuración del algoritmo para contemplar división por períodos.
+Este proyecto se distribuye con fines educativos y prácticos. La licencia podrá definirse en futuras versiones.
+---
 
-# 
-
-# Exportaciones a Excel mediante plantillas.
-
-# 
-
-# Exportador específico para Edenor.
-
-# 
-
-# Nota: actualmente existe una limitación en el cotejo de múltiples carpetas de distintos años cuando los períodos se superponen. Se encuentra pendiente una mejora en el algoritmo de validación.
-
-# 
-
-# Arquitectura general
-
-# 
-
-# El proyecto sigue una estructura modular basada en separación de responsabilidades:
-
-# 
-
-# Forms: Interfaz gráfica y eventos.
-
-# 
-
-# Clases: Modelos de dominio (Factura y entidades asociadas).
-
-# 
-
-# Servicios / Procesadores: Lógica de negocio y procesamiento de archivos.
-
-# 
-
-# Controladores: Coordinación entre UI y modelo.
-
-# 
-
-# Assets: Plantillas Excel y recursos estáticos.
-
-# 
-
-# La lógica de modificación de entidades se encuentra centralizada en el controlador, utilizando reflexión para permitir edición genérica de propiedades sin acoplar la UI al modelo.
-
-# 
-
-# Tecnologías
-
-# 
-
-# C#
-
-# 
-
-# .NET Desktop (Windows Forms)
-
-# 
-
-# OpenXML para exportación a Excel
-
-# 
-
-# Expresiones Regulares (Regex) para parseo de texto
-
-# 
-
-# CultureInfo controlado para manejo consistente de importes y fechas
-
-# 
-
-# Cómo ejecutar
-
-# 
-
-# Clonar el repositorio:
-
-# git clone https://github.com/Ozhammar/Programa-Servicios-Basicos.git
-
-# 
-
-# Abrir la solución en Visual Studio.
-
-# 
-
-# Verificar que el proyecto apunte a una versión compatible de .NET Desktop.
-
-# 
-
-# Restaurar dependencias si fuese necesario.
-
-# 
-
-# Compilar y ejecutar.
-
-# 
-
-# Estado del proyecto
-
-# 
-
-# En desarrollo activo.
-
-# 
-
-# Actualmente el foco está en:
-
-# 
-
-# Mejorar robustez del algoritmo de informes.
-
-# 
-
-# Optimizar separación de responsabilidades.
-
-# 
-
-# Reducir duplicación de lógica.
-
-# 
-
-# Preparar la base para futura persistencia en base de datos.
-
-# 
-
-# Próximas mejoras
-
-# 
-
-# Persistencia en base de datos.
-
-# 
-
-# Mejor manejo de superposición de períodos entre años.
-
-# 
-
-# Filtros y búsquedas avanzadas.
-
-# 
-
-# Reportes gráficos.
-
-# 
-
-# Instalador para distribución.
-
-# 
-
-# Autor
-
-# 
-
-# Lucas Povolo
-
-# https://github.com/Ozhammar
 
