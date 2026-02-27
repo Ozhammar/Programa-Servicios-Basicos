@@ -290,7 +290,10 @@ namespace Control_de_Facturas.Servicios
                 "USHUAIA",
                 "www.osmgp.gov.ar",
                 "30 - 63046762 - 0",
-                "RIO NEGRO"
+                "RIO NEGRO",
+                "ROSARIO",
+                "RECONQUISTA",
+                "SANTA FE",
                 #endregion
             };
             string[] palabrasClave_LUZ =
