@@ -295,6 +295,7 @@ namespace Control_de_Facturas.Servicios
                 "RECONQUISTA",
                 "SANTA FE",
                 "30-64516879-4",
+                "AGUAS CORDOBESAS"
                 #endregion
             };
             string[] palabrasClave_LUZ =
