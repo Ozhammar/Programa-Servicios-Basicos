@@ -2,21 +2,21 @@
 
 ## 📌 Descripción general
 
-**Programa Servicios Básicos** es una aplicación de escritorio desarrollada en **C# (.NET – Windows Forms)** cuyo objetivo es **centralizar, procesar y analizar facturas de servicios básicos** como **luz, gas y agua**. El sistema permite cargar facturas, extraer información relevante, organizarla por empresa y período, editar datos manualmente y generar reportes y archivos de salida (por ejemplo Excel) para su posterior uso administrativo y contable.
+Programa Servicios Básicos es una aplicación de escritorio desarrollada en **C# (.NET – Windows Forms)** cuyo objetivo es **centralizar, procesar y analizar facturas de servicios básicos** como **luz, gas y agua**. El sistema permite cargar facturas desde PDF, extraer información relevante, organizarla por empresa y período, editar datos manualmente y generar reportes y archivos de salida (por ejemplo Excel) para su posterior uso administrativo y contable. :contentReference[oaicite:1]{index=1}
 
-El proyecto surge como una herramienta práctica para **automatizar tareas repetitivas**, reducir errores manuales y facilitar el control de facturación en entornos administrativos.
+El proyecto surge como una herramienta práctica para **automatizar tareas repetitivas, reducir errores manuales** y facilitar el control de facturación en entornos administrativos. :contentReference[oaicite:2]{index=2}
 
 ---
 
 ## 🎯 Objetivos del sistema
 
 * Centralizar la gestión de facturas de servicios básicos.
-* Automatizar la **lectura y procesamiento de datos** provenientes de archivos (PDF / texto).
-* Permitir la **edición individual y múltiple** de facturas cargadas.
-* Organizar facturas por **empresa, tipo de servicio y período**.
-* Generar **reportes estructurados por período**.
-* Exportar información a **Excel** (SIDIF y otros formatos).
-* Servir como base extensible para futuras mejoras.
+* Automatizar la lectura y procesamiento de datos provenientes de archivos (PDF / texto).
+* Permitir la edición individual y múltiple de facturas cargadas.
+* Organizar facturas por empresa, tipo de servicio y período.
+* Generar reportes estructurados por período.
+* Exportar información a Excel (SIDIF u otros formatos).
+* Servir como base extensible para futuras mejoras. :contentReference[oaicite:3]{index=3}
 
 ---
 
@@ -27,72 +27,59 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
 * **Tipo de aplicación:** Windows Forms
 * **IDE recomendado:** Visual Studio 2022/2026
 * **Librerías destacadas:**
-
   * OpenXML / Excel (para exportaciones)
   * Expresiones regulares (Regex) para parseo de datos
-  * Uso de reflexión (`Reflection`) para edición dinámica de propiedades
+  * Uso de reflexión (`Reflection`) para edición dinámica de propiedades :contentReference[oaicite:4]{index=4}
 
 ---
 
 ## 🧱 Estructura general del proyecto
 
-* **Forms /**
-
-  * Formularios principales (UI, DataGridView, eventos, navegación)
+* **Forms/**  
+  * Formularios principales (UI, DataGridView, eventos, navegación)  
   * Gestión de selección y modificación múltiple
-* **Clases /**
 
-  * Modelos de dominio (Factura, Empresa, etc.)
+* **Clases/**  
+  * Modelos de dominio (Factura, Empresa, etc.)  
   * Lógica de negocio
-* **Controladores /**
 
-  * Coordinación entre UI y modelo
+* **Controladores/**  
+  * Coordinación entre UI y modelo  
   * Modificación dinámica de facturas
-* **Servicios /**
 
-  * Procesamiento de facturas por empresa
-  * Generación de informes
+* **Servicios/**  
+  * Procesamiento de facturas por empresa  
+  * Generación de informes  
   * Exportadores específicos
-* **Assets /**
 
-  * Plantillas de Excel
+* **Assets/**  
+  * Plantillas de Excel  
   * Recursos estáticos
-* **Program.cs / Form1.cs**
 
-  * Punto de entrada y formulario principal
+* **Program.cs / Form1.cs**  
+  * Punto de entrada y formulario principal :contentReference[oaicite:5]{index=5}
 
 ---
 
 ## ⚙️ Funcionalidades principales
 
-* 📄 **Carga masiva de facturas** desde carpetas
-
+* 📁 **Carga masiva de facturas desde carpetas**
 * 🔍 **Parseo automático de datos** (fechas, importes, CUIT, período)
-
 * 🏢 Soporte para múltiples empresas:
-
   * Edesur
   * Edenor
   * Metrogas (segmentos chicos y grandes)
   * AySA
   * Camuzzi Gas del Sur
   * Camuzzi Gas Pampeana
-
-* 🧾 **Edición manual individual** mediante doble click en el grid
-
-* ✅ **Modificación múltiple** de facturas seleccionadas
-
-* 🔄 Recalculo automático de **ImporteAbonable**
-
+* ✍️ Edición manual individual mediante doble click en el grid
+* ✅ **Modificación múltiple de facturas seleccionadas**
+* 🔄 Recalculo automático de `ImporteAbonable`
 * 🧠 Corrección de cálculo cuando el saldo anterior es negativo
-
 * 📊 **Generación de informes divididos por período**
-
-* 📤 **Exportación a Excel** con plantillas configurables
-
+* 📤 **Exportación a Excel con plantillas configurables**
 * ⚡ Exportador específico para Edenor
-
-* 🌍 Manejo de cultura numérica y fechas (`InvariantCulture`)
+* 🌍 Manejo de cultura numérica y fechas (`InvariantCulture`) :contentReference[oaicite:6]{index=6}
 
 ---
 
@@ -102,60 +89,55 @@ El proyecto surge como una herramienta práctica para **automatizar tareas repet
 
    ```bash
    git clone https://github.com/Ozhammar/Programa-Servicios-Basicos.git
-   ```
 
-2. Abrir el archivo de solución en **Visual Studio**.
+Abrir el archivo de solución en Visual Studio.
 
-3. Verificar que el proyecto apunte a una versión compatible de **.NET Desktop**.
+Verificar que el proyecto apunte a una versión compatible de .NET Desktop.
 
-4. Restaurar dependencias si fuera necesario.
+Restaurar dependencias si fuese necesario.
 
-5. Compilar y ejecutar (`F5`).
+Compilar y ejecutar (F5).
 
----
+📦 Requisitos
 
-## 📦 Requisitos
+Windows 10/11
 
-* Windows 10/11
-* Visual Studio (con carga de trabajo **Desarrollo de escritorio .NET**)
-* .NET Desktop Runtime compatible
+Visual Studio (con carga de trabajo Desarrollo de escritorio .NET)
 
----
+.NET Desktop Runtime compatible
 
-## 🚧 Estado del proyecto
+🚧 Estado del proyecto
 
-🟡 **En desarrollo activo**
+🟡 En desarrollo activo
 
 El proyecto se encuentra en evolución constante, con mejoras continuas en:
 
-* Optimización del algoritmo de informes por período
-* Mejora en el control de superposición de períodos entre años
-* Modularización y separación de responsabilidades
-* Experiencia de usuario (UI)
-* Validaciones y manejo de errores
+Optimización del algoritmo de informes por período
 
----
+Mejor manejo de carpetas con múltiples años y períodos superpuestos
 
-## 🔮 Mejoras futuras previstas
+Modularización y separación de responsabilidades
 
-* Persistencia en base de datos
-* Mejor manejo de carpetas con múltiples años y períodos superpuestos
-* Filtros y búsquedas avanzadas
-* Reportes gráficos
-* Instalador y distribución del ejecutable
+Experiencia de usuario (UI)
 
----
+Validaciones y manejo de errores
 
-## 👤 Autor
+🔮 Mejoras futuras previstas
 
-**Lucas Povolo**
-GitHub: [https://github.com/Ozhammar](https://github.com/Ozhammar)
+Persistencia en base de datos
 
----
+Filtros y búsquedas avanzadas
 
-## 📄 Licencia
+Reportes gráficos
 
-Este proyecto se distribuye con fines educativos y prácticos. La licencia podrá definirse en futuras versiones.
----
+Instalador y distribución del ejecutable
 
+👤 Autor
 
+Lucas Povolo
+GitHub: https://github.com/Ozhammar
+
+📄 Licencia
+
+Este proyecto se distribuye con fines educativos y prácticos.
+La licencia podrá definirse en futuras versiones.
