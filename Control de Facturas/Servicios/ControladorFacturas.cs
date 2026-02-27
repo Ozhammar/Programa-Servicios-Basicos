@@ -294,6 +294,7 @@ namespace Control_de_Facturas.Servicios
                 "ROSARIO",
                 "RECONQUISTA",
                 "SANTA FE",
+                "30-64516879-4",
                 #endregion
             };
             string[] palabrasClave_LUZ =
