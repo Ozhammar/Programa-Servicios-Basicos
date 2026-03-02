@@ -60,11 +60,41 @@ namespace Control_de_Facturas.Servicios
                     await Task.Run(() =>
                     {
                         string textoPDF = gestorArchivos.LeerPDF(archivo);
-                        Factura factura = IdentificarYProcesarFactura(textoPDF, archivo);
-                        if (factura != null)
+
+                        /*if (textoPDF.Contains("30-70861788-8"))
                         {
-                            facturasProcesadas.Add(factura);
+                            var bloques = DividirEnBloques(textoPDF);
+                            foreach (var bloque in bloques)
+                            {
+                                Factura factura = IdentificarYProcesarFactura(bloque, archivo);
+                                if (factura != null)
+                                {
+                                    facturasProcesadas.Add(factura);
+                                }
+                            }
+                        }*/
+                        if (RequiereDivisionEnBloques(textoPDF))
+                        {
+                            var bloques = DividirEnBloques(textoPDF);
+
+                            foreach (var bloque in bloques)
+                            {
+                                Factura factura = IdentificarYProcesarFactura(bloque, archivo);
+                                if (factura != null)
+                                {
+                                    facturasProcesadas.Add(factura);
+                                }
+                            }
                         }
+                        else
+                        {
+                            Factura factura = IdentificarYProcesarFactura(textoPDF, archivo);
+                            if (factura != null)
+                            {
+                                facturasProcesadas.Add(factura);
+                            }
+                        }
+
                     });
                 }
                 catch (Exception ex)
@@ -80,9 +110,20 @@ namespace Control_de_Facturas.Servicios
             return facturasProcesadas;
         }
 
+        private bool RequiereDivisionEnBloques(string textoPDF)
+        {
+            bool check = false;
+            if (textoPDF.Contains("30-70861788-8" /* Aguas del Tucumán*/))
+            {
+                check = true;
+            }
+
+            return check;
+        }
+
         private Factura IdentificarYProcesarFactura(string textoPDF, string rutaArchivo)
         {
-          
+
             if (textoPDF.Contains("Edesur"))
             {
                 return procesadorEdesur.ProcesarFactura(textoPDF, rutaArchivo);
@@ -133,92 +174,6 @@ namespace Control_de_Facturas.Servicios
 
             return OrdenarSegunEmpresa(facturasFiltradas, empresa);
         }
-
-        /* private bool corroborarInterior(string textoPDF)
-         {
-             string[] palabrasClave =
-             {
-                 #region GAS INTERIOR
-                 "redengas",
-                 "30-67775026-6",
-                 "naturgynoa",
-                 "30-65786572-5",
-                 "www.naturgy.com.ar",
-                 "30-65786633-0",
-                 "litoralgas",
-                 "gasnea",
-                 "30-66554905-0",
-                 "33-65786527-9",
-                 "DISTRIBUIDORA DE GAS DEL CENTRO",
-                 "30-67364611-1",
-                 "DISTRIGAS",
-                 #region camuzziSUR
-                 "94000940600148071",
-                 "94000940600098389",
-                 "94000940600168381",
-                 "94200940600112201",
-                 "92000940600020772",
-                 "92030940600006061",
-                 "83700940600049699",
-                 "90000940600042178",
-                 "91030940600057771",
-                 "94000940600149324",
-                 "83240040200274998",
-                 "83240040100274230",
-                 "83320940600029269",
-                 "83000940600326800",
-                 "83000940600081425",
-                 "83000220302066056",
-                 "83000100101297507",
-                 "84000940600071234",
-                 "85000940600125847",
-                 "91200940600011558",
-                 "84000000100284341",
-                 "94100180200309425",
-                 "90000940600043201",
-                 "83000211202040550",
-                 "83400230400207495",
-                 "19000940601128792",
-                 #endregion
-                 #region camuzziPampeana
-                 "19000940600543300",
-                 "7000940600260990",
-                 "76000990403737859",
-                 "76300030900324405",
-                 "80000940600856251",
-                 "73000940600135266",
-                 "76000940601787206",
-                 "63000940600187037",
-                 "63000031000591301",
-                 "63600940600122119",
-                 "71300061100081656",
-                 "66600940600000934",
-                 "74000990300369728",
-                 "76000960703428986",
-                 #endregion
-
-                 #endregion
-
-                 #region AGUA INTERIOR
-                 "USHUAIA",
-                 #endregion
-                 #region LUZ INTERIOR
-
-                 #endregion
-
-             };
-             bool existe = false;
-
-             foreach (string palabra in palabrasClave)
-             {
-                 if (textoPDF.Contains(palabra))
-                 {
-                     existe = true;
-                     break;
-                 }
-             }
-             return existe;
-         }*/
 
         private TiposServicios? corroborarInterior(string textoPDF)
         {
@@ -295,7 +250,14 @@ namespace Control_de_Facturas.Servicios
                 "RECONQUISTA",
                 "SANTA FE",
                 "30-64516879-4",
-                "AGUAS CORDOBESAS"
+                "AGUAS CORDOBESAS",
+                "AGUAS DEL TUCUMÁN",
+                "AGUAS DEL TUCUMAN",
+                "30-70861788-8",
+                "aguasdeltucuman",
+                "30-71151356-2",
+                "33-69809590-9",
+                "aguasdeformosa",
                 #endregion
             };
             string[] palabrasClave_LUZ =
@@ -376,6 +338,14 @@ namespace Control_de_Facturas.Servicios
                 .Distinct()
                 .OrderBy(e => e)
                 .ToList();
+        }
+        private IEnumerable<string> DividirEnBloques(string textoPDF)
+        {
+            textoPDF = textoPDF.Replace("\r", "");
+
+            var bloques = Regex.Split(textoPDF, @"(?=Cliente\s*\d{8})", RegexOptions.IgnoreCase);
+
+            return bloques.Where(b => b.Contains("Cliente"));
         }
         #endregion
 
