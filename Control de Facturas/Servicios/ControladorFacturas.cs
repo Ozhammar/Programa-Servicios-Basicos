@@ -257,7 +257,7 @@ namespace Control_de_Facturas.Servicios
                 "aguasdeltucuman",
                 "30-71151356-2",
                 "33-69809590-9",
-
+                "aguasdeformosa",
                 #endregion
             };
             string[] palabrasClave_LUZ =
