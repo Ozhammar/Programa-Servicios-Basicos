@@ -255,7 +255,8 @@ namespace Control_de_Facturas.Servicios
                 "AGUAS DEL TUCUMAN",
                 "30-70861788-8",
                 "aguasdeltucuman",
-                "30-71151356-2"
+                "30-71151356-2",
+                "33-69809590-9",
 
                 #endregion
             };
