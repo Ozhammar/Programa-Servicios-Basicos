@@ -58,12 +58,14 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"(USHUAIA)", RegexOptions.IgnoreCase),//DPOSS
                 new Regex(@"(www.osmgp.gov.ar)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS DE MAR DEL PLATA
                 new Regex(@"(30 - 63046762 - 0)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS DE MAR DEL PLATA
+                new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
                 new Regex(@"(R[íi]o\s*negro)", RegexOptions.IgnoreCase),//AGUAS RIONEGRINAS
                 new Regex(@"(ROSARIO)", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"(SANTA\s*FE)", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"(RECONQUISTA)", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"(Aguas\s*de\s*Corrientes)", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                 new Regex(@"(Aguas Cordobesas)", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
+                
 
 
             };
@@ -111,6 +113,12 @@ namespace Control_de_Facturas.Processors
                                 empresa = "AGUAS SANTAFESINAS";
                                 break;
                             }
+                        case "30-70861788-8":
+                            {
+                                empresa = "AGUAS DE TUCUMAN";
+                                break;
+                            }
+                            
                     }
                     break;
                 }
@@ -129,6 +137,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"Punto\s*Suministro\s*\:?(\d{8})", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"FC\s*\-\s*\d{4}\s*\-\s*\d{8}(\d{8})", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                 new Regex(@"Cuenta\s*N[º°]\s*[\s\S]+(\d{6})FC", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
+                new Regex(@"Cliente\s*(\d{8})", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
 
             };
             string numeroCliente = "";
@@ -152,6 +161,7 @@ namespace Control_de_Facturas.Processors
             {
 
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?(B)""?", RegexOptions.IgnoreCase),//DPOSS
+                new Regex(@"Liquidaci[óo]n\s*Servicios\s*P[úu]blicos\s*(B)", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
                 new Regex(@"(B)-\d{1,2}", RegexOptions.IgnoreCase),//obras sanitarias mdp
                 new Regex(@"""(B)""", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"(B)\s*\−\s*C[óo]digo", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
@@ -246,6 +256,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"\.\.\.\s*\d{2}\s*\/\s*\d{3}\.?([\d.]+\/\d{2})", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
                 new Regex(@"Factura\s*\:?\s*\d+\s*\-[\s\S]+\-(\d+)\s*C", RegexOptions.IgnoreCase),//AGUAS RIONEGRINAS
                 new Regex(@"""B""\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
+                new Regex(@"Factura\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
                 new Regex(@"FC\s*\-\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                 new Regex(@"FC\s*\d{4}\s*\−\s*(\d{8})\s*In", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
 
@@ -357,6 +368,7 @@ namespace Control_de_Facturas.Processors
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"\d{2}\s*/\s*\d{2}\s*/\s*\d{4}\s*(\d{2}\/\d{2})\s*Categor[íi]a", RegexOptions.IgnoreCase),//DPOSS
+                new Regex(@"per[íi]odo\s*mensual\s*(\d{4}/\d+)", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
                 new Regex(@"Per[íi]odo\s*\:?\s*(\d+/\d{4})", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
                 new Regex(@"(\d{4}/\d{2})\s*IC", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"((ENE|FEB|MAR|ABR|MAY|JUN|JUL|AGO|SEP|OCT|NOV|DIC)-\d{4})", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
@@ -394,6 +406,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"([\d.,]+)\s*[úu]ltimos", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"\d{2}/\d{2}/\d{4}\s*([\d.,]+)\s*FC", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                 new Regex(@"total\s*\$?\s*([\d.,]+)", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
+                new Regex(@"Importe\s*\$?\s*([\d.,]+)", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
             };
             decimal ImportePrimerVencimiento = 0;
 
@@ -415,7 +428,9 @@ namespace Control_de_Facturas.Processors
             long cuitLong = 0;
             List<Regex> patrones = new List<Regex>
             {
+                 new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
                  new Regex(@"C\s*\.?\s*U\s*\.?\s*I\s*\.?\s*T\.?\s*\:?\s*\s*N?[º°]?\s*(\d{2}-\d{8}-\d{1})", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
+             
           
             };
 
