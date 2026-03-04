@@ -465,6 +465,7 @@
             btnLiqUInterior_Agua.TabIndex = 11;
             btnLiqUInterior_Agua.Text = "Unificada";
             btnLiqUInterior_Agua.UseVisualStyleBackColor = true;
+            btnLiqUInterior_Agua.Click += btnLiqUInterior_Agua_Click;
             // 
             // btnLiqIInterior_Agua
             // 

@@ -195,12 +195,22 @@ namespace Control_de_Facturas.Servicios
             return OrdenarSegunEmpresa(facturasFiltradas, empresa);
         }
 
-      /*  public List<Factura> borrarDuplicados(List<Factura> facturas)
+        public List<Factura> filtrarPorTipoServicio(List<Factura> facturas, string tipoServicio)
         {
-            List<Factura> facturasSinDuplicados = facturas.Distinct().ToList();
+            if (facturas == null || facturas.Count == 0)
+                return new List<Factura>();
 
-            return facturasSinDuplicados;
-        }*/
+            var facturasFiltradas = facturas
+                .Where(f => f.TipoServicio.Equals(tipoServicio, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            return OrdenarSegunEmpresa(facturasFiltradas, tipoServicio);
+        }
+        /*  public List<Factura> borrarDuplicados(List<Factura> facturas)
+          {
+              List<Factura> facturasSinDuplicados = facturas.Distinct().ToList();
+
+              return facturasSinDuplicados;
+          }*/
 
         private TiposServicios? corroborarInterior(string textoPDF)
         {

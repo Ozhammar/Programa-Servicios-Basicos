@@ -40,7 +40,7 @@ namespace Control_de_Facturas.Processors
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
             factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
-            factura.TipoServicio = "AGUA";
+            factura.TipoServicio = "AGUA INTERIOR";
             //factura.Tarifa = ExtraerTarifa(textoPDF);
 
             if (factura.CodigoAutorizacion == "")
@@ -144,7 +144,6 @@ namespace Control_de_Facturas.Processors
         }
         private string ExtraerNumeroCliente(string textoPDF)
         {
-
             // Lógica para extraer el número de cliente del texto del PDF
             List<Regex> patrones = new List<Regex>
             {
@@ -444,6 +443,7 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
+                new Regex(@"Total\s*a\s*Pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
                 new Regex(@"\d+\s*\.\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//AGUAS MENDOCINAS
                 new Regex(@"doc\.?\s*\$\s*([\d.,]+)\s*\d{2}/\d{2}/\d{4}", RegexOptions.IgnoreCase),//AGUA DE MISIONES
                 new Regex(@"\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)\s*LIQUIDACI[ÓO]N", RegexOptions.IgnoreCase),//DPOSS

@@ -22,6 +22,7 @@ namespace Control_de_Facturas
         #region Eventos de Carga y Configuración
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             tabControl1.Enabled = false;
             btnValidar.Enabled = false;
             btnEjecutar.Enabled = false;
@@ -364,6 +365,18 @@ namespace Control_de_Facturas
             }
             exportadorExcel.GenerarInforme("AYSA", facturasAysa);
         }
+        private async void btnLiqUInterior_Agua_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasAguaInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "AGUA INTERIOR");
+
+            if (facturasAguaInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de AGUA INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, "28.0.0.1.0");
+        }
         #endregion
 
         #region GAS
@@ -586,7 +599,7 @@ namespace Control_de_Facturas
         private void ordenarCache()
         {
             facturasCache = facturasCache.OrderBy(f => Path.GetDirectoryName(f.Archivo))
-                                .ThenByDescending(f => f.Empresa)
+                                .ThenBy(f => f.Empresa)
                                 .ThenByDescending(f => f.NumeroCliente)
                                 .ThenByDescending(f => f.NumeroFactura)
                                 .ThenByDescending(f => f.Periodo)
@@ -667,6 +680,7 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionIndividual(facturasCache, "1.0.0.1.0");
         }
         #endregion
+
 
 
     }
