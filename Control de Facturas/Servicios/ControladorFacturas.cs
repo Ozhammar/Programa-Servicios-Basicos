@@ -42,9 +42,22 @@ namespace Control_de_Facturas.Servicios
             LUZ
         }
 
-
         #region Procesamiento de PDFs
-        //METODO DE ENTRADA AL PROCESAMIENTO DE DATOS
+        /// <summary>
+        /// Procesa todos los archivos PDF encontrados en la <paramref name="carpeta"/> indicada.
+        /// </summary>
+        /// <remarks>
+        /// - Obtiene la lista de PDFs mediante <c>gestorArchivos.ObtenerPDF</c> y lee el texto de cada archivo con <c>gestorArchivos.LeerPDF</c>.<br/>
+        /// - Para cada PDF, identifica la empresa y delega el procesamiento al procesador correspondiente a través de <c>IdentificarYProcesarFactura</c>.<br/>
+        /// - Si el PDF requiere división en bloques (por ejemplo facturas agrupadas), se usa <c>RequiereDivisionEnBloques</c> y <c>DividirEnBloques</c>.
+        ///   Para cada bloque adicional se crea una copia física del PDF original con sufijo <c>_bloque{i}.pdf</c> en el mismo directorio y se procesa cada bloque por separado.<br/>
+        /// - El método ejecuta el trabajo de lectura y procesamiento dentro de <c>Task.Run</c> para no bloquear el hilo llamador y soporta reporte de progreso mediante el parámetro opcional <paramref name="progreso"/>.<br/>
+        /// - En caso de error al procesar un archivo se muestra un diálogo con el mensaje de error y el procesamiento continúa con los demás archivos.
+        /// </remarks>
+        /// <param name="carpeta">Ruta de la carpeta que contiene los archivos PDF a procesar.</param>
+        /// <param name="progreso">Objeto opcional para reportar el número de archivos procesados (incremental).</param>
+        /// <returns>Lista con las <c>Factura</c> correctamente procesadas. Si no hay archivos o no se procesan facturas, la lista puede estar vacía.</returns>
+        /// <exception cref="ArgumentNullException">Si <paramref name="carpeta"/> es null (no comprobado explícitamente; depende de <c>gestorArchivos.ObtenerPDF</c>).</exception>
         public async Task<List<Factura>> ProcesarFacturasEnCarpeta(string carpeta, IProgress<int> progreso = null)
         {
             List<Factura> facturasProcesadas = new List<Factura>();
@@ -61,30 +74,37 @@ namespace Control_de_Facturas.Servicios
                     {
                         string textoPDF = gestorArchivos.LeerPDF(archivo);
 
-                        /*if (textoPDF.Contains("30-70861788-8"))
-                        {
-                            var bloques = DividirEnBloques(textoPDF);
-                            foreach (var bloque in bloques)
-                            {
-                                Factura factura = IdentificarYProcesarFactura(bloque, archivo);
-                                if (factura != null)
-                                {
-                                    facturasProcesadas.Add(factura);
-                                }
-                            }
-                        }*/
                         if (RequiereDivisionEnBloques(textoPDF))
                         {
-                            var bloques = DividirEnBloques(textoPDF);
+                            var bloques = DividirEnBloques(textoPDF).ToList();
 
-                            foreach (var bloque in bloques)
+                            List<string> rutasPorBloque = new List<string>();
+                            string dirArchivo = Path.GetDirectoryName(archivo)!;
+                            string nombreSinExt = Path.GetFileNameWithoutExtension(archivo);
+
+                            for (int i = 0; i < bloques.Count; i++)
                             {
-                                Factura factura = IdentificarYProcesarFactura(bloque, archivo);
-                                if (factura != null)
+                                if (i == 0)
+                                {
+                                    rutasPorBloque.Add(archivo);
+                                }
+                                else
+                                {
+                                    string rutaCopia = Path.Combine(dirArchivo, $"{nombreSinExt}_bloque{i}.pdf");
+                                    File.Copy(archivo, rutaCopia, overwrite: true);
+                                    rutasPorBloque.Add(rutaCopia);
+                                }
+                            }
+
+                            for (int i = 0; i < bloques.Count; i++)
+                            {
+                                Factura factura = IdentificarYProcesarFactura(bloques[i], rutasPorBloque[i]);
+                                if (factura != null && !facturasProcesadas.Any(f => f.NumeroFactura == factura.NumeroFactura))
                                 {
                                     facturasProcesadas.Add(factura);
                                 }
                             }
+                           
                         }
                         else
                         {
@@ -94,12 +114,11 @@ namespace Control_de_Facturas.Servicios
                                 facturasProcesadas.Add(factura);
                             }
                         }
-
                     });
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error al procesar {archivo}: {ex.Message}");
+                    MessageBox.Show($"Error al procesar {archivo}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 finally
                 {
@@ -110,7 +129,8 @@ namespace Control_de_Facturas.Servicios
             return facturasProcesadas;
         }
 
-        private bool RequiereDivisionEnBloques(string textoPDF)
+
+        public bool RequiereDivisionEnBloques(string textoPDF)
         {
             bool check = false;
             if (textoPDF.Contains("30-70861788-8" /* Aguas del Tucumán*/))
@@ -174,6 +194,13 @@ namespace Control_de_Facturas.Servicios
 
             return OrdenarSegunEmpresa(facturasFiltradas, empresa);
         }
+
+      /*  public List<Factura> borrarDuplicados(List<Factura> facturas)
+        {
+            List<Factura> facturasSinDuplicados = facturas.Distinct().ToList();
+
+            return facturasSinDuplicados;
+        }*/
 
         private TiposServicios? corroborarInterior(string textoPDF)
         {

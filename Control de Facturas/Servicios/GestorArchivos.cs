@@ -2,6 +2,7 @@
 {
     internal class GestorArchivos
     {
+              
         public IEnumerable<string> ObtenerPDF(string path)
         {
             return Directory.EnumerateFiles(path, "*.pdf", SearchOption.AllDirectories);
@@ -25,7 +26,8 @@
             string PathFinal = path;
             if (File.Exists(path))
             {
-                string PathNuevo = Path.Combine(Path.GetDirectoryName(path)!, $"{cliente}_{empresa}_{puntoVenta}-{numeroFactura}.pdf");
+        
+                string PathNuevo = Path.Combine(Path.GetDirectoryName(path)!, $"{empresa}_{cliente}_{puntoVenta}-{numeroFactura}.pdf");
                 if(PathFinal != PathNuevo)
                 {
                     File.Copy(PathFinal, PathNuevo, true);

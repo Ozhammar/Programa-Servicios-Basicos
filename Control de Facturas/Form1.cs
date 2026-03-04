@@ -68,7 +68,6 @@ namespace Control_de_Facturas
             tabControl1.Enabled = false;
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = true;
-            facturasCache = null;
         }
 
         private async Task comprobacionCache()
@@ -164,6 +163,7 @@ namespace Control_de_Facturas
                     return;
                 }
 
+                #region PROGRESSBAR
                 // Configurar ProgressBar con valores reales
                 progressBar1.Minimum = 0;
                 progressBar1.Maximum = totalPDFS;
@@ -178,10 +178,15 @@ namespace Control_de_Facturas
                     int porcentaje = (valorSeguro * 100) / totalPDFS;
                     labelPorcentaje.Text = $"{porcentaje}%";
                 });
+                #endregion
 
                 // Procesar facturas
                 facturasCache = await controladorFacturas
                     .ProcesarFacturasEnCarpeta(path, progreso);
+
+                //List<Factura> sin_duplicados = controladorFacturas.borrarDuplicados(facturasCache);
+                //facturasCache.Clear();
+                //facturasCache = sin_duplicados;
 
                 ordenarCache();
 
@@ -581,8 +586,11 @@ namespace Control_de_Facturas
         private void ordenarCache()
         {
             facturasCache = facturasCache.OrderBy(f => Path.GetDirectoryName(f.Archivo))
-                                         .ThenByDescending(f => f.Periodo)
-                                         .ToList();
+                                .ThenByDescending(f => f.Empresa)
+                                .ThenByDescending(f => f.NumeroCliente)
+                                .ThenByDescending(f => f.NumeroFactura)
+                                .ThenByDescending(f => f.Periodo)
+                                .ToList();
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
