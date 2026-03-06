@@ -403,7 +403,6 @@ namespace Control_de_Facturas.Servicios
             cargarPlantillaSidif(out libro, out cabecera, out detalle_cabecera, out detalle_financiero);
 
             DatosBasicosExcel config = ConfiguracionExcel.CrearPorDefecto();
-            ProcesadorAguaInterior procesadorAguaInterior = new ProcesadorAguaInterior();
             ArmadoLotesPago armadoLotesPago = new ArmadoLotesPago();
             BuscadorUD_UG buscadorUD_UG = new BuscadorUD_UG();
 
@@ -416,16 +415,12 @@ namespace Control_de_Facturas.Servicios
             foreach (List<Factura> empresa in facturasPorEmpresa)
             {
                 List<Factura> facturas = empresa;
-                List<LotesPago> lotesPago = armadoLotesPago.armarLotesPago(facturas, "SERVICIO AGUA INTERIOR");
+                List<LotesPago> lotesPago = armadoLotesPago.armarLotesPago(facturas, $"SERVICIO {facturas[0].TipoServicio}");
 
                 foreach (LotesPago lote in lotesPago)
                 {
                     var valoresUG_UD = buscadorUD_UG.BuscarUD_UG(lote.PrimerFactura.CUIT);
                     
-                    
-                    
-
-
                     #region cabecera
                     //CABECERA
                     cabecera.Cell($"A{filaCabecera}").Value = config.SAF;
@@ -436,7 +431,7 @@ namespace Control_de_Facturas.Servicios
                     cabecera.Cell($"F{filaCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.PuntoVenta);
                     cabecera.Cell($"G{filaCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.NumeroFactura);
                     cabecera.Cell($"K{filaCabecera}").Value = lote.PrimerFactura.TipoCodigoAutorizacion;
-                    cabecera.Cell($"L{filaCabecera}").Value = lote.PrimerFactura.CodigoAutorizacion;
+                    cabecera.Cell($"L{filaCabecera}").Value = string.IsNullOrEmpty(lote.PrimerFactura.CodigoAutorizacion) ? null : lote.PrimerFactura.CodigoAutorizacion ;
                     cabecera.Cell($"M{filaCabecera}").Value = lote.PrimerFactura.VencimientoCodigoAutorizacion != DateTime.MinValue ? lote.PrimerFactura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy") : null;
                     cabecera.Cell($"O{filaCabecera}").Value = config.TipoDocumento;
                     cabecera.Cell($"P{filaCabecera}").Value = lote.PrimerFactura.CUIT;
@@ -460,7 +455,7 @@ namespace Control_de_Facturas.Servicios
                     detalle_cabecera.Cell($"D{filaDetalleCabecera}").Value = config.TipoDocumento;
                     detalle_cabecera.Cell($"E{filaDetalleCabecera}").Value = lote.PrimerFactura.CUIT;
                     detalle_cabecera.Cell($"F{filaDetalleCabecera}").Value = lote.PrimerFactura.TipoCodigoAutorizacion;
-                    detalle_cabecera.Cell($"G{filaDetalleCabecera}").Value = lote.PrimerFactura.CodigoAutorizacion;
+                    detalle_cabecera.Cell($"G{filaDetalleCabecera}").Value = string.IsNullOrEmpty(lote.PrimerFactura.CodigoAutorizacion) ? null : lote.PrimerFactura.CodigoAutorizacion;
                     detalle_cabecera.Cell($"H{filaDetalleCabecera}").Value = lote.PrimerFactura.CodigoCatalogo;
                     detalle_cabecera.Cell($"J{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[0]);
                     detalle_cabecera.Cell($"K{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[1]);
@@ -479,7 +474,7 @@ namespace Control_de_Facturas.Servicios
                     detalle_financiero.Cell($"D{filaDetalleFinanciero}").Value = config.TipoDocumento;
                     detalle_financiero.Cell($"E{filaDetalleFinanciero}").Value = lote.PrimerFactura.CUIT;
                     detalle_financiero.Cell($"F{filaDetalleFinanciero}").Value = lote.PrimerFactura.TipoCodigoAutorizacion;
-                    detalle_financiero.Cell($"G{filaDetalleFinanciero}").Value = lote.PrimerFactura.CodigoAutorizacion;
+                    detalle_financiero.Cell($"G{filaDetalleFinanciero}").Value = string.IsNullOrEmpty(lote.PrimerFactura.CodigoAutorizacion) ? null : lote.PrimerFactura.CodigoAutorizacion;
                     detalle_financiero.Cell($"J{filaDetalleFinanciero}").Value = config.Jurisdiccion;
                     detalle_financiero.Cell($"K{filaDetalleFinanciero}").Value = config.SubJurisdiccion;
                     detalle_financiero.Cell($"L{filaDetalleFinanciero}").Value = config.Entidad;
@@ -509,7 +504,7 @@ namespace Control_de_Facturas.Servicios
                 }
             }
 
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas_AGUA INTERIOR_Exportadas_Unidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+            libro.SaveAs(Path.Combine(desktopPath, $"Facturas_{facturasPorEmpresa[0][0].TipoServicio}_Exportadas_Unidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
 
