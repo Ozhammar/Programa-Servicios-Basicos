@@ -72,7 +72,7 @@
             tabPage1 = new TabPage();
             groupBox10 = new GroupBox();
             label10 = new Label();
-            button15 = new Button();
+            btnLiqUInterior_GAS = new Button();
             button16 = new Button();
             button17 = new Button();
             groupBox9 = new GroupBox();
@@ -554,7 +554,7 @@
             // groupBox10
             // 
             groupBox10.Controls.Add(label10);
-            groupBox10.Controls.Add(button15);
+            groupBox10.Controls.Add(btnLiqUInterior_GAS);
             groupBox10.Controls.Add(button16);
             groupBox10.Controls.Add(button17);
             groupBox10.Location = new Point(358, 6);
@@ -574,14 +574,15 @@
             label10.TabIndex = 10;
             label10.Text = "Liquidaciones";
             // 
-            // button15
+            // btnLiqUInterior_GAS
             // 
-            button15.Location = new Point(89, 71);
-            button15.Name = "button15";
-            button15.Size = new Size(75, 23);
-            button15.TabIndex = 11;
-            button15.Text = "Unificada";
-            button15.UseVisualStyleBackColor = true;
+            btnLiqUInterior_GAS.Location = new Point(89, 71);
+            btnLiqUInterior_GAS.Name = "btnLiqUInterior_GAS";
+            btnLiqUInterior_GAS.Size = new Size(75, 23);
+            btnLiqUInterior_GAS.TabIndex = 11;
+            btnLiqUInterior_GAS.Text = "Unificada";
+            btnLiqUInterior_GAS.UseVisualStyleBackColor = true;
+            btnLiqUInterior_GAS.Click += btnLiqUInterior_GAS_Click;
             // 
             // button16
             // 
@@ -894,7 +895,7 @@
         private Button btnInformeInterior_Agua;
         private GroupBox groupBox10;
         private Label label10;
-        private Button button15;
+        private Button btnLiqUInterior_GAS;
         private Button button16;
         private Button button17;
         private GroupBox groupBox9;

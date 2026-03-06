@@ -22,7 +22,7 @@ namespace Control_de_Facturas
         #region Eventos de Carga y Configuración
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
             tabControl1.Enabled = false;
             btnValidar.Enabled = false;
             btnEjecutar.Enabled = false;
@@ -245,8 +245,6 @@ namespace Control_de_Facturas
 
             exportadorExcel.generarLiquidacionIndividual(facturasEdesur, "1.0.0.1.0");
         }
-
-
         //LIQUIDACION EDESUR UNIFICADA
         private async void btnLiqUEdesur_Click(object sender, EventArgs e)
         {
@@ -315,13 +313,12 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasEdenor, "1.0.0.1.0");
         }
-
-
+        //LIQUIDACION INTERIOR INDIVIDUAL
         private void btnLiqIInterior_Click(object sender, EventArgs e)
         {
 
         }
-
+        //LIQUIDACION INTERIOR UNIFICADA
         private void btnLiqUInterior_Click(object sender, EventArgs e)
         {
 
@@ -329,6 +326,7 @@ namespace Control_de_Facturas
         #endregion
 
         #region AGUA
+        //LIQUIDACION AYSA INDIVIDUAL
         private async void btnLiqIAYSA_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -341,6 +339,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasAysa, "1.0.0.1.0");
         }
+        //LIQUIDACION AYSA UNIFICADA
         private async void btnLiqUAYSA_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -353,6 +352,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasAysa, "1.0.0.1.0");
         }
+        //INFORME AYSA
         private async void btnInformeAYSA_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -365,6 +365,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.GenerarInforme("AYSA", facturasAysa);
         }
+        //LIQUIDACION INTERIOR UNIFICADA AGUA
         private async void btnLiqUInterior_Agua_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -375,12 +376,13 @@ namespace Control_de_Facturas
                 MessageBox.Show("No se encontraron facturas de AGUA INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, "28.0.0.1.0");
-            //EN ESTA FUNCION TENGO QUE LLAMAR AL BUSCADOR DE UG_UD
+            var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para AGUA INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+            exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, actividadProgramatica);
         }
         #endregion
 
         #region GAS
+        //LIQUIDACION METROGAS GRANDES CLIENTES INDIVIDUAL
         private async void btnLiqIMetrogasG_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -393,6 +395,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasMetrogasG, "1.0.0.1.0");
         }
+        //LIQUIDACION METROGAS GRANDES CLIENTES UNIFICADA
         private async void btnLiqUMetrogasG_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -405,6 +408,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasG, "1.0.0.1.0");
         }
+        //INFORME METROGAS GRANDES CLIENTES
         private async void btnInformeMetrogasG_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -417,6 +421,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.GenerarInforme("METROGAS GRANDES CLIENTES", facturasMetrogasG);
         }
+        //LIQUIDACION METROGAS PEQUEÑOS CLIENTES INDIVIDUAL
         private async void btnLiqIMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -429,6 +434,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasMetrogasP, "1.0.0.1.0");
         }
+        //LIQUIDACION METROGAS PEQUEÑOS CLIENTES UNIFICADA
         private async void btnLiqUMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -441,6 +447,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasP, "1.0.0.1.0");
         }
+        //INFORME METROGAS PEQUEÑOS CLIENTES
         private async void btnInformeMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -452,6 +459,20 @@ namespace Control_de_Facturas
                 return;
             }
             exportadorExcel.GenerarInforme("METROGAS PEQUEÑOS CLIENTES", facturasMetrogasC);
+        }
+        //LIQUIDACION INTERIOR UNIFICADA
+        private async void btnLiqUInterior_GAS_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasGasInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "GAS INTERIOR");
+
+            if (facturasGasInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de GAS INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para GAS INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+            exportadorExcel.generarLiquidacionUnificadaInterior(facturasGasInterior, actividadProgramatica);
         }
         #endregion
 
@@ -681,6 +702,7 @@ namespace Control_de_Facturas
             exportadorExcel.generarLiquidacionIndividual(facturasCache, "1.0.0.1.0");
         }
         #endregion
+
 
 
 

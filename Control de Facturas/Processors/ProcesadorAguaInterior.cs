@@ -11,14 +11,14 @@ namespace Control_de_Facturas.Processors
         private readonly GestorArchivos gestorArchivos;
         private readonly ConvertidorImportes convertidorImportes;
         private readonly BuscadorCUIT buscadorCUIT;
-        private readonly LotesPago lotes;
+       // private readonly LotesPago lotes;
 
         public ProcesadorAguaInterior()
         {
             gestorArchivos = new GestorArchivos();
             convertidorImportes = new ConvertidorImportes();
             buscadorCUIT = new BuscadorCUIT();
-            lotes = new LotesPago();
+           // lotes = new LotesPago();
         }
 
         public Factura ProcesarFactura(string textoPDF, string rutaArchivo)
@@ -575,9 +575,9 @@ namespace Control_de_Facturas.Processors
             return fechaVencimientoAut;
         }
 
-        public List<LotesPago> armarLotesPago(List<Factura> facturas, int maximo_caracteres = 250)
+        /*public List<LotesPago> armarLotesPago(List<Factura> facturas, int maximo_caracteres = 250)
         {
-            List<LotesPago> lotesPago = new List<LotesPago>();
+            List<LotesPago>lotesPago = new List<LotesPago>();
             StringBuilder sb = new StringBuilder();
 
             Factura primerfactura = null;
@@ -634,6 +634,6 @@ namespace Control_de_Facturas.Processors
             });
 
             return lotesPago;
-        }
+        }*/
     }
 }

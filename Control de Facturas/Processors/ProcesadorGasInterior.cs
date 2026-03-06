@@ -44,7 +44,7 @@ namespace Control_de_Facturas.Processors
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
             factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
-            factura.TipoServicio = "GAS";
+            factura.TipoServicio = "GAS INTERIOR";
             //factura.Tarifa = ExtraerTarifa(textoPDF);
 
             return factura;
@@ -209,7 +209,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"\d{5}\s*-(\d{8}\/\d{1})", RegexOptions.IgnoreCase),//CAMUZZISUR
+                new Regex(@"\d{5}\s*-(\d{8})\/\d{1}", RegexOptions.IgnoreCase),//CAMUZZISUR
                 new Regex(@"Factura\s*N[º°]\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//DISTRIGAS
                 new Regex(@"cod\s*\(?\d+\)?\s*:\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//ecogas
                 new Regex(@"Factura\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//gasjunin
@@ -467,56 +467,5 @@ namespace Control_de_Facturas.Processors
 
             return fechaVencimientoAut;
         }
-        /*private string ExtraerTarifa(string textoPDF)
-        {
-            string tipoTarifa = "";
-
-            List<Regex> patrones = new List<Regex>
-            {
-                new Regex(@"Tarifa\s*T\s*(\d{1})", RegexOptions.IgnoreCase),
-                new Regex(@"Tarifa\s*\:\s*T\s*(\d{1})", RegexOptions.IgnoreCase)
-            };
-
-            foreach (Regex regex in patrones)
-            {
-                Match match = regex.Match(textoPDF);
-                if (match.Success)
-                {
-                    tipoTarifa = match.Groups[1].Value;
-                    break;
-                }
-            }
-            return tipoTarifa;
-        }*/
-
-        /*private decimal ExtraerImporteSaldoAnterior(string textoPDF)
-        {
-            decimal ImporteSaldoAnterior = 0;
-
-            List<Regex> patrones = new List<Regex>
-            {
-                new Regex(@"Saldo\s*anterior\s*\$\s*([\d.,]+-)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldo\s*anterior\s*\$\s*(-[\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldo\s*anterior\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldos\s*anteriores\s*([\d.,]+-)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldos\s*anteriores\s*(-[\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldos\s*anteriores\s*([\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline)
-            };
-
-            foreach (Regex regex in patrones)
-            {
-                Match match = regex.Match(textoPDF);
-                if (match.Success)
-                {
-                    string valor = match.Groups[1].Value;
-                    //  valor = valor.Replace(",", "");
-                    //  valor = valor.Replace(".", ",");
-                    ImporteSaldoAnterior = decimal.Parse(valor, NumberStyles.Number, new CultureInfo("es-AR"));
-                    break;
-                }
-            }
-            return ImporteSaldoAnterior;
-
-        }*/
     }
 }

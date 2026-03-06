@@ -404,6 +404,7 @@ namespace Control_de_Facturas.Servicios
 
             DatosBasicosExcel config = ConfiguracionExcel.CrearPorDefecto();
             ProcesadorAguaInterior procesadorAguaInterior = new ProcesadorAguaInterior();
+            ArmadoLotesPago armadoLotesPago = new ArmadoLotesPago();
             BuscadorUD_UG buscadorUD_UG = new BuscadorUD_UG();
 
             int filaCabecera = 5;
@@ -415,7 +416,7 @@ namespace Control_de_Facturas.Servicios
             foreach (List<Factura> empresa in facturasPorEmpresa)
             {
                 List<Factura> facturas = empresa;
-                List<LotesPago> lotesPago = procesadorAguaInterior.armarLotesPago(facturas);
+                List<LotesPago> lotesPago = armadoLotesPago.armarLotesPago(facturas, "SERVICIO AGUA INTERIOR");
 
                 foreach (LotesPago lote in lotesPago)
                 {
