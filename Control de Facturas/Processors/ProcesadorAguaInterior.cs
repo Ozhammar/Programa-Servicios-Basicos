@@ -11,12 +11,14 @@ namespace Control_de_Facturas.Processors
         private readonly GestorArchivos gestorArchivos;
         private readonly ConvertidorImportes convertidorImportes;
         private readonly BuscadorCUIT buscadorCUIT;
+        private readonly LotesPago lotes;
 
         public ProcesadorAguaInterior()
         {
             gestorArchivos = new GestorArchivos();
             convertidorImportes = new ConvertidorImportes();
             buscadorCUIT = new BuscadorCUIT();
+            lotes = new LotesPago();
         }
 
         public Factura ProcesarFactura(string textoPDF, string rutaArchivo)
@@ -46,6 +48,7 @@ namespace Control_de_Facturas.Processors
             if (factura.CodigoAutorizacion == "")
             {
                 factura.TipoCodigoAutorizacion = "NA";
+                
             }
             return factura;
         }
@@ -495,11 +498,6 @@ namespace Control_de_Facturas.Processors
                     cuitLong = long.Parse(CUIT);
                     break;
                 }
-                /* else
-                 {
-
-                     break;
-                 }*/
             }
 
             if (cuitLong == 0)
@@ -576,57 +574,66 @@ namespace Control_de_Facturas.Processors
 
             return fechaVencimientoAut;
         }
-        /*private string ExtraerTarifa(string textoPDF)
+
+        public List<LotesPago> armarLotesPago(List<Factura> facturas, int maximo_caracteres = 250)
         {
-            string tipoTarifa = "";
+            List<LotesPago> lotesPago = new List<LotesPago>();
+            StringBuilder sb = new StringBuilder();
 
-            List<Regex> patrones = new List<Regex>
-            {
-                new Regex(@"Tarifa\s*T\s*(\d{1})", RegexOptions.IgnoreCase),
-                new Regex(@"Tarifa\s*\:\s*T\s*(\d{1})", RegexOptions.IgnoreCase)
-            };
+            Factura primerfactura = null;
+            decimal importeTotal = 0;
+            decimal importeParcial = 0;
+            string clienteActual = null;
 
-            foreach (Regex regex in patrones)
+            sb.AppendLine("SERVICIO AGUA INTERIOR");
+            Factura facturaInicial = facturas[0];
+            foreach (Factura factura in facturas)
             {
-                Match match = regex.Match(textoPDF);
-                if (match.Success)
+                string observacion_cliente = $"C{factura.NumeroCliente}";
+                string observacion_factura = $"F{factura.PuntoVenta}-{factura.NumeroFactura} P{factura.Periodo} ${factura.ImporteAbonable}";
+                
+                bool entra = (sb.Length + observacion_cliente.Length + observacion_factura.Length) < maximo_caracteres;
+
+                //COMPROBACION DE TAMAÑO PARA REALIZAR CORTE DEL LOTE
+                if (!entra)
                 {
-                    tipoTarifa = match.Groups[1].Value;
-                    break;
+                    lotesPago.Add(new LotesPago
+                    {
+                        Observacion = sb.ToString().TrimEnd(),
+                        Importe = importeParcial,
+                        PrimerFactura = facturaInicial,
+                    });
+
+                    sb.Clear();
+                    sb.AppendLine("SERVICIO AGUA INTERIOR");
+                    importeParcial = 0;
+                    clienteActual = null;
+                    primerfactura = null;
                 }
-            }
-            return tipoTarifa;
-        }*/
 
-        /*private decimal ExtraerImporteSaldoAnterior(string textoPDF)
-        {
-            decimal ImporteSaldoAnterior = 0;
-
-            List<Regex> patrones = new List<Regex>
-            {
-                new Regex(@"Saldo\s*anterior\s*\$\s*([\d.,]+-)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldo\s*anterior\s*\$\s*(-[\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldo\s*anterior\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldos\s*anteriores\s*([\d.,]+-)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldos\s*anteriores\s*(-[\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline),
-                new Regex(@"Saldos\s*anteriores\s*([\d.,]+)", RegexOptions.IgnoreCase | RegexOptions.Singleline)
-            };
-
-            foreach (Regex regex in patrones)
-            {
-                Match match = regex.Match(textoPDF);
-                if (match.Success)
+                if (clienteActual != factura.NumeroCliente)
                 {
-                    string valor = match.Groups[1].Value;
-                    //  valor = valor.Replace(",", "");
-                    //  valor = valor.Replace(".", ",");
-                    ImporteSaldoAnterior = decimal.Parse(valor, NumberStyles.Number, new CultureInfo("es-AR"));
-                    break;
+                    sb.AppendLine(observacion_cliente);
+                    clienteActual = factura.NumeroCliente;
                 }
-            }
-            return ImporteSaldoAnterior;
 
-        }*/
+                if (primerfactura == null)
+                {
+                    primerfactura = factura;
+                }
+
+                sb.AppendLine(observacion_factura);
+                importeParcial += factura.ImporteAbonable;
+            }
+
+            lotesPago.Add(new LotesPago
+            {
+                Observacion = sb.ToString().TrimEnd(),
+                Importe = importeParcial,
+                PrimerFactura = primerfactura
+            });
+
+            return lotesPago;
+        }
     }
 }
-

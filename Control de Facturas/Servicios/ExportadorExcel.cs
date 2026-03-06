@@ -403,181 +403,114 @@ namespace Control_de_Facturas.Servicios
             cargarPlantillaSidif(out libro, out cabecera, out detalle_cabecera, out detalle_financiero);
 
             DatosBasicosExcel config = ConfiguracionExcel.CrearPorDefecto();
-            // /List<Factura> facturas = facturasEdesur;
+            ProcesadorAguaInterior procesadorAguaInterior = new ProcesadorAguaInterior();
+            BuscadorUD_UG buscadorUD_UG = new BuscadorUD_UG();
+
             int filaCabecera = 5;
             int filaDetalleCabecera = 4;
             int filaDetalleFinanciero = 4;
-            const int maximo_caracteres = 250;
 
-            List<List<Factura>> facturasPorEmpresa = facturasFiltradas.GroupBy(f => f.Empresa).Select(g => g.ToList()).ToList();
+            List<List<Factura>> facturasPorEmpresa = facturasFiltradas.GroupBy(f => f.Empresa).Select(g => g.OrderBy(f => f.NumeroCliente).ToList()).ToList();
 
             foreach (List<Factura> empresa in facturasPorEmpresa)
             {
                 List<Factura> facturas = empresa;
+                List<LotesPago> lotesPago = procesadorAguaInterior.armarLotesPago(facturas);
 
-                facturas = facturas.OrderBy(f => f.NumeroCliente).ToList();
-
-                Factura factura = null;
-                decimal importeTotal = 0;
-                StringBuilder sb = new StringBuilder();
-
-                sb.AppendLine("SERVICIO AGUA INTERIOR");
-
-                string cliente_actual = null;
-
-                for (int i = 0; i < facturas.Count; i++)
+                foreach (LotesPago lote in lotesPago)
                 {
-                    factura = facturas[i];
-
-                    if (cliente_actual != factura.NumeroCliente)
-                    {
-                        string observacionParcial_cliente = $"C{factura.NumeroCliente}";
-
-                        if (sb.Length + observacionParcial_cliente.Length + Environment.NewLine.Length > maximo_caracteres)
-                        {
-                            break;
-                        }
-
-                        sb.AppendLine(observacionParcial_cliente);
-                        cliente_actual = factura.NumeroCliente;
-                        string observacionParcial_factura = $"F{factura.PuntoVenta}-{factura.NumeroFactura} P{factura.Periodo} ${factura.ImporteAbonable}";
-
-                        if (sb.Length + observacionParcial_factura.Length + Environment.NewLine.Length > maximo_caracteres)
-                        {
-                            break;
-                        }
-                        sb.AppendLine(observacionParcial_factura);
-                        importeTotal += factura.ImporteAbonable;
-                    }
+                    var valoresUG_UD = buscadorUD_UG.BuscarUD_UG(lote.PrimerFactura.CUIT);
+                    
+                    
+                    
 
 
+                    #region cabecera
+                    //CABECERA
+                    cabecera.Cell($"A{filaCabecera}").Value = config.SAF;
+                    cabecera.Cell($"B{filaCabecera}").Value = config.TipoComprobante;
+                    cabecera.Cell($"C{filaCabecera}").Value = config.Ejercicio;
+                    cabecera.Cell($"D{filaCabecera}").Value = "FSB";
+                    cabecera.Cell($"E{filaCabecera}").Value = lote.PrimerFactura.TipoFactura;
+                    cabecera.Cell($"F{filaCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.PuntoVenta);
+                    cabecera.Cell($"G{filaCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.NumeroFactura);
+                    cabecera.Cell($"K{filaCabecera}").Value = lote.PrimerFactura.TipoCodigoAutorizacion;
+                    cabecera.Cell($"L{filaCabecera}").Value = lote.PrimerFactura.CodigoAutorizacion;
+                    cabecera.Cell($"M{filaCabecera}").Value = lote.PrimerFactura.VencimientoCodigoAutorizacion != DateTime.MinValue ? lote.PrimerFactura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy") : null;
+                    cabecera.Cell($"O{filaCabecera}").Value = config.TipoDocumento;
+                    cabecera.Cell($"P{filaCabecera}").Value = lote.PrimerFactura.CUIT;
+                    cabecera.Cell($"X{filaCabecera}").Value = config.TipoMoneda;
+                    cabecera.Cell($"AA{filaCabecera}").Value = config.Cotizacion;
+                    cabecera.Cell($"AB{filaCabecera}").Value = config.MedioPago;
+                    cabecera.Cell($"AF{filaCabecera}").Value = lote.PrimerFactura.FechaEmision.ToString("dd/MM/yyyy");
+                    cabecera.Cell($"AG{filaCabecera}").Value = lote.PrimerFactura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy");
+                    cabecera.Cell($"AI{filaCabecera}").Value = lote.Importe;
+                    cabecera.Cell($"AJ{filaCabecera}").Value = $"{lote.Observacion}";
+                    filaCabecera++;
+                    #endregion
+                    #region detalle cabecera
+
+                    //DETALLE CABECERA
+                    string[] objetoGastoPartes = lote.PrimerFactura.ObjetoGasto.Split(".");
+
+                    detalle_cabecera.Cell($"A{filaDetalleCabecera}").Value = lote.PrimerFactura.TipoFactura;
+                    detalle_cabecera.Cell($"B{filaDetalleCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.PuntoVenta);
+                    detalle_cabecera.Cell($"C{filaDetalleCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.NumeroFactura);
+                    detalle_cabecera.Cell($"D{filaDetalleCabecera}").Value = config.TipoDocumento;
+                    detalle_cabecera.Cell($"E{filaDetalleCabecera}").Value = lote.PrimerFactura.CUIT;
+                    detalle_cabecera.Cell($"F{filaDetalleCabecera}").Value = lote.PrimerFactura.TipoCodigoAutorizacion;
+                    detalle_cabecera.Cell($"G{filaDetalleCabecera}").Value = lote.PrimerFactura.CodigoAutorizacion;
+                    detalle_cabecera.Cell($"H{filaDetalleCabecera}").Value = lote.PrimerFactura.CodigoCatalogo;
+                    detalle_cabecera.Cell($"J{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[0]);
+                    detalle_cabecera.Cell($"K{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[1]);
+                    detalle_cabecera.Cell($"L{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[2]);
+                    detalle_cabecera.Cell($"M{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[3]);
+                    detalle_cabecera.Cell($"N{filaDetalleCabecera}").Value = config.CantidadUnidades;
+                    detalle_cabecera.Cell($"P{filaDetalleCabecera}").Value = lote.Importe;
+                    filaDetalleCabecera++;
+                    #endregion
+                    #region detalle financiero
+                    //DETALLE FINANCIERO
+                    string[] apertura_programatica = actividadProgramatica.Split(".");
+                    detalle_financiero.Cell($"A{filaDetalleFinanciero}").Value = lote.PrimerFactura.TipoFactura;
+                    detalle_financiero.Cell($"B{filaDetalleFinanciero}").Value = Convert.ToInt32(lote.PrimerFactura.PuntoVenta);
+                    detalle_financiero.Cell($"C{filaDetalleFinanciero}").Value = Convert.ToInt32(lote.PrimerFactura.NumeroFactura);
+                    detalle_financiero.Cell($"D{filaDetalleFinanciero}").Value = config.TipoDocumento;
+                    detalle_financiero.Cell($"E{filaDetalleFinanciero}").Value = lote.PrimerFactura.CUIT;
+                    detalle_financiero.Cell($"F{filaDetalleFinanciero}").Value = lote.PrimerFactura.TipoCodigoAutorizacion;
+                    detalle_financiero.Cell($"G{filaDetalleFinanciero}").Value = lote.PrimerFactura.CodigoAutorizacion;
+                    detalle_financiero.Cell($"J{filaDetalleFinanciero}").Value = config.Jurisdiccion;
+                    detalle_financiero.Cell($"K{filaDetalleFinanciero}").Value = config.SubJurisdiccion;
+                    detalle_financiero.Cell($"L{filaDetalleFinanciero}").Value = config.Entidad;
+                    detalle_financiero.Cell($"M{filaDetalleFinanciero}").Value = config.SAF;
+                    detalle_financiero.Cell($"N{filaDetalleFinanciero}").Value = valoresUG_UD.Dependencia;
+                    detalle_financiero.Cell($"O{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[0]);
+                    detalle_financiero.Cell($"P{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[1]);
+                    detalle_financiero.Cell($"Q{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[2]);
+                    detalle_financiero.Cell($"R{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[3]);
+                    detalle_financiero.Cell($"S{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[4]);
+                    detalle_financiero.Cell($"T{filaDetalleFinanciero}").Value = valoresUG_UD.UGeografica;
+                    detalle_financiero.Cell($"U{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[0]);
+                    detalle_financiero.Cell($"V{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[1]);
+                    detalle_financiero.Cell($"W{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[2]);
+                    detalle_financiero.Cell($"X{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[3]);
+                    detalle_financiero.Cell($"Y{filaDetalleFinanciero}").Value = config.FuenteFinanciamiento;
+                    detalle_financiero.Cell($"Z{filaDetalleFinanciero}").Value = config.Moneda;
+                    detalle_financiero.Cell($"AB{filaDetalleFinanciero}").Value = config.PEX;
+                    detalle_financiero.Cell($"AC{filaDetalleFinanciero}").Value = config.BAPIN;
+                    detalle_financiero.Cell($"AE{filaDetalleFinanciero}").Value = config.CodigoGanancias;
+                    detalle_financiero.Cell($"AF{filaDetalleFinanciero}").Value = config.CodigoIVA;
+                    detalle_financiero.Cell($"AG{filaDetalleFinanciero}").Value = config.CodigoSUSS;
+                    detalle_financiero.Cell($"AH{filaDetalleFinanciero}").Value = config.PorcentualIVA;
+                    detalle_financiero.Cell($"AJ{filaDetalleFinanciero}").Value = lote.Importe;
+                    filaDetalleFinanciero++;
+                    #endregion
                 }
-
-                string observacion = sb.ToString().TrimEnd(); // Elimina el último salto de línea
-                /* string observacionParcial_cliente = $"C{cliente_actual}{Environment.NewLine}";
-observacion += observacionParcial_cliente;
-foreach (Factura facturaEmpresa in facturas)
-{
-/*  try
- {
-     if (factura == null)
-     {
-         factura = facturaEmpresa;
-     }
- }
- catch (Exception ex)
- {
-     throw new Exception("Error al procesar las facturas por : " + ex.Message);
- }
- string observacionParcial_factura = "";
-     while (facturaEmpresa.NumeroCliente == cliente_actual)
-     {
-     observacion += observacionParcial_factura = $"F{facturaEmpresa.PuntoVenta}-{facturaEmpresa.NumeroFactura} P{facturaEmpresa.Periodo} ${facturaEmpresa.ImporteAbonable}{Environment.NewLine}";
-
-     facturaEmpresa.
-     }
-
-
-
-
-
-
-*/
-                //importeTotal += facturaEmpresa.ImporteAbonable;
-
-
-                #region cabecera
-                //CABECERA
-                cabecera.Cell($"A{filaCabecera}").Value = config.SAF;
-                cabecera.Cell($"B{filaCabecera}").Value = config.TipoComprobante;
-                cabecera.Cell($"C{filaCabecera}").Value = config.Ejercicio;
-                cabecera.Cell($"D{filaCabecera}").Value = "FSB";
-                cabecera.Cell($"E{filaCabecera}").Value = factura.TipoFactura;
-                cabecera.Cell($"F{filaCabecera}").Value = Convert.ToInt32(factura.PuntoVenta);
-                cabecera.Cell($"G{filaCabecera}").Value = Convert.ToInt32(factura.NumeroFactura);
-                cabecera.Cell($"K{filaCabecera}").Value = factura.TipoCodigoAutorizacion;
-                cabecera.Cell($"L{filaCabecera}").Value = factura.CodigoAutorizacion;
-                cabecera.Cell($"M{filaCabecera}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
-                cabecera.Cell($"O{filaCabecera}").Value = config.TipoDocumento;
-                cabecera.Cell($"P{filaCabecera}").Value = factura.CUIT;
-                cabecera.Cell($"X{filaCabecera}").Value = config.TipoMoneda;
-                cabecera.Cell($"AA{filaCabecera}").Value = config.Cotizacion;
-                cabecera.Cell($"AB{filaCabecera}").Value = config.MedioPago;
-                cabecera.Cell($"AF{filaCabecera}").Value = factura.FechaEmision.ToString("dd/MM/yyyy");
-                cabecera.Cell($"AG{filaCabecera}").Value = factura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy");
-                cabecera.Cell($"AI{filaCabecera}").Value = importeTotal;
-                cabecera.Cell($"AJ{filaCabecera}").Value = $"{observacion}";
-                filaCabecera++;
-                #endregion
-                #region detalle cabecera
-
-                //DETALLE CABECERA
-                string[] objetoGastoPartes = factura.ObjetoGasto.Split(".");
-
-                detalle_cabecera.Cell($"A{filaDetalleCabecera}").Value = factura.TipoFactura;
-                detalle_cabecera.Cell($"B{filaDetalleCabecera}").Value = Convert.ToInt32(factura.PuntoVenta);
-                detalle_cabecera.Cell($"C{filaDetalleCabecera}").Value = Convert.ToInt32(factura.NumeroFactura);
-                detalle_cabecera.Cell($"D{filaDetalleCabecera}").Value = config.TipoDocumento;
-                detalle_cabecera.Cell($"E{filaDetalleCabecera}").Value = factura.CUIT;
-                detalle_cabecera.Cell($"F{filaDetalleCabecera}").Value = factura.TipoCodigoAutorizacion;
-                detalle_cabecera.Cell($"G{filaDetalleCabecera}").Value = factura.CodigoAutorizacion;
-                detalle_cabecera.Cell($"H{filaDetalleCabecera}").Value = factura.CodigoCatalogo;
-                detalle_cabecera.Cell($"J{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[0]);
-                detalle_cabecera.Cell($"K{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[1]);
-                detalle_cabecera.Cell($"L{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[2]);
-                detalle_cabecera.Cell($"M{filaDetalleCabecera}").Value = int.Parse(objetoGastoPartes[3]);
-                detalle_cabecera.Cell($"N{filaDetalleCabecera}").Value = config.CantidadUnidades;
-                detalle_cabecera.Cell($"P{filaDetalleCabecera}").Value = importeTotal;
-                filaDetalleCabecera++;
-                #endregion
-                #region detalle financiero
-                //DETALLE FINANCIERO
-                string[] apertura_programatica = actividadProgramatica.Split(".");
-                detalle_financiero.Cell($"A{filaDetalleFinanciero}").Value = factura.TipoFactura;
-                detalle_financiero.Cell($"B{filaDetalleFinanciero}").Value = Convert.ToInt32(factura.PuntoVenta);
-                detalle_financiero.Cell($"C{filaDetalleFinanciero}").Value = Convert.ToInt32(factura.NumeroFactura);
-                detalle_financiero.Cell($"D{filaDetalleFinanciero}").Value = config.TipoDocumento;
-                detalle_financiero.Cell($"E{filaDetalleFinanciero}").Value = factura.CUIT;
-                detalle_financiero.Cell($"F{filaDetalleFinanciero}").Value = factura.TipoCodigoAutorizacion;
-                detalle_financiero.Cell($"G{filaDetalleFinanciero}").Value = factura.CodigoAutorizacion;
-                detalle_financiero.Cell($"J{filaDetalleFinanciero}").Value = config.Jurisdiccion;
-                detalle_financiero.Cell($"K{filaDetalleFinanciero}").Value = config.SubJurisdiccion;
-                detalle_financiero.Cell($"L{filaDetalleFinanciero}").Value = config.Entidad;
-                detalle_financiero.Cell($"M{filaDetalleFinanciero}").Value = config.SAF;
-                detalle_financiero.Cell($"N{filaDetalleFinanciero}").Value = dependencia;
-                detalle_financiero.Cell($"O{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[0]);
-                detalle_financiero.Cell($"P{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[1]);
-                detalle_financiero.Cell($"Q{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[2]);
-                detalle_financiero.Cell($"R{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[3]);
-                detalle_financiero.Cell($"S{filaDetalleFinanciero}").Value = int.Parse(apertura_programatica[4]);
-                detalle_financiero.Cell($"T{filaDetalleFinanciero}").Value = uGeografica;
-                detalle_financiero.Cell($"U{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[0]);
-                detalle_financiero.Cell($"V{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[1]);
-                detalle_financiero.Cell($"W{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[2]);
-                detalle_financiero.Cell($"X{filaDetalleFinanciero}").Value = int.Parse(objetoGastoPartes[3]);
-                detalle_financiero.Cell($"Y{filaDetalleFinanciero}").Value = config.FuenteFinanciamiento;
-                detalle_financiero.Cell($"Z{filaDetalleFinanciero}").Value = config.Moneda;
-                detalle_financiero.Cell($"AB{filaDetalleFinanciero}").Value = config.PEX;
-                detalle_financiero.Cell($"AC{filaDetalleFinanciero}").Value = config.BAPIN;
-                detalle_financiero.Cell($"AE{filaDetalleFinanciero}").Value = config.CodigoGanancias;
-                detalle_financiero.Cell($"AF{filaDetalleFinanciero}").Value = config.CodigoIVA;
-                detalle_financiero.Cell($"AG{filaDetalleFinanciero}").Value = config.CodigoSUSS;
-                detalle_financiero.Cell($"AH{filaDetalleFinanciero}").Value = config.PorcentualIVA;
-                detalle_financiero.Cell($"AJ{filaDetalleFinanciero}").Value = importeTotal;
-                filaDetalleFinanciero++;
-                #endregion
-
-                //importeTotal = 0;
-                //factura = null;
             }
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas_{facturasPorEmpresa[0][0].TipoServicio}_ExportadasUnidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+
+            libro.SaveAs(Path.Combine(desktopPath, $"Facturas_AGUA INTERIOR_Exportadas_Unidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
-
-
-
-
-
 
         public void GenerarInforme(string plantilla, List<Factura> facturas)
         {

@@ -125,12 +125,6 @@ namespace Control_de_Facturas.Models
             };
         }
 
-        private void comprobarCESP()
-        {
-            if(this.CodigoAutorizacion == "")
-            {
-                this.TipoCodigoAutorizacion = "NA";
-            }
-        }
+    
     }
 }

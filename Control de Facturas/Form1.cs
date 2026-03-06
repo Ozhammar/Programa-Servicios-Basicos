@@ -376,6 +376,7 @@ namespace Control_de_Facturas
                 return;
             }
             exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, "28.0.0.1.0");
+            //EN ESTA FUNCION TENGO QUE LLAMAR AL BUSCADOR DE UG_UD
         }
         #endregion
 
