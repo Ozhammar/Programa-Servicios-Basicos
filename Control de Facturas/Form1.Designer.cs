@@ -74,7 +74,7 @@
             label10 = new Label();
             btnLiqUInterior_GAS = new Button();
             button16 = new Button();
-            button17 = new Button();
+            btnInformeInterior_GAS = new Button();
             groupBox9 = new GroupBox();
             label9 = new Label();
             btnLiqUMetrogasG = new Button();
@@ -484,6 +484,7 @@
             btnInformeInterior_Agua.TabIndex = 9;
             btnInformeInterior_Agua.Text = "Informe";
             btnInformeInterior_Agua.UseVisualStyleBackColor = true;
+            btnInformeInterior_Agua.Click += btnInformeInterior_Agua_Click;
             // 
             // groupBox6
             // 
@@ -556,7 +557,7 @@
             groupBox10.Controls.Add(label10);
             groupBox10.Controls.Add(btnLiqUInterior_GAS);
             groupBox10.Controls.Add(button16);
-            groupBox10.Controls.Add(button17);
+            groupBox10.Controls.Add(btnInformeInterior_GAS);
             groupBox10.Location = new Point(358, 6);
             groupBox10.Name = "groupBox10";
             groupBox10.Size = new Size(170, 118);
@@ -593,14 +594,15 @@
             button16.Text = "Individual";
             button16.UseVisualStyleBackColor = true;
             // 
-            // button17
+            // btnInformeInterior_GAS
             // 
-            button17.Location = new Point(6, 22);
-            button17.Name = "button17";
-            button17.Size = new Size(75, 23);
-            button17.TabIndex = 9;
-            button17.Text = "Informe";
-            button17.UseVisualStyleBackColor = true;
+            btnInformeInterior_GAS.Location = new Point(6, 22);
+            btnInformeInterior_GAS.Name = "btnInformeInterior_GAS";
+            btnInformeInterior_GAS.Size = new Size(75, 23);
+            btnInformeInterior_GAS.TabIndex = 9;
+            btnInformeInterior_GAS.Text = "Informe";
+            btnInformeInterior_GAS.UseVisualStyleBackColor = true;
+            btnInformeInterior_GAS.Click += btnInformeInterior_GAS_Click;
             // 
             // groupBox9
             // 
@@ -811,7 +813,8 @@
             Controls.Add(btnSalir);
             Controls.Add(groupBox1);
             Name = "Form1";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Programa Servicios Básicos";
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -897,7 +900,7 @@
         private Label label10;
         private Button btnLiqUInterior_GAS;
         private Button button16;
-        private Button button17;
+        private Button btnInformeInterior_GAS;
         private GroupBox groupBox9;
         private Label label9;
         private Button btnLiqUMetrogasG;

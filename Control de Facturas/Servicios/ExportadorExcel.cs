@@ -10,12 +10,12 @@ namespace Control_de_Facturas.Servicios
     {
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         private readonly string rutaPlantilla_SIDIF;
-        private readonly string rutaPlantillaInfome_AYSA;
-        private readonly string rutaPlantillaInfome_EDESUR;
-        private readonly string rutaPlantillaInfome_MetroGasChicos;
-        private readonly string rutaPlantillaInfome_MetroGasGrandes;
-        private readonly string rutaPlantillaInfome_EDENOR;
-        private ControladorFacturas controladorFacturas;
+        private readonly string rutaPlantillaInforme_AYSA;
+        private readonly string rutaPlantillaInforme_EDESUR;
+        private readonly string rutaPlantillaInforme_MetroGasChicos;
+        private readonly string rutaPlantillaInforme_MetroGasGrandes;
+        private readonly string rutaPlantillaInforme_EDENOR;
+        private readonly string rutaPlantillaInforme_Interior;
 
         public ExportadorExcel()
         {
@@ -23,13 +23,13 @@ namespace Control_de_Facturas.Servicios
             rutaPlantilla_SIDIF = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "PLANTILLA.xlsx");
 
             //PLANTILLAS DE INFORMES
-            rutaPlantillaInfome_AYSA = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "AYSA.xlsx");
-            rutaPlantillaInfome_EDESUR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDESUR.xlsx");
-            rutaPlantillaInfome_MetroGasChicos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS PEQUEÑOS.xlsx");
-            rutaPlantillaInfome_MetroGasGrandes = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS GRANDES.xlsx");
-            rutaPlantillaInfome_EDENOR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDENOR.xlsx");
+            rutaPlantillaInforme_AYSA = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "AYSA.xlsx");
+            rutaPlantillaInforme_EDESUR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDESUR.xlsx");
+            rutaPlantillaInforme_MetroGasChicos = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS PEQUEÑOS.xlsx");
+            rutaPlantillaInforme_MetroGasGrandes = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "METROGAS GRANDES.xlsx");
+            rutaPlantillaInforme_EDENOR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "EDENOR.xlsx");
+            rutaPlantillaInforme_Interior = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "Plantillas Pagos", "INTERIOR.xlsx");
 
-            controladorFacturas = new ControladorFacturas();
         }
 
         public XLWorkbook abrirPlantilla(string Plantilla)
@@ -58,15 +58,17 @@ namespace Control_de_Facturas.Servicios
             switch (empresa.ToUpper())
             {
                 case "AYSA":
-                    return rutaPlantillaInfome_AYSA;
+                    return rutaPlantillaInforme_AYSA;
                 case "EDESUR":
-                    return rutaPlantillaInfome_EDESUR;
+                    return rutaPlantillaInforme_EDESUR;
                 case "METROGAS PEQUEÑOS CLIENTES":
-                    return rutaPlantillaInfome_MetroGasChicos;
+                    return rutaPlantillaInforme_MetroGasChicos;
                 case "METROGAS GRANDES CLIENTES":
-                    return rutaPlantillaInfome_MetroGasGrandes;
+                    return rutaPlantillaInforme_MetroGasGrandes;
                 case "EDENOR":
-                    return rutaPlantillaInfome_EDENOR;
+                    return rutaPlantillaInforme_EDENOR;
+                case "INTERIOR":
+                    return rutaPlantillaInforme_Interior;
                 default:
                     throw new Exception("No se ha encontrado una plantilla de informe para la empresa especificada.");
             }
@@ -420,7 +422,7 @@ namespace Control_de_Facturas.Servicios
                 foreach (LotesPago lote in lotesPago)
                 {
                     var valoresUG_UD = buscadorUD_UG.BuscarUD_UG(lote.PrimerFactura.CUIT);
-                    
+
                     #region cabecera
                     //CABECERA
                     cabecera.Cell($"A{filaCabecera}").Value = config.SAF;
@@ -431,7 +433,7 @@ namespace Control_de_Facturas.Servicios
                     cabecera.Cell($"F{filaCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.PuntoVenta);
                     cabecera.Cell($"G{filaCabecera}").Value = Convert.ToInt32(lote.PrimerFactura.NumeroFactura);
                     cabecera.Cell($"K{filaCabecera}").Value = lote.PrimerFactura.TipoCodigoAutorizacion;
-                    cabecera.Cell($"L{filaCabecera}").Value = string.IsNullOrEmpty(lote.PrimerFactura.CodigoAutorizacion) ? null : lote.PrimerFactura.CodigoAutorizacion ;
+                    cabecera.Cell($"L{filaCabecera}").Value = string.IsNullOrEmpty(lote.PrimerFactura.CodigoAutorizacion) ? null : lote.PrimerFactura.CodigoAutorizacion;
                     cabecera.Cell($"M{filaCabecera}").Value = lote.PrimerFactura.VencimientoCodigoAutorizacion != DateTime.MinValue ? lote.PrimerFactura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy") : null;
                     cabecera.Cell($"O{filaCabecera}").Value = config.TipoDocumento;
                     cabecera.Cell($"P{filaCabecera}").Value = lote.PrimerFactura.CUIT;
@@ -556,6 +558,72 @@ namespace Control_de_Facturas.Servicios
 
 
                 string pathGuardado = Path.Combine(desktopPath, $"{facturasFiltadas[0].FechaVencimiento.ToString("yyyy")}-{DateTime.ParseExact(facturasFiltadas[0].Periodo, "MMMM", new CultureInfo("es-ES")).Month}-Informe de Pago - {facturasFiltadas[0].Empresa} {facturasFiltadas[0].Periodo}.xlsx");
+
+
+                if (!File.Exists(pathGuardado))
+                {
+                    libro.SaveAs(pathGuardado);
+                    MessageBox.Show($"Informe de {facturasFiltadas[0].Empresa} exportado correctamente. Se ha guardado en {pathGuardado}");
+                }
+                else
+                {
+                    string pathGuardado_Error = Path.Combine(desktopPath, $"{facturasFiltadas[0].FechaVencimiento.ToString("yyyy")}-{DateTime.ParseExact(facturasFiltadas[0].Periodo, "MMMM", new CultureInfo("es-ES")).Month}-Informe de Pago - {facturasFiltadas[0].Empresa} {facturasFiltadas[0].Periodo}_Error_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+                    libro.SaveAs(pathGuardado_Error);
+                    MessageBox.Show($"El informe para el periodo {facturasFiltadas[0].Periodo} ya existe en el escritorio. Se ha guardado, {pathGuardado_Error}  para evitar sobrescribir el archivo existente.");
+                }
+
+
+
+                fila = 2;
+                importeTotalPeriodo = 0;
+                facturasFiltadas.Clear();
+            }
+        }
+
+        public void GenerarInformeInterior(string plantilla, List<Factura> facturas)
+        {
+            int fila = 2;
+
+            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.ToList()).ToList();
+
+            foreach (List<Factura> carpeta in facturasPorCarpeta)
+            {
+                XLWorkbook libro = this.abrirPlantilla(obtenerRutaPlantillaInforme(plantilla));
+                IXLWorksheet informe = libro.Worksheet("Informe de Pago Realizado");
+
+                List<Factura> facturasFiltadas = carpeta;
+                decimal importeTotalPeriodo = 0;
+
+                foreach (Factura factura in facturasFiltadas)
+                {
+
+                    importeTotalPeriodo += factura.ImporteAbonable;
+
+                    informe.Cell($"A{fila}").Value = factura.NumeroCliente;
+                    informe.Cell($"B{fila}").Value = $"{factura.PuntoVenta}-{factura.NumeroFactura}";
+                    informe.Cell($"C{fila}").Value = factura.FechaVencimiento.ToString("dd/MM/yyyy");
+                    informe.Cell($"D{fila}").Value = factura.ImportePrimerVencimiento;
+                    informe.Cell($"E{fila}").Value = factura.ImporteSaldoAnterior;
+                    informe.Cell($"F{fila}").Value = factura.ImporteAbonable;
+                    informe.Cell($"G{fila}").Value = factura.CUIT;
+                    informe.Cell($"H{fila}").Value = factura.TipoCodigoAutorizacion;
+                    informe.Cell($"I{fila}").Value = factura.CodigoAutorizacion;
+                    informe.Cell($"J{fila}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
+                    informe.Cell($"K{fila}").Value = factura.Tarifa;
+                    fila++;
+
+
+
+                }
+
+                //informe.Range($"A{fila}:G{fila}").Merge().Value = "IMPORTE TOTAL";
+                //informe.Range($"H{fila}:K{fila}").Merge().Value = importeTotalPeriodo;//importeTotal;
+                //informe.Range($"H{fila}:K{fila}").Style.NumberFormat.Format = "$ #,##0.00";
+
+                informe.Range($"A2:K{fila - 1}").Sort(1, XLSortOrder.Ascending);
+
+
+                string pathGuardado = Path.Combine(desktopPath, $"Informe de Pago - {facturasFiltadas[0].TipoServicio}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
 
 
                 if (!File.Exists(pathGuardado))

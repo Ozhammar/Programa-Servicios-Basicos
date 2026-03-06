@@ -327,7 +327,6 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"(\d{2}\s*\/\s*\d{4})\s*\d{10}", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"Mensual\s*(\d{4}\s*\/\s*\d{1})", RegexOptions.IgnoreCase),//GASNEA
 
-
             };
 
             foreach (Regex regex in patrones)
@@ -347,7 +346,7 @@ namespace Control_de_Facturas.Processors
                      }*/
 
                     DateTime fecha = Convert.ToDateTime(match.Groups[1].Value);
-                    periodo = fecha.ToString("MMMM").ToUpper();
+                    periodo = fecha.ToString("MM/yy").ToUpper();
                     break;
                 }
             }

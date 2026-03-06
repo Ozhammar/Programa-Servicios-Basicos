@@ -425,7 +425,7 @@ namespace Control_de_Facturas.Processors
                     try
                     {
                         DateTime fecha = Convert.ToDateTime(match.Groups[1].Value);
-                        periodo = fecha.ToString("MMMM").ToUpper();
+                        periodo = fecha.ToString("MM/yy").ToUpper();
                         break;
                     }
                     catch
@@ -536,14 +536,12 @@ namespace Control_de_Facturas.Processors
                     break;
                 }
             }
-         
             return codigoAutorizacion;
         }
         private DateTime ExtraerVencimientoCodigoAutorizacion(string textoPDF)
         {
             List<Regex> patrones = new List<Regex>
             {
-
                  new Regex(@"C\.?E\.?S\.?P\.?[\s\S]+\d{14}Vto\.?\s*C\.?E\.?S\.?P\.?\:?\s*(\d{2}/\d{2}/\d{2})", RegexOptions.IgnoreCase),//DPOSS
                  new Regex(@"C\.?E\.?S\.?P\.?\s*:?\s*\d{14}\s*\.\s*Vto\.?\:?\s*(\d{2}/\d+/\d{4})", RegexOptions.IgnoreCase),//AGUAS MENDOCINAS
                  new Regex(@"C\.E\.S\.P\.?\:?\s*N[º°]:?\s*\d{15}\s*Vencimiento:?(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
