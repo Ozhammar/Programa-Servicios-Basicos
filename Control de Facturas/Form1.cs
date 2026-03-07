@@ -22,6 +22,7 @@ namespace Control_de_Facturas
         #region Eventos de Carga y Configuración
         private void Form1_Load(object sender, EventArgs e)
         {
+
             tabControl1.Enabled = false;
             btnValidar.Enabled = false;
             btnEjecutar.Enabled = false;
@@ -68,7 +69,7 @@ namespace Control_de_Facturas
             tabControl1.Enabled = false;
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = true;
-            facturasCache = null;
+            dataGridView1.CellContentDoubleClick -= modificarDatosFactura;
         }
 
         private async Task comprobacionCache()
@@ -93,54 +94,6 @@ namespace Control_de_Facturas
             btnValidar.Enabled = true;
         }
 
-        /*private async Task cargaFacturas()
-        {
-            try
-            {
-                // Deshabilitar controles durante procesamiento
-                button1.Enabled = false;
-                btnLimpiarPath.Enabled = false;
-                btnSeleccionarCarpeta.Enabled = false;
-                btnEjecutar.Enabled = false;
-
-                dataGridView1.Rows.Clear();
-
-                // Configurar progress bar
-                progressBar1.Maximum = 100;
-                progressBar1.Value = 0;
-
-                int totalPDFS = gestorArchivos.ObtenerPDF(path).Count();
-                var progreso = new Progress<int>(actual =>
-                {
-                    int porcentaje = (actual * 100) / totalPDFS;
-                    progressBar1.Value = porcentaje;
-                    labelPorcentaje.Text = $"{porcentaje}%";
-                    labelPorcentaje.Refresh();
-                });
-
-                // Procesar facturas
-                facturasCache = await controladorFacturas.ProcesarFacturasEnCarpeta(path, progreso);
-                dataGridView1.DataSource = facturasCache;
-                FormatearColumnasDecimales();
-
-                // Rehabilitar controles
-                button1.Enabled = true;
-                btnLimpiarPath.Enabled = true;
-                btnEjecutar.Enabled = true;
-                btnSeleccionarCarpeta.Enabled = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error durante el procesamiento: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                // Rehabilitar controles
-                button1.Enabled = true;
-                btnEjecutar.Enabled = true;
-                btnLimpiarPath.Enabled = true;
-                btnSeleccionarCarpeta.Enabled = true;
-            }
-        }*/
-
         private async Task cargaFacturas()
         {
             try
@@ -164,6 +117,7 @@ namespace Control_de_Facturas
                     return;
                 }
 
+                #region PROGRESSBAR
                 // Configurar ProgressBar con valores reales
                 progressBar1.Minimum = 0;
                 progressBar1.Maximum = totalPDFS;
@@ -178,6 +132,7 @@ namespace Control_de_Facturas
                     int porcentaje = (valorSeguro * 100) / totalPDFS;
                     labelPorcentaje.Text = $"{porcentaje}%";
                 });
+                #endregion
 
                 // Procesar facturas
                 facturasCache = await controladorFacturas
@@ -212,11 +167,10 @@ namespace Control_de_Facturas
             }
         }
 
-
-
         private void btnValidar_Click(object sender, EventArgs e)
         {
             tabControl1.Enabled = true;
+            dataGridView1.CellContentDoubleClick -= modificarDatosFactura;
         }
         #endregion
 
@@ -239,8 +193,6 @@ namespace Control_de_Facturas
 
             exportadorExcel.generarLiquidacionIndividual(facturasEdesur, "1.0.0.1.0");
         }
-
-
         //LIQUIDACION EDESUR UNIFICADA
         private async void btnLiqUEdesur_Click(object sender, EventArgs e)
         {
@@ -309,13 +261,12 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasEdenor, "1.0.0.1.0");
         }
-
-
+        //LIQUIDACION INTERIOR INDIVIDUAL
         private void btnLiqIInterior_Click(object sender, EventArgs e)
         {
 
         }
-
+        //LIQUIDACION INTERIOR UNIFICADA
         private void btnLiqUInterior_Click(object sender, EventArgs e)
         {
 
@@ -323,6 +274,7 @@ namespace Control_de_Facturas
         #endregion
 
         #region AGUA
+        //LIQUIDACION AYSA INDIVIDUAL
         private async void btnLiqIAYSA_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -335,6 +287,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasAysa, "1.0.0.1.0");
         }
+        //LIQUIDACION AYSA UNIFICADA
         private async void btnLiqUAYSA_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -347,6 +300,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasAysa, "1.0.0.1.0");
         }
+        //INFORME AYSA
         private async void btnInformeAYSA_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -359,9 +313,37 @@ namespace Control_de_Facturas
             }
             exportadorExcel.GenerarInforme("AYSA", facturasAysa);
         }
+        //LIQUIDACION INTERIOR UNIFICADA AGUA
+        private async void btnLiqUInterior_Agua_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasAguaInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "AGUA INTERIOR");
+
+            if (facturasAguaInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de AGUA INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para AGUA INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+            exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, actividadProgramatica);
+        }
+        //INFORME AGUA INTERIOR
+        private async void btnInformeInterior_Agua_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasAguaInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "AGUA INTERIOR");
+
+            if (facturasAguaInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de AGUA INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInformeInterior("INTERIOR", facturasAguaInterior);
+        }
         #endregion
 
         #region GAS
+        //LIQUIDACION METROGAS GRANDES CLIENTES INDIVIDUAL
         private async void btnLiqIMetrogasG_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -374,6 +356,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasMetrogasG, "1.0.0.1.0");
         }
+        //LIQUIDACION METROGAS GRANDES CLIENTES UNIFICADA
         private async void btnLiqUMetrogasG_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -386,6 +369,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasG, "1.0.0.1.0");
         }
+        //INFORME METROGAS GRANDES CLIENTES
         private async void btnInformeMetrogasG_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -398,6 +382,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.GenerarInforme("METROGAS GRANDES CLIENTES", facturasMetrogasG);
         }
+        //LIQUIDACION METROGAS PEQUEÑOS CLIENTES INDIVIDUAL
         private async void btnLiqIMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -410,6 +395,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionIndividual(facturasMetrogasP, "1.0.0.1.0");
         }
+        //LIQUIDACION METROGAS PEQUEÑOS CLIENTES UNIFICADA
         private async void btnLiqUMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -422,6 +408,7 @@ namespace Control_de_Facturas
             }
             exportadorExcel.generarLiquidacionUnificada(facturasMetrogasP, "1.0.0.1.0");
         }
+        //INFORME METROGAS PEQUEÑOS CLIENTES
         private async void btnInformeMetrogasC_Click(object sender, EventArgs e)
         {
             await comprobacionCache();
@@ -433,6 +420,33 @@ namespace Control_de_Facturas
                 return;
             }
             exportadorExcel.GenerarInforme("METROGAS PEQUEÑOS CLIENTES", facturasMetrogasC);
+        }
+        //LIQUIDACION INTERIOR UNIFICADA
+        private async void btnLiqUInterior_GAS_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasGasInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "GAS INTERIOR");
+
+            if (facturasGasInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de GAS INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para GAS INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+            exportadorExcel.generarLiquidacionUnificadaInterior(facturasGasInterior, actividadProgramatica);
+        }
+
+        private async void btnInformeInterior_GAS_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasGasInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "GAS INTERIOR");
+
+            if (facturasGasInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de GAS INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInformeInterior("INTERIOR", facturasGasInterior);
         }
         #endregion
 
@@ -581,8 +595,11 @@ namespace Control_de_Facturas
         private void ordenarCache()
         {
             facturasCache = facturasCache.OrderBy(f => Path.GetDirectoryName(f.Archivo))
-                                         .ThenByDescending(f => f.Periodo)
-                                         .ToList();
+                                .ThenBy(f => f.Empresa)
+                                .ThenByDescending(f => f.NumeroCliente)
+                                .ThenByDescending(f => f.NumeroFactura)
+                                .ThenByDescending(f => f.Periodo)
+                                .ToList();
         }
 
         private void dataGridView1_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -661,5 +678,8 @@ namespace Control_de_Facturas
         #endregion
 
 
+
+
+ 
     }
 }
