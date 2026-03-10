@@ -584,7 +584,6 @@ namespace Control_de_Facturas.Servicios
 
                 List<Factura> facturasFiltadas = carpeta;
 
-                
                 decimal importeTotal = 0;
 
                 foreach (Factura factura in facturasFiltadas)
@@ -609,11 +608,7 @@ namespace Control_de_Facturas.Servicios
                 informe.Range($"H{fila}:L{fila}").Merge().Value = importeTotal;
                 informe.Range($"H{fila}:K{fila}").Style.NumberFormat.Format = "$ #,##0.00";
 
-                //informe.Range($"A2:L{fila - 1}").Sort(1, XLSortOrder.Ascending);
-
-
                 string pathGuardado = Path.Combine(desktopPath, $"Informe de Pago - {facturasFiltadas[0].TipoServicio}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
-
 
                 if (!File.Exists(pathGuardado))
                 {
