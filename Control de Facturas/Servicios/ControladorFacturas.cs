@@ -205,12 +205,6 @@ namespace Control_de_Facturas.Servicios
                 .ToList();
             return OrdenarSegunEmpresa(facturasFiltradas, tipoServicio);
         }
-        /*  public List<Factura> borrarDuplicados(List<Factura> facturas)
-          {
-              List<Factura> facturasSinDuplicados = facturas.Distinct().ToList();
-
-              return facturasSinDuplicados;
-          }*/
 
         private TiposServicios? corroborarInterior(string textoPDF)
         {
@@ -295,6 +289,7 @@ namespace Control_de_Facturas.Servicios
                 "30-71151356-2",
                 "33-69809590-9",
                 "aguasdeformosa",
+                "33-71097454-9"
                 #endregion
             };
             string[] palabrasClave_LUZ =
