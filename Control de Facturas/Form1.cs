@@ -325,6 +325,13 @@ namespace Control_de_Facturas
                 return;
             }
             var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para AGUA INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+
+            if (string.IsNullOrEmpty(actividadProgramatica))
+            {
+                MessageBox.Show("La actividad programática no puede estar vacía. Se cancelará la generación de la liquidación unificada para AGUA INTERIOR.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+                
             exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, actividadProgramatica);
         }
         //INFORME AGUA INTERIOR

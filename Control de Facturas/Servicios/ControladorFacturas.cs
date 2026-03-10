@@ -20,7 +20,6 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorMetrogasPequenios procesadorMetrogasPequenios;
         private readonly ProcesadorGasInterior procesadorGasInterior;
         private readonly ProcesadorAguaInterior procesadorAguaInterior;
-        //private readonly ProcesadorTelecom procesadorTelecom;
 
         public ControladorFacturas()
         {
@@ -32,7 +31,6 @@ namespace Control_de_Facturas.Servicios
             procesadorMetrogasPequenios = new ProcesadorMetrogasPequenios();
             procesadorGasInterior = new ProcesadorGasInterior();
             procesadorAguaInterior = new ProcesadorAguaInterior();
-            //procesadorTelecom = new ProcesadorTelecom();
         }
 
         public enum TiposServicios
@@ -63,7 +61,6 @@ namespace Control_de_Facturas.Servicios
             List<Factura> facturasProcesadas = new List<Factura>();
             IEnumerable<string> archivosPDF = gestorArchivos.ObtenerPDF(carpeta);
 
-            int total = archivosPDF.Count();
             int actual = 0;
 
             foreach (string archivo in archivosPDF)
@@ -104,12 +101,11 @@ namespace Control_de_Facturas.Servicios
                                     facturasProcesadas.Add(factura);
                                 }
                             }
-                           
                         }
                         else
                         {
                             Factura factura = IdentificarYProcesarFactura(textoPDF, archivo);
-                            if (factura != null)
+                            if (factura != null && !facturasProcesadas.Any(f => f.NumeroFactura == factura.NumeroFactura))
                             {
                                 facturasProcesadas.Add(factura);
                             }
@@ -128,7 +124,6 @@ namespace Control_de_Facturas.Servicios
             }
             return facturasProcesadas;
         }
-
 
         public bool RequiereDivisionEnBloques(string textoPDF)
         {
@@ -178,34 +173,8 @@ namespace Control_de_Facturas.Servicios
                 return null;
             }
         }
-
-
         #endregion
-
         #region Filtrado y Ordenamiento
-        public List<Factura> FiltrarPorEmpresa(List<Factura> facturas, string empresa)
-        {
-            if (facturas == null || facturas.Count == 0)
-                return new List<Factura>();
-
-            var facturasFiltradas = facturas
-                .Where(f => f.Empresa.Equals(empresa, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            return OrdenarSegunEmpresa(facturasFiltradas, empresa);
-        }
-
-        public List<Factura> filtrarPorTipoServicio(List<Factura> facturas, string tipoServicio)
-        {
-            if (facturas == null || facturas.Count == 0)
-                return new List<Factura>();
-
-            var facturasFiltradas = facturas
-                .Where(f => f.TipoServicio.Equals(tipoServicio, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-            return OrdenarSegunEmpresa(facturasFiltradas, tipoServicio);
-        }
-
         private TiposServicios? corroborarInterior(string textoPDF)
         {
             string[] palabrasClave_GAS =
@@ -289,7 +258,8 @@ namespace Control_de_Facturas.Servicios
                 "30-71151356-2",
                 "33-69809590-9",
                 "aguasdeformosa",
-                "33-71097454-9"
+                "33-71097454-9",
+                "30-64263072-1"
                 #endregion
             };
             string[] palabrasClave_LUZ =
@@ -324,6 +294,28 @@ namespace Control_de_Facturas.Servicios
                 }
             }
             return null;
+        }
+        public List<Factura> FiltrarPorEmpresa(List<Factura> facturas, string empresa)
+        {
+            if (facturas == null || facturas.Count == 0)
+                return new List<Factura>();
+
+            var facturasFiltradas = facturas
+                .Where(f => f.Empresa.Equals(empresa, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return OrdenarSegunEmpresa(facturasFiltradas, empresa);
+        }
+
+        public List<Factura> filtrarPorTipoServicio(List<Factura> facturas, string tipoServicio)
+        {
+            if (facturas == null || facturas.Count == 0)
+                return new List<Factura>();
+
+            var facturasFiltradas = facturas
+                .Where(f => f.TipoServicio.Equals(tipoServicio, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            return OrdenarSegunEmpresa(facturasFiltradas, tipoServicio);
         }
 
         private List<Factura> OrdenarSegunEmpresa(List<Factura> facturas, string empresa)
