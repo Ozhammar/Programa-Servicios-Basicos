@@ -584,7 +584,7 @@ namespace Control_de_Facturas.Servicios
         {
             int fila = 2;
 
-            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.ToList()).ToList();
+            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.OrderByDescending(h => h.NumeroCliente).ThenBy(j => j.Periodo).ToList()).ToList();
 
             foreach (List<Factura> carpeta in facturasPorCarpeta)
             {
@@ -592,33 +592,31 @@ namespace Control_de_Facturas.Servicios
                 IXLWorksheet informe = libro.Worksheet("Informe de Pago Realizado");
 
                 List<Factura> facturasFiltadas = carpeta;
-                decimal importeTotalPeriodo = 0;
+                decimal importeTotal = 0;
 
                 foreach (Factura factura in facturasFiltadas)
                 {
 
-                    importeTotalPeriodo += factura.ImporteAbonable;
-
-                    informe.Cell($"A{fila}").Value = factura.NumeroCliente;
-                    informe.Cell($"B{fila}").Value = $"{factura.PuntoVenta}-{factura.NumeroFactura}";
-                    informe.Cell($"C{fila}").Value = factura.FechaVencimiento.ToString("dd/MM/yyyy");
-                    informe.Cell($"D{fila}").Value = factura.ImportePrimerVencimiento;
-                    informe.Cell($"E{fila}").Value = factura.ImporteSaldoAnterior;
-                    informe.Cell($"F{fila}").Value = factura.ImporteAbonable;
-                    informe.Cell($"G{fila}").Value = factura.CUIT;
-                    informe.Cell($"H{fila}").Value = factura.TipoCodigoAutorizacion;
-                    informe.Cell($"I{fila}").Value = factura.CodigoAutorizacion;
-                    informe.Cell($"J{fila}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
-                    informe.Cell($"K{fila}").Value = factura.Tarifa;
+                    importeTotal += factura.ImporteAbonable;
+                    informe.Cell($"A{fila}").Value = factura.Empresa;
+                    informe.Cell($"B{fila}").Value = factura.NumeroCliente;
+                    informe.Cell($"C{fila}").Value = $"{factura.PuntoVenta}-{factura.NumeroFactura}";
+                    informe.Cell($"D{fila}").Value = factura.Periodo;
+                    informe.Cell($"E{fila}").Value = factura.FechaVencimiento.ToString("dd/MM/yyyy");
+                    informe.Cell($"F{fila}").Value = factura.ImportePrimerVencimiento;
+                    informe.Cell($"G{fila}").Value = factura.ImporteSaldoAnterior;
+                    informe.Cell($"H{fila}").Value = factura.ImporteAbonable;
+                    informe.Cell($"I{fila}").Value = factura.CUIT;
+                    informe.Cell($"J{fila}").Value = factura.TipoCodigoAutorizacion;
+                    informe.Cell($"K{fila}").Value = factura.CodigoAutorizacion;
+                    informe.Cell($"L{fila}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
                     fila++;
-
-
 
                 }
 
-                //informe.Range($"A{fila}:G{fila}").Merge().Value = "IMPORTE TOTAL";
-                //informe.Range($"H{fila}:K{fila}").Merge().Value = importeTotalPeriodo;//importeTotal;
-                //informe.Range($"H{fila}:K{fila}").Style.NumberFormat.Format = "$ #,##0.00";
+                informe.Range($"A{fila}:G{fila}").Merge().Value = "IMPORTE TOTAL";
+                informe.Range($"H{fila}:L{fila}").Merge().Value = importeTotal;
+                informe.Range($"H{fila}:K{fila}").Style.NumberFormat.Format = "$ #,##0.00";
 
                 informe.Range($"A2:K{fila - 1}").Sort(1, XLSortOrder.Ascending);
 
@@ -638,13 +636,10 @@ namespace Control_de_Facturas.Servicios
                     MessageBox.Show($"El informe para el periodo {facturasFiltadas[0].Periodo} ya existe en el escritorio. Se ha guardado, {pathGuardado_Error}  para evitar sobrescribir el archivo existente.");
                 }
 
-
-
                 fila = 2;
-                importeTotalPeriodo = 0;
+                importeTotal = 0;
                 facturasFiltadas.Clear();
             }
-
         }
     }
 }
