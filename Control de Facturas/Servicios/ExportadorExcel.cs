@@ -514,7 +514,6 @@ namespace Control_de_Facturas.Servicios
         {
             int fila = 2;
 
-            //var facturasPorPeriodo = facturas.GroupBy(f => new{Año = f.FechaVencimiento.Year,f.Periodo}).Select(g => g.OrderBy(f => f.FechaVencimiento).ToList()).ToList();
             List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.ToList()).ToList();
 
             foreach (List<Factura> carpeta in facturasPorCarpeta)
@@ -523,7 +522,6 @@ namespace Control_de_Facturas.Servicios
                 IXLWorksheet informe = libro.Worksheet("Informe de Pago Realizado");
 
                 List<Factura> facturasFiltadas = carpeta;
-                //  Factura factura = null;
                 decimal importeTotalPeriodo = 0;
 
                 foreach (Factura factura in facturasFiltadas)
@@ -545,9 +543,6 @@ namespace Control_de_Facturas.Servicios
                     informe.Cell($"J{fila}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
                     informe.Cell($"K{fila}").Value = factura.Tarifa;
                     fila++;
-
-
-
                 }
 
                 informe.Range($"A{fila}:G{fila}").Merge().Value = "IMPORTE TOTAL";
@@ -555,7 +550,6 @@ namespace Control_de_Facturas.Servicios
                 informe.Range($"H{fila}:K{fila}").Style.NumberFormat.Format = "$ #,##0.00";
 
                 informe.Range($"A2:K{fila - 1}").Sort(1, XLSortOrder.Ascending);
-
 
                 string pathGuardado = Path.Combine(desktopPath, $"{facturasFiltadas[0].FechaVencimiento.ToString("yyyy")}-{DateTime.ParseExact(facturasFiltadas[0].Periodo, "MMMM", new CultureInfo("es-ES")).Month}-Informe de Pago - {facturasFiltadas[0].Empresa} {facturasFiltadas[0].Periodo}.xlsx");
 
@@ -571,9 +565,6 @@ namespace Control_de_Facturas.Servicios
                     libro.SaveAs(pathGuardado_Error);
                     MessageBox.Show($"El informe para el periodo {facturasFiltadas[0].Periodo} ya existe en el escritorio. Se ha guardado, {pathGuardado_Error}  para evitar sobrescribir el archivo existente.");
                 }
-
-
-
                 fila = 2;
                 importeTotalPeriodo = 0;
                 facturasFiltadas.Clear();
@@ -584,7 +575,7 @@ namespace Control_de_Facturas.Servicios
         {
             int fila = 2;
 
-            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.OrderByDescending(h => h.NumeroCliente).ThenBy(j => j.Periodo).ToList()).ToList();
+            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.OrderBy(h => long.Parse(h.NumeroCliente.Replace("-", ""))).ThenBy(j => j.Periodo).ToList()).ToList();
 
             foreach (List<Factura> carpeta in facturasPorCarpeta)
             {
@@ -592,11 +583,12 @@ namespace Control_de_Facturas.Servicios
                 IXLWorksheet informe = libro.Worksheet("Informe de Pago Realizado");
 
                 List<Factura> facturasFiltadas = carpeta;
+
+                
                 decimal importeTotal = 0;
 
                 foreach (Factura factura in facturasFiltadas)
                 {
-
                     importeTotal += factura.ImporteAbonable;
                     informe.Cell($"A{fila}").Value = factura.Empresa;
                     informe.Cell($"B{fila}").Value = factura.NumeroCliente;
@@ -611,14 +603,13 @@ namespace Control_de_Facturas.Servicios
                     informe.Cell($"K{fila}").Value = factura.CodigoAutorizacion;
                     informe.Cell($"L{fila}").Value = factura.VencimientoCodigoAutorizacion.ToString("dd/MM/yyyy");
                     fila++;
-
                 }
 
                 informe.Range($"A{fila}:G{fila}").Merge().Value = "IMPORTE TOTAL";
                 informe.Range($"H{fila}:L{fila}").Merge().Value = importeTotal;
                 informe.Range($"H{fila}:K{fila}").Style.NumberFormat.Format = "$ #,##0.00";
 
-                informe.Range($"A2:K{fila - 1}").Sort(1, XLSortOrder.Ascending);
+                //informe.Range($"A2:L{fila - 1}").Sort(1, XLSortOrder.Ascending);
 
 
                 string pathGuardado = Path.Combine(desktopPath, $"Informe de Pago - {facturasFiltadas[0].TipoServicio}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
