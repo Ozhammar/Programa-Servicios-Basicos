@@ -140,6 +140,7 @@
                                 break;
                             }
                     }
+                    break;
                 }
 
             }
@@ -380,7 +381,7 @@
                 new Regex(@"Vencimiento\s*\:?\s*(\d+\s*/\s*\d+\s*/\s*\d{4})\s*\$?", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MAR DEL PLATA
                 new Regex(@"(\d{2}/\d{2}/\d{4})\s*[\d.,]+\s*FC", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                   new Regex(@"\d+\s*(\d{2}\/\d{2}\/\d{4})\s*\d{2}\/\d{4}\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
-                new Regex(@"(\d{2}\/\d{2}\/\d{4})\s*\$\s*[\d.,]+", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
+                new Regex(@"[\d.,]+\s*(\d{2}\/\d{2}\/\d{4})\s*\$\s*[\d.,]+", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
             };
             DateTime fechaVencimiento = DateTime.MinValue;
 

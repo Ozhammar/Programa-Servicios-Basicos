@@ -8,6 +8,8 @@ Recolectar todas las facturas procesadas en un List<Factura>
 Manejar errores y reportarlos
 Retornar la lista final a Form1*/
 
+using System.ComponentModel;
+
 namespace Control_de_Facturas.Servicios
 {
     internal class ControladorFacturas

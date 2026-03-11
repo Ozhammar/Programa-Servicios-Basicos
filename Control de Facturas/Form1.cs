@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic;
+using System.ComponentModel;
 
 namespace Control_de_Facturas
 {
@@ -9,7 +10,7 @@ namespace Control_de_Facturas
         private GestorArchivos gestorArchivos;
         private ControladorFacturas controladorFacturas;
         private ExportadorExcel exportadorExcel;
-        public List<Factura> facturasCache = null;
+        private List<Factura> facturasCache = null;
 
         public Form1()
         {
@@ -691,15 +692,18 @@ namespace Control_de_Facturas
         private void btnCargaManual_Click(object sender, EventArgs e)
         {
             FormularioCargaManual cargaManual = new FormularioCargaManual();
-
             if (cargaManual.ShowDialog() == DialogResult.OK)
             {
                 if (facturasCache == null)
                     facturasCache = new List<Factura>();
 
-                facturasCache.AddRange(cargaManual.facturasCargadas);
-                ordenarCache();
+                foreach (var factura in cargaManual.facturasCargadas)
+                {
+                    if (!facturasCache.Any(f => f.NumeroFactura == factura.NumeroFactura))
+                        facturasCache.Add(factura);
+                }
 
+                ordenarCache();
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = facturasCache;
             }

@@ -1,6 +1,7 @@
 ﻿using Control_de_Facturas.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Control_de_Facturas.Servicios
