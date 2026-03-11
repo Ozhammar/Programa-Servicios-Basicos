@@ -32,9 +32,34 @@
         {
             cBoxTipoServicio.DataSource = tiposDeServicios;
             cBoxTiposCodAut.DataSource = tiposCodAut;
+            cBoxTiposComprobante.SelectedIndex = 0;
+
         }
-            
 
+        private void buscarEmpresa(object sender, EventArgs e)
+        {
+            BuscadorCUIT buscador = new BuscadorCUIT();
 
+            string CUIT = txtCUIT.Text;
+
+            if (CUIT != "")
+            {
+                Empresas empresa = buscador.BuscarEmpresa(CUIT);
+                if (empresa != null)
+                {
+                    txtRazonSocial.Text = empresa.Denominacion;
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró una empresa con ese CUIT.");
+                }
+
+            }
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
