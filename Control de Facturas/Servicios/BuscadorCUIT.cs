@@ -8,8 +8,8 @@ namespace Control_de_Facturas.Servicios
         {
             rutaPlantilla = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "BENEFICIARIOS AGUA, GAS Y LUZ.xlsx");
         }
-        List<Empresas> listaEmpresas = new List<Empresas>();
 
+        List<Empresas> listaEmpresas = new List<Empresas>();
 
         public void CargarEmpresas()
         {
@@ -27,7 +27,7 @@ namespace Control_de_Facturas.Servicios
                 listaEmpresas.Add(empresa);
             }
         }
-            
+
         public string BuscarCUIT(string razonSocial)
         {
             CargarEmpresas();
@@ -41,6 +41,23 @@ namespace Control_de_Facturas.Servicios
                 }
             }
             return cuit;
+
+        }
+
+        public Empresas BuscarEmpresa(string CUIT)
+        {
+            CargarEmpresas();
+
+            string cui = string.Empty;
+            Empresas aux = null;
+            foreach (Empresas empresa in listaEmpresas)
+            {
+                if (empresa.NumeroDocumento.Contains(CUIT))
+                {
+                    aux = empresa;
+                }
+            }
+            return aux;
 
         }
     }

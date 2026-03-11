@@ -35,6 +35,7 @@
             txtCUIT = new TextBox();
             labelRazonSocial = new Label();
             txtRazonSocial = new TextBox();
+            groupBox2 = new GroupBox();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -103,11 +104,21 @@
             txtRazonSocial.TabIndex = 2;
             txtRazonSocial.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // groupBox2
+            // 
+            groupBox2.Location = new Point(12, 93);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(387, 272);
+            groupBox2.TabIndex = 3;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Datos del Comprobante";
+            // 
             // FormularioCargaManual
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(904, 509);
+            Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(cBoxTiposCodAut);
             Controls.Add(cBoxTipoServicio);
@@ -128,5 +139,6 @@
         private Label labelCUIT;
         private Label labelRazonSocial;
         private TextBox txtRazonSocial;
+        private GroupBox groupBox2;
     }
 }
