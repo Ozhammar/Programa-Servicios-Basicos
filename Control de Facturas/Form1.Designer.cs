@@ -93,6 +93,7 @@
             btnValidar = new Button();
             groupBox5 = new GroupBox();
             dataGridView1 = new DataGridView();
+            btnCargaManual = new Button();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabCapital.SuspendLayout();
@@ -113,6 +114,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnCargaManual);
             groupBox1.Controls.Add(btnEjecutar);
             groupBox1.Controls.Add(labelPorcentaje);
             groupBox1.Controls.Add(progressBar1);
@@ -803,6 +805,16 @@
             dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
             // 
+            // btnCargaManual
+            // 
+            btnCargaManual.Location = new Point(369, 22);
+            btnCargaManual.Name = "btnCargaManual";
+            btnCargaManual.Size = new Size(99, 23);
+            btnCargaManual.TabIndex = 12;
+            btnCargaManual.Text = "Carga Manual";
+            btnCargaManual.UseVisualStyleBackColor = true;
+            btnCargaManual.Click += btnCargaManual_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -911,5 +923,6 @@
         private Button btnLiqUMetrogasC;
         private Button btnLiqIMetrogasC;
         private Button btnInformeMetrogasC;
+        private Button btnCargaManual;
     }
 }

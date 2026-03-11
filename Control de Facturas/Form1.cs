@@ -331,7 +331,7 @@ namespace Control_de_Facturas
                 MessageBox.Show("La actividad programática no puede estar vacía. Se cancelará la generación de la liquidación unificada para AGUA INTERIOR.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-                
+
             exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, actividadProgramatica);
         }
         //INFORME AGUA INTERIOR
@@ -687,6 +687,12 @@ namespace Control_de_Facturas
 
 
 
- 
+
+        private void btnCargaManual_Click(object sender, EventArgs e)
+        {
+            Form cargaManual = new FormularioCargaManual();
+
+            cargaManual.ShowDialog();
+        }
     }
 }
