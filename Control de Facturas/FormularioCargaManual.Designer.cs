@@ -74,7 +74,7 @@
             cBoxTipoServicio.Location = new Point(8, 232);
             cBoxTipoServicio.Name = "cBoxTipoServicio";
             cBoxTipoServicio.Size = new Size(169, 23);
-            cBoxTipoServicio.TabIndex = 0;
+            cBoxTipoServicio.TabIndex = 7;
             // 
             // cBoxTiposCodAut
             // 
@@ -93,7 +93,7 @@
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(387, 75);
-            groupBox1.TabIndex = 2;
+            groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Datos del Proveedor";
             // 
@@ -103,7 +103,7 @@
             labelRazonSocial.Location = new Point(139, 18);
             labelRazonSocial.Name = "labelRazonSocial";
             labelRazonSocial.Size = new Size(73, 15);
-            labelRazonSocial.TabIndex = 3;
+            labelRazonSocial.TabIndex = 0;
             labelRazonSocial.Text = "Razón Social";
             // 
             // txtRazonSocial
@@ -121,7 +121,7 @@
             labelCUIT.Location = new Point(6, 18);
             labelCUIT.Name = "labelCUIT";
             labelCUIT.Size = new Size(32, 15);
-            labelCUIT.TabIndex = 1;
+            labelCUIT.TabIndex = 0;
             labelCUIT.Text = "CUIT";
             // 
             // txtCUIT
@@ -130,7 +130,7 @@
             txtCUIT.Name = "txtCUIT";
             txtCUIT.PlaceholderText = "CUIT del Proveedor";
             txtCUIT.Size = new Size(111, 23);
-            txtCUIT.TabIndex = 0;
+            txtCUIT.TabIndex = 1;
             txtCUIT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             txtCUIT.Leave += buscarEmpresa;
             // 
@@ -153,7 +153,7 @@
             groupBox2.Location = new Point(12, 93);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(387, 262);
-            groupBox2.TabIndex = 3;
+            groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Datos del Comprobante";
             // 
@@ -163,7 +163,7 @@
             labelTipoServicio.Location = new Point(6, 214);
             labelTipoServicio.Name = "labelTipoServicio";
             labelTipoServicio.Size = new Size(90, 15);
-            labelTipoServicio.TabIndex = 23;
+            labelTipoServicio.TabIndex = 0;
             labelTipoServicio.Text = "Tipo de Servicio";
             // 
             // labelImporte
@@ -173,7 +173,7 @@
             labelImporte.Location = new Point(229, 202);
             labelImporte.Name = "labelImporte";
             labelImporte.Size = new Size(65, 21);
-            labelImporte.TabIndex = 22;
+            labelImporte.TabIndex = 0;
             labelImporte.Text = "Importe";
             // 
             // txtImporte
@@ -181,9 +181,12 @@
             txtImporte.Font = new Font("Segoe UI", 12F);
             txtImporte.Location = new Point(229, 226);
             txtImporte.Name = "txtImporte";
+            txtImporte.PlaceholderText = "$ 0,00";
+            txtImporte.RightToLeft = RightToLeft.No;
             txtImporte.Size = new Size(151, 29);
-            txtImporte.TabIndex = 21;
+            txtImporte.TabIndex = 8;
             txtImporte.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            txtImporte.Leave += txtImporte_Leave;
             // 
             // groupBox4
             // 
@@ -196,7 +199,7 @@
             groupBox4.Location = new Point(6, 135);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(375, 68);
-            groupBox4.TabIndex = 20;
+            groupBox4.TabIndex = 6;
             groupBox4.TabStop = false;
             groupBox4.Text = "Código de Autorización";
             // 
@@ -207,7 +210,7 @@
             dateVencimientoCodAut.Location = new Point(259, 37);
             dateVencimientoCodAut.Name = "dateVencimientoCodAut";
             dateVencimientoCodAut.Size = new Size(95, 23);
-            dateVencimientoCodAut.TabIndex = 19;
+            dateVencimientoCodAut.TabIndex = 3;
             // 
             // label1
             // 
@@ -216,7 +219,7 @@
             label1.Margin = new Padding(0);
             label1.Name = "label1";
             label1.Size = new Size(123, 15);
-            label1.TabIndex = 18;
+            label1.TabIndex = 0;
             label1.Text = "Fecha de Vencimiento";
             // 
             // labelTipo
@@ -225,7 +228,7 @@
             labelTipo.Location = new Point(13, 19);
             labelTipo.Name = "labelTipo";
             labelTipo.Size = new Size(30, 15);
-            labelTipo.TabIndex = 20;
+            labelTipo.TabIndex = 0;
             labelTipo.Text = "Tipo";
             // 
             // txtNumCodAut
@@ -233,7 +236,7 @@
             txtNumCodAut.Location = new Point(85, 37);
             txtNumCodAut.Name = "txtNumCodAut";
             txtNumCodAut.Size = new Size(157, 23);
-            txtNumCodAut.TabIndex = 20;
+            txtNumCodAut.TabIndex = 2;
             txtNumCodAut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // labelNumeroCodigo
@@ -242,7 +245,7 @@
             labelNumeroCodigo.Location = new Point(85, 19);
             labelNumeroCodigo.Name = "labelNumeroCodigo";
             labelNumeroCodigo.Size = new Size(51, 15);
-            labelNumeroCodigo.TabIndex = 21;
+            labelNumeroCodigo.TabIndex = 0;
             labelNumeroCodigo.Text = "Número";
             // 
             // datePeriodo
@@ -252,7 +255,7 @@
             datePeriodo.Location = new Point(278, 106);
             datePeriodo.Name = "datePeriodo";
             datePeriodo.Size = new Size(95, 23);
-            datePeriodo.TabIndex = 17;
+            datePeriodo.TabIndex = 5;
             // 
             // dateVencimientoFC
             // 
@@ -261,7 +264,7 @@
             dateVencimientoFC.Location = new Point(146, 106);
             dateVencimientoFC.Name = "dateVencimientoFC";
             dateVencimientoFC.Size = new Size(95, 23);
-            dateVencimientoFC.TabIndex = 15;
+            dateVencimientoFC.TabIndex = 4;
             // 
             // labelPeriodo
             // 
@@ -269,7 +272,7 @@
             labelPeriodo.Location = new Point(301, 88);
             labelPeriodo.Name = "labelPeriodo";
             labelPeriodo.Size = new Size(48, 15);
-            labelPeriodo.TabIndex = 16;
+            labelPeriodo.TabIndex = 0;
             labelPeriodo.Text = "Período";
             // 
             // dateEmision
@@ -280,8 +283,9 @@
             dateEmision.MaxDate = new DateTime(2100, 12, 31, 0, 0, 0, 0);
             dateEmision.Name = "dateEmision";
             dateEmision.Size = new Size(103, 23);
-            dateEmision.TabIndex = 4;
+            dateEmision.TabIndex = 3;
             dateEmision.Value = new DateTime(2026, 3, 11, 0, 0, 0, 0);
+            dateEmision.ValueChanged += checkFechaMaximaEmision;
             // 
             // labelFechaVencimiento
             // 
@@ -289,7 +293,7 @@
             labelFechaVencimiento.Location = new Point(132, 88);
             labelFechaVencimiento.Name = "labelFechaVencimiento";
             labelFechaVencimiento.Size = new Size(123, 15);
-            labelFechaVencimiento.TabIndex = 14;
+            labelFechaVencimiento.TabIndex = 0;
             labelFechaVencimiento.Text = "Fecha de Vencimiento";
             // 
             // labelFechaEmision
@@ -298,7 +302,7 @@
             labelFechaEmision.Location = new Point(8, 88);
             labelFechaEmision.Name = "labelFechaEmision";
             labelFechaEmision.Size = new Size(99, 15);
-            labelFechaEmision.TabIndex = 13;
+            labelFechaEmision.TabIndex = 0;
             labelFechaEmision.Text = "Fecha de Emisión";
             // 
             // groupBox3
@@ -311,7 +315,7 @@
             groupBox3.Location = new Point(142, 22);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(239, 58);
-            groupBox3.TabIndex = 12;
+            groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "Factura";
             // 
@@ -323,7 +327,7 @@
             label5.Margin = new Padding(0);
             label5.Name = "label5";
             label5.Size = new Size(16, 21);
-            label5.TabIndex = 13;
+            label5.TabIndex = 0;
             label5.Text = "-";
             // 
             // label4
@@ -334,7 +338,7 @@
             label4.Margin = new Padding(0);
             label4.Name = "label4";
             label4.Size = new Size(16, 21);
-            label4.TabIndex = 12;
+            label4.TabIndex = 0;
             label4.Text = "-";
             // 
             // cBoxTiposComprobante
@@ -344,7 +348,7 @@
             cBoxTiposComprobante.Location = new Point(8, 24);
             cBoxTiposComprobante.Name = "cBoxTiposComprobante";
             cBoxTiposComprobante.Size = new Size(36, 23);
-            cBoxTiposComprobante.TabIndex = 4;
+            cBoxTiposComprobante.TabIndex = 1;
             // 
             // txtNumeroFactura
             // 
@@ -352,7 +356,7 @@
             txtNumeroFactura.Margin = new Padding(0);
             txtNumeroFactura.Name = "txtNumeroFactura";
             txtNumeroFactura.Size = new Size(111, 23);
-            txtNumeroFactura.TabIndex = 8;
+            txtNumeroFactura.TabIndex = 3;
             txtNumeroFactura.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtPuntoVenta
@@ -361,7 +365,7 @@
             txtPuntoVenta.Margin = new Padding(0);
             txtPuntoVenta.Name = "txtPuntoVenta";
             txtPuntoVenta.Size = new Size(45, 23);
-            txtPuntoVenta.TabIndex = 6;
+            txtPuntoVenta.TabIndex = 2;
             txtPuntoVenta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // labelCliente
@@ -370,7 +374,7 @@
             labelCliente.Location = new Point(6, 28);
             labelCliente.Name = "labelCliente";
             labelCliente.Size = new Size(44, 15);
-            labelCliente.TabIndex = 5;
+            labelCliente.TabIndex = 0;
             labelCliente.Text = "Cliente";
             // 
             // txtCliente
@@ -378,7 +382,7 @@
             txtCliente.Location = new Point(6, 46);
             txtCliente.Name = "txtCliente";
             txtCliente.Size = new Size(111, 23);
-            txtCliente.TabIndex = 4;
+            txtCliente.TabIndex = 1;
             txtCliente.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // btnLimpiar
@@ -386,25 +390,27 @@
             btnLimpiar.Location = new Point(241, 361);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(75, 23);
-            btnLimpiar.TabIndex = 4;
+            btnLimpiar.TabIndex = 3;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
             // btnCargar
             // 
             btnCargar.Location = new Point(324, 361);
             btnCargar.Name = "btnCargar";
             btnCargar.Size = new Size(75, 23);
-            btnCargar.TabIndex = 5;
+            btnCargar.TabIndex = 2;
             btnCargar.Text = "Cargar";
             btnCargar.UseVisualStyleBackColor = true;
+            btnCargar.Click += btnCargar_Click;
             // 
             // btnSalir
             // 
             btnSalir.Location = new Point(12, 361);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(75, 23);
-            btnSalir.TabIndex = 6;
+            btnSalir.TabIndex = 4;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
             btnSalir.Click += btnSalir_Click;

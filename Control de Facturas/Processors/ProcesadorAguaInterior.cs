@@ -342,8 +342,8 @@
                 new Regex(@"FC\s*\-\s*\d{4}\s*\-\s*\d{16}(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                 new Regex(@"Fecha\s*de\s*Emisi[óo]n\:\s*(\d{2}/\d{2}/\d{2})", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
                 new Regex(@"B\s*\d{4}\s*\-\s*\d{8}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUA DE FORMOSA
-                    new Regex(@"Cuenta\s*Emisi[óo]n\s*\d{3}-\d{7}-\d{3}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS DE MISIONES
-                      new Regex(@"\d+\s*\d{2}\/\d{2}\/\d{4}\s*\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
+                new Regex(@"Cuenta\s*Emisi[óo]n\s*\d{3}-\d{7}-\d{3}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS DE MISIONES
+                new Regex(@"\d+\s*\d{2}\/\d{2}\/\d{4}\s*\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
             };
 
             DateTime fechaEmision = DateTime.MinValue;

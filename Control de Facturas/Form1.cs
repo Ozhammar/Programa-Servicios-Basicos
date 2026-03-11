@@ -9,7 +9,7 @@ namespace Control_de_Facturas
         private GestorArchivos gestorArchivos;
         private ControladorFacturas controladorFacturas;
         private ExportadorExcel exportadorExcel;
-        private List<Factura> facturasCache = null;
+        public List<Factura> facturasCache = null;
 
         public Form1()
         {
@@ -690,9 +690,19 @@ namespace Control_de_Facturas
 
         private void btnCargaManual_Click(object sender, EventArgs e)
         {
-            Form cargaManual = new FormularioCargaManual();
+            FormularioCargaManual cargaManual = new FormularioCargaManual();
 
-            cargaManual.ShowDialog();
+            if (cargaManual.ShowDialog() == DialogResult.OK)
+            {
+                if (facturasCache == null)
+                    facturasCache = new List<Factura>();
+
+                facturasCache.AddRange(cargaManual.facturasCargadas);
+                ordenarCache();
+
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = facturasCache;
+            }
         }
     }
 }
