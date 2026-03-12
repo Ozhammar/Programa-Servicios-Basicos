@@ -50,8 +50,9 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"(30−99902748−9)", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"(30-99902748-9)", RegexOptions.IgnoreCase),//EPEC -> DISTINTO TIPO DE CARACTER EN LOS GUIONES
 
-
+     
             };
 
             foreach (Regex regex in patrones)
@@ -67,7 +68,11 @@
                                 empresa = "EPEC";
                                 break;
                             }
-
+                        case "30-99902748-9":
+                            {
+                                empresa = "EPEC";
+                                break;
+                            }
                     }
                     break;
                 }
@@ -80,7 +85,9 @@
             // Lógica para extraer el número de cliente del texto del PDF
             List<Regex> patrones = new List<Regex>
             {
+                new Regex(@"BANELCO\s*(\d{8})", RegexOptions.IgnoreCase),//EPEC -->minoritarias
                 new Regex(@"(\d{8})\s*\/\s*\d{2}", RegexOptions.IgnoreCase),//EPEC
+               
 
 
             };
@@ -105,6 +112,7 @@
             {
 
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?(B)""?", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"(B)\s*\(18\)", RegexOptions.IgnoreCase),//EPEC
   
                 
                  
@@ -159,6 +167,7 @@
             List<Regex> patrones = new List<Regex>
             {
                  new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?B""?\s*[\s\S]+(\d{5})\s*\−", RegexOptions.IgnoreCase),//EPEC
+                 new Regex(@"B\s*\(18\)\s*N[º°]\s*(\d{5})-", RegexOptions.IgnoreCase),//EPEC
 
 
             };
@@ -191,6 +200,7 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?B""?\s*[\s\S]+\d{5}\s*\−\s*(\d{8})\s*P", RegexOptions.IgnoreCase),//EPEC -> no es el comprobante interno
+                new Regex(@"B\s*\(18\)\s*N[º°]\s*\d{5}-(\d{8})", RegexOptions.IgnoreCase),//EPEC
 
                              
             };
@@ -226,6 +236,7 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"Emisi[oó]n\s*\:?[\s\S]+(\d{2}\/\d{2}\/\d{4})\s*Imprime", RegexOptions.IgnoreCase),//EPEC
+                  new Regex(@"C[óo]rdoba\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
  
             };
 
@@ -255,6 +266,7 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"TOTAL\s*A\s*Pagar\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
 
             };
             DateTime fechaVencimiento = DateTime.MinValue;
@@ -292,6 +304,7 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"F\s*\d{4}\−\s*\d{8}[\s\S]+(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"(\d{2}\/\d{4})\s*N[º°]\s*F", RegexOptions.IgnoreCase),//EPEC
  
             };
 
@@ -327,6 +340,7 @@
             {
                 new Regex(@"Total\s*a\s*Pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
                 new Regex(@"F\s*\d{4}\−\s*\d{8}([\d.,]+)\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EPEC
+                    new Regex(@"\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)\s*\$", RegexOptions.IgnoreCase),//EPEC
 
                 
             };
@@ -383,7 +397,6 @@
         {
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*(\d{15})", RegexOptions.IgnoreCase),
                 new Regex(@"C\.?E\.?S\.?P\.?[\s\S]+(\d{14})Vto\:?\.?", RegexOptions.IgnoreCase),
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//EPEC
 
@@ -407,6 +420,7 @@
             List<Regex> patrones = new List<Regex>
             {
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\.?\s*C\.?E\.?S\.?P\.?(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
+               new Regex(@"Fecha\s*de\s*Vto\.?\s*C\.?E\.?S\.?P\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
 
 
             };
