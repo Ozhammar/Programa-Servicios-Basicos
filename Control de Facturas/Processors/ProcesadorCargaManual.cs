@@ -77,7 +77,6 @@
                 }
                 if (Enum.TryParse<TipoServicio>(datosTipoServicio, out var tipoServicio))
                 {
-                   
                     if (CatalogoServicios.TryGetValue(tipoServicio, out var datosCatalogo))
                     {
                         return datosCatalogo;
@@ -90,7 +89,5 @@
             }
             return null;
         }
-
-
     }
 }
