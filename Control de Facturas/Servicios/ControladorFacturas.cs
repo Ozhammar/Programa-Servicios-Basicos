@@ -275,7 +275,8 @@ namespace Control_de_Facturas.Servicios
                 #region LUZ INTERIOR
                 "30−99902748−9",
                 "30-99902748-9",
-                "VILLA MERCEDES"
+                "VILLA MERCEDES",
+                "30-68997751-7"
 
                 #endregion
             };
