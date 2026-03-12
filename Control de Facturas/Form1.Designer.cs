@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            btnCargaManual = new Button();
             btnEjecutar = new Button();
             labelPorcentaje = new Label();
             progressBar1 = new ProgressBar();
@@ -93,7 +94,6 @@
             btnValidar = new Button();
             groupBox5 = new GroupBox();
             dataGridView1 = new DataGridView();
-            btnCargaManual = new Button();
             groupBox1.SuspendLayout();
             tabControl1.SuspendLayout();
             tabCapital.SuspendLayout();
@@ -129,6 +129,16 @@
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Selección de Archivos";
+            // 
+            // btnCargaManual
+            // 
+            btnCargaManual.Location = new Point(369, 22);
+            btnCargaManual.Name = "btnCargaManual";
+            btnCargaManual.Size = new Size(99, 23);
+            btnCargaManual.TabIndex = 12;
+            btnCargaManual.Text = "Carga Manual";
+            btnCargaManual.UseVisualStyleBackColor = true;
+            btnCargaManual.Click += btnCargaManual_Click;
             // 
             // btnEjecutar
             // 
@@ -318,6 +328,7 @@
             btnInformeInterior_Luz.TabIndex = 9;
             btnInformeInterior_Luz.Text = "Informe";
             btnInformeInterior_Luz.UseVisualStyleBackColor = true;
+            btnInformeInterior_Luz.Click += btnInformeInterior_Luz_Click;
             // 
             // groupBox3
             // 
@@ -804,16 +815,6 @@
             dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
             dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;
-            // 
-            // btnCargaManual
-            // 
-            btnCargaManual.Location = new Point(369, 22);
-            btnCargaManual.Name = "btnCargaManual";
-            btnCargaManual.Size = new Size(99, 23);
-            btnCargaManual.TabIndex = 12;
-            btnCargaManual.Text = "Carga Manual";
-            btnCargaManual.UseVisualStyleBackColor = true;
-            btnCargaManual.Click += btnCargaManual_Click;
             // 
             // Form1
             // 

@@ -268,9 +268,37 @@ namespace Control_de_Facturas
 
         }
         //LIQUIDACION INTERIOR UNIFICADA
-        private void btnLiqUInterior_Click(object sender, EventArgs e)
+        private async void btnLiqUInterior_Click(object sender, EventArgs e)
         {
+            await comprobacionCache();
+            List<Factura> facturasElectricidadInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "ELECTRICIDAD INTERIOR");
 
+            if (facturasElectricidadInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de ELECTRICIDAD INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para ELECTRICIDAD INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+
+            if (string.IsNullOrEmpty(actividadProgramatica))
+            {
+                MessageBox.Show("La actividad programática no puede estar vacía. Se cancelará la generación de la liquidación unificada para ELECTRICIDAD INTERIOR.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            exportadorExcel.generarLiquidacionUnificadaInterior(facturasElectricidadInterior, actividadProgramatica);
+        }
+        private async void btnInformeInterior_Luz_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasElectricidadInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "ELECTRICIDAD INTERIOR");
+
+            if (facturasElectricidadInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de ELECTRICIDAD INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInformeInterior("INTERIOR", facturasElectricidadInterior);
         }
         #endregion
 
@@ -708,5 +736,7 @@ namespace Control_de_Facturas
                 dataGridView1.DataSource = facturasCache;
             }
         }
+
+
     }
 }

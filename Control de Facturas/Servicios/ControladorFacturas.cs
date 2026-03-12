@@ -22,6 +22,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorMetrogasPequenios procesadorMetrogasPequenios;
         private readonly ProcesadorGasInterior procesadorGasInterior;
         private readonly ProcesadorAguaInterior procesadorAguaInterior;
+        private readonly ProcesadorElectricidadInterior procesadorElectricidadInterior;
 
         public ControladorFacturas()
         {
@@ -33,6 +34,7 @@ namespace Control_de_Facturas.Servicios
             procesadorMetrogasPequenios = new ProcesadorMetrogasPequenios();
             procesadorGasInterior = new ProcesadorGasInterior();
             procesadorAguaInterior = new ProcesadorAguaInterior();
+            procesadorElectricidadInterior = new ProcesadorElectricidadInterior();
         }
 
         public enum TiposServicios
@@ -172,6 +174,10 @@ namespace Control_de_Facturas.Servicios
                 {
                     return procesadorAguaInterior.ProcesarFactura(textoPDF, rutaArchivo);
                 }
+                if (tipoServicioInterior == TiposServicios.LUZ)
+                {
+                    return procesadorElectricidadInterior.ProcesarFactura(textoPDF, rutaArchivo);
+                }
                 return null;
             }
         }
@@ -267,7 +273,7 @@ namespace Control_de_Facturas.Servicios
             string[] palabrasClave_LUZ =
             {
                 #region LUZ INTERIOR
-
+                "30−99902748−9",
                 #endregion
             };
 
@@ -284,7 +290,13 @@ namespace Control_de_Facturas.Servicios
             {
                 if (textoPDF.Contains(palabra))
                 {
-                    return TiposServicios.AGUA;
+                    foreach (string palabraLuz in palabrasClave_LUZ)
+                    {
+                        if (!textoPDF.Contains(palabra))
+                        {
+                            return TiposServicios.AGUA;
+                        }
+                    }
                 }
             }
 
