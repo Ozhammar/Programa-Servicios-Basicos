@@ -29,6 +29,8 @@ namespace Control_de_Facturas
             btnEjecutar.Enabled = false;
 
             btnEjecutar.Enabled = true; //ELIMINAR CUANDO NO SE QUIERA PROBAR LA CARGA AUTOMÁTICA DE LA CARPETA PREDEFINIDA
+           
+
         }
         #endregion
 
@@ -71,6 +73,7 @@ namespace Control_de_Facturas
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = true;
             dataGridView1.CellContentDoubleClick -= modificarDatosFactura;
+            headerCheckBox.Visible = false;
         }
 
         private async Task comprobacionCache()
@@ -87,9 +90,10 @@ namespace Control_de_Facturas
         {
             progressBar1.Visible = true;
             labelPorcentaje.Visible = true;
-
+            
             await cargaFacturas();
-
+            
+            headerCheckBox.Visible = true;
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = false;
             btnValidar.Enabled = true;
@@ -110,7 +114,6 @@ namespace Control_de_Facturas
                     dataGridView1.Rows.Clear();
                 }
                 
-
                 int totalPDFS = gestorArchivos.ObtenerPDF(path).Count();
 
                 if (totalPDFS == 0)
@@ -156,7 +159,7 @@ namespace Control_de_Facturas
                     if (col.DataPropertyName != "Seleccionada")
                         col.ReadOnly = true;
                 }
-
+               
                 FormatearColumnasDecimales();
             }
             catch (Exception ex)
@@ -173,6 +176,7 @@ namespace Control_de_Facturas
                 btnLimpiarPath.Enabled = true;
                 btnEjecutar.Enabled = true;
                 btnSeleccionarCarpeta.Enabled = true;
+                AgregarCheckBoxHeader();
             }
         }
 
@@ -556,7 +560,7 @@ namespace Control_de_Facturas
             dataGridView1.DataSource = null;
             ordenarCache();
             dataGridView1.DataSource = facturasCache;
-            AgregarCheckBoxHeader();
+           AgregarCheckBoxHeader();
 
             foreach (DataGridViewColumn col in dataGridView1.Columns)
             {
@@ -576,6 +580,9 @@ namespace Control_de_Facturas
 
         private void AgregarCheckBoxHeader()
         {
+            if (dataGridView1.Controls.Contains(headerCheckBox))
+                return;
+
             Rectangle rect = dataGridView1.GetCellDisplayRectangle(0, -1, true);
 
             headerCheckBox.Size = new Size(15, 15);

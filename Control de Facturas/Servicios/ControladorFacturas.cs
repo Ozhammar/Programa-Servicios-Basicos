@@ -153,28 +153,18 @@ namespace Control_de_Facturas.Servicios
         public bool RequiereDivisionEnBloques(string textoPDF)
         {
             bool check = false;
+            Match match = busquedaDeRegex(textoPDF);
 
-            //List<Regex> patrones = new List<Regex>
-            //{
-            //    new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//Aguas del Tucumán
-            //};
-
-            //foreach (Regex regex in patrones)
-            //{
-            //    Match match = regex.Match(textoPDF);
-                if ((busquedaDeRegex(textoPDF)).Success)
-                {
-                    check = true;
-                    //break;
-                }
-           // }
+            if (match != null && match.Success)
+            {
+                check = true;
+            }
 
             return check;
         }
 
         private Factura IdentificarYProcesarFactura(string textoPDF, string rutaArchivo)
         {
-
             if (textoPDF.Contains("Edesur"))
             {
                 return procesadorEdesur.ProcesarFactura(textoPDF, rutaArchivo);
