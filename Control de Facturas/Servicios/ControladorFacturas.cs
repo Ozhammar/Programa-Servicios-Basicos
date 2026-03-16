@@ -331,7 +331,8 @@ namespace Control_de_Facturas.Servicios
                 "30-99902748-9",
                 "VILLA MERCEDES",
                 "30-68997751-7",
-                "30-65865024-2"
+                "30-65865024-2",
+                "30-69383434-8",
 
                 #endregion
             };
