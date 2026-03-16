@@ -332,7 +332,7 @@ namespace Control_de_Facturas.Servicios
                 cabecera.Cell($"AA{filaCabecera}").Value = config.Cotizacion;
                 cabecera.Cell($"AB{filaCabecera}").Value = config.MedioPago;
                 cabecera.Cell($"AF{filaCabecera}").Value = factura.FechaEmision.ToString("dd/MM/yyyy");
-                cabecera.Cell($"AG{filaCabecera}").Value = factura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy");
+                cabecera.Cell($"AG{filaCabecera}").Value = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy");
                 cabecera.Cell($"AI{filaCabecera}").Value = importeTotalPeriodo;
                 cabecera.Cell($"AJ{filaCabecera}").Value = $"SERVICIO DE {factura.TipoServicio} CORRESPONDIENTE A {factura.Empresa}, PARA LOS CLIENTES INSTITUCIONALES, CORRESPONDIENTE AL PERIODO: {factura.Periodo} - IMPORTE: $ {importeTotalPeriodo}";
                 filaCabecera++;
@@ -442,7 +442,7 @@ namespace Control_de_Facturas.Servicios
                     cabecera.Cell($"AA{filaCabecera}").Value = config.Cotizacion;
                     cabecera.Cell($"AB{filaCabecera}").Value = config.MedioPago;
                     cabecera.Cell($"AF{filaCabecera}").Value = lote.PrimerFactura.FechaEmision.ToString("dd/MM/yyyy");
-                    cabecera.Cell($"AG{filaCabecera}").Value = lote.PrimerFactura.FechaEmision.AddDays(3).ToString("dd/MM/yyyy");
+                    cabecera.Cell($"AG{filaCabecera}").Value = DateTime.Now.AddDays(3).ToString("dd/MM/yyyy"); 
                     cabecera.Cell($"AI{filaCabecera}").Value = lote.Importe;
                     cabecera.Cell($"AJ{filaCabecera}").Value = $"{lote.Observacion}";
                     filaCabecera++;

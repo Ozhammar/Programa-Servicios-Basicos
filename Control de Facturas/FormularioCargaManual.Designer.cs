@@ -285,7 +285,7 @@
             dateEmision.Size = new Size(103, 23);
             dateEmision.TabIndex = 3;
             dateEmision.Value = new DateTime(2026, 3, 11, 0, 0, 0, 0);
-            dateEmision.ValueChanged += checkFechaMaximaEmision;
+            dateEmision.Leave += checkFechaMaximaEmision;
             // 
             // labelFechaVencimiento
             // 
@@ -358,6 +358,7 @@
             txtNumeroFactura.Size = new Size(111, 23);
             txtNumeroFactura.TabIndex = 3;
             txtNumeroFactura.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            txtNumeroFactura.Leave += txtNumeroFacturaCheck;
             // 
             // txtPuntoVenta
             // 
@@ -367,6 +368,7 @@
             txtPuntoVenta.Size = new Size(45, 23);
             txtPuntoVenta.TabIndex = 2;
             txtPuntoVenta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            txtPuntoVenta.Leave += txtPuntoVtaCheck;
             // 
             // labelCliente
             // 

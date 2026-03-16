@@ -5,6 +5,8 @@
         #region Declaraciones Globales
 
         ProcesadorCargaManual cargaManual;
+
+        string bufferFecha = "";
         public List<Factura> facturasCargadas { get; private set; }
         // Listas para cargar los tipos de servicios y tipos de códigos de autorización en los ComboBox del formulario
         List<string> tiposDeServicios = new List<string>()
@@ -112,7 +114,10 @@
             {
                 MessageBox.Show("La fecha de emisión no puede ser mayor a la fecha actual.");
                 dateEmision.Value = fechaMaximaEmision;
+                dateEmision.Focus();
             }
+
+            bufferFecha = "";
         }
         // Método para cerrar el formulario
         private void btnSalir_Click(object sender, EventArgs e)
@@ -141,7 +146,75 @@
 
             }
         }
+        private void txtPuntoVtaCheck(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtPuntoVenta.Text))
+                return;
 
+            int size = txtPuntoVenta.Text.Length;
+
+            if (size > 5)
+            {
+                MessageBox.Show(
+                    "El punto de venta no puede tener más de 5 dígitos.",
+                    "Validación de Punto de Venta",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                txtPuntoVenta.Focus();
+                return;
+            }
+
+            if (!int.TryParse(txtPuntoVenta.Text, out _))
+            {
+                MessageBox.Show(
+                    "El punto de venta debe contener solo números.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                txtPuntoVenta.Focus();
+                return;
+            }
+        }
+
+        private void txtNumeroFacturaCheck(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtNumeroFactura.Text))
+                return;
+
+            int size = txtNumeroFactura.Text.Length;
+
+            if (size > 8)
+            {
+                MessageBox.Show(
+                    "El número de factura no puede tener más de 8 dígitos.",
+                    "Validación de Número de Factura",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                txtNumeroFactura.Focus();
+                return;
+            }
+
+            if (!long.TryParse(txtNumeroFactura.Text, out _))
+            {
+                MessageBox.Show(
+                    "El número de factura debe contener solo números.",
+                    "Validación",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+
+                txtNumeroFactura.Focus();
+                return;
+            }
+        }
+
+      
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             txtCUIT.Text = "";
@@ -160,6 +233,6 @@
             dateVencimientoCodAut.Value = DateTime.Now;
         }
 
-
+      
     }
 }

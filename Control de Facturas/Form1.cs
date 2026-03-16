@@ -105,7 +105,11 @@ namespace Control_de_Facturas
                 btnSeleccionarCarpeta.Enabled = false;
                 btnEjecutar.Enabled = false;
 
-                dataGridView1.Rows.Clear();
+                if(facturasCache == null)
+                {
+                    dataGridView1.Rows.Clear();
+                }
+                
 
                 int totalPDFS = gestorArchivos.ObtenerPDF(path).Count();
 
@@ -135,9 +139,13 @@ namespace Control_de_Facturas
                 });
                 #endregion
 
+
                 // Procesar facturas
-                facturasCache = await controladorFacturas
-                    .ProcesarFacturasEnCarpeta(path, progreso);
+                if (facturasCache == null)
+                    facturasCache = new List<Factura>();
+
+                facturasCache.AddRange(await controladorFacturas
+                    .ProcesarFacturasEnCarpeta(path, progreso));
 
                 ordenarCache();
 

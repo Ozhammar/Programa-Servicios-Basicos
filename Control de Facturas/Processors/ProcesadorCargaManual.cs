@@ -50,7 +50,15 @@
                 factura.CUIT = datos.CUIT;
                 factura.TipoCodigoAutorizacion = datos.TipoCodAut;
                 factura.CodigoAutorizacion = datos.CodigoAut;
-                factura.VencimientoCodigoAutorizacion = datos.VencimientoCodAut;
+
+                if (datos.TipoCodAut == "NA")
+                {
+                    factura.VencimientoCodigoAutorizacion = DateTime.MinValue;
+                }
+                else
+                {
+                    factura.VencimientoCodigoAutorizacion = datos.VencimientoCodAut;
+                }
                 //factura.Archivo =
                 factura.TipoServicio = datos.TipoServicio;
                 //factura.Tarifa
