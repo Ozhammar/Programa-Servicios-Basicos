@@ -129,13 +129,45 @@ namespace Control_de_Facturas.Servicios
             return facturasProcesadas;
         }
 
+        public Match busquedaDeRegex(string textoPDF)
+        {
+            Match match_aux = null;
+            List<Regex> patrones = new List<Regex>
+            {
+                new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//Aguas del Tucumán
+                new Regex(@"(01-031962)", RegexOptions.IgnoreCase),//Aguas de Catamarca
+            };
+
+                foreach (Regex regex in patrones)
+                {
+                    Match match = regex.Match(textoPDF);
+                    if (match.Success)
+                    {
+                    match_aux = match;
+                    }
+                }
+
+                return match_aux;
+
+        }
         public bool RequiereDivisionEnBloques(string textoPDF)
         {
             bool check = false;
-            if (textoPDF.Contains("30-70861788-8" /* Aguas del Tucumán*/))
-            {
-                check = true;
-            }
+
+            //List<Regex> patrones = new List<Regex>
+            //{
+            //    new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//Aguas del Tucumán
+            //};
+
+            //foreach (Regex regex in patrones)
+            //{
+            //    Match match = regex.Match(textoPDF);
+                if ((busquedaDeRegex(textoPDF)).Success)
+                {
+                    check = true;
+                    //break;
+                }
+           // }
 
             return check;
         }
@@ -272,7 +304,8 @@ namespace Control_de_Facturas.Servicios
                 "33-69809590-9",
                 "aguasdeformosa",
                 "33-71097454-9",
-                "30-64263072-1"
+                "30-64263072-1",
+                "01-031962", //aguas catamarca
                 #endregion
             };
             string[] palabrasClave_LUZ =
@@ -297,15 +330,9 @@ namespace Control_de_Facturas.Servicios
 
             foreach (string palabra in palabrasClave_AGUA)
             {
-                if (textoPDF.Contains(palabra))
+                if (textoPDF.Contains(palabra) && !palabrasClave_LUZ.Contains(palabra))
                 {
-                    foreach (string palabraLuz in palabrasClave_LUZ)
-                    {
-                        if (!textoPDF.Contains(palabra))
-                        {
-                            return TiposServicios.AGUA;
-                        }
-                    }
+                    return TiposServicios.AGUA;
                 }
             }
 
@@ -390,9 +417,25 @@ namespace Control_de_Facturas.Servicios
         {
             textoPDF = textoPDF.Replace("\r", "");
 
-            var bloques = Regex.Split(textoPDF, @"(?=Cliente\s*\d{8})", RegexOptions.IgnoreCase);
+            Match match = busquedaDeRegex(textoPDF);
+            switch (match.Groups[1].Value)
+            {
+                case "30-70861788-8":
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=Cliente\s*\d{8})", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("Cliente"));
+                    }
+                case "01-031962":
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=Liquidaci[óo]n)", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("Liquidación"));
+                    }
+               
+            }
 
-            return bloques.Where(b => b.Contains("Cliente"));
+            return null;
+
+            
         }
         #endregion
 
