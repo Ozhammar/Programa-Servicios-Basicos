@@ -333,6 +333,10 @@ namespace Control_de_Facturas.Servicios
                 "30-68997751-7",
                 "30-65865024-2",
                 "30-69383434-8",
+                "30-54578816-7",
+                "SANTA FE",
+                "ROSARIO",
+                "RECONQUISTA",
 
                 #endregion
             };
