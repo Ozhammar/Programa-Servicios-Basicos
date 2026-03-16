@@ -201,6 +201,9 @@ namespace Control_de_Facturas.Servicios
                 "DISTRIBUIDORA DE GAS DEL CENTRO",
                 "30-67364611-1",
                 "DISTRIGAS",
+                "33-65786558-9",
+                "DISTRIBUIDORA DE GAS CUYANA",
+                "www.proagas.com.ar",
                 #region camuzziSUR
                 "94000940600148071",
                 "94000940600098389",

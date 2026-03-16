@@ -46,6 +46,7 @@
                 factura.FechaVencimiento = datos.FechaVencimientoFC;
                 factura.Periodo = datos.Periodo;
                 factura.ImportePrimerVencimiento = datos.Importe;
+                factura.ImporteAbonable = datos.Importe;
                 factura.CUIT = datos.CUIT;
                 factura.TipoCodigoAutorizacion = datos.TipoCodAut;
                 factura.CodigoAutorizacion = datos.CodigoAut;

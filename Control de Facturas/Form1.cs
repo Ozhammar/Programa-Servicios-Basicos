@@ -730,7 +730,7 @@ namespace Control_de_Facturas
                     if (!facturasCache.Any(f => f.NumeroFactura == factura.NumeroFactura))
                         facturasCache.Add(factura);
                 }
-
+                btnValidar.Enabled = true;
                 ordenarCache();
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = facturasCache;

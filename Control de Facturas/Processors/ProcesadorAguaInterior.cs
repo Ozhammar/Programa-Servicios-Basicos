@@ -514,7 +514,7 @@
                 }
             }
 
-            if (cuitLong == 0)
+            if (cuitLong == 0 || cuitLong == 30624051919)
             {
                 string CUIT_buscado = buscadorCUIT.BuscarCUIT(ExtraerEmpresa(textoPDF).ToUpper().Trim());
                 cuitLong = long.Parse(CUIT_buscado);
