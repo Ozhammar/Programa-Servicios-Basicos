@@ -136,6 +136,7 @@ namespace Control_de_Facturas.Servicios
             {
                 new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//Aguas del Tucumán
                 new Regex(@"(01-031962)", RegexOptions.IgnoreCase),//Aguas de Catamarca
+                new Regex(@"(30-68997751-7)", RegexOptions.IgnoreCase),//EDEA
             };
 
                 foreach (Regex regex in patrones)
@@ -149,6 +150,31 @@ namespace Control_de_Facturas.Servicios
 
                 return match_aux;
 
+        }
+        private IEnumerable<string> DividirEnBloques(string textoPDF)
+        {
+            textoPDF = textoPDF.Replace("\r", "");
+
+            Match match = busquedaDeRegex(textoPDF);
+            switch (match.Groups[1].Value)
+            {
+                case "30-70861788-8"://AGUAS DE TUCUMAN
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=Cliente\s*\d{8})", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("Cliente"));
+                    }
+                case "01-031962"://AGUAS DE CATAMARCA
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=Liquidaci[óo]n)", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("Liquidación"));
+                    }
+                case "30-68997751-7"://EDEA
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=HOJA\s*\d{1}\s*de)", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("HOJA"));
+                    }
+            }
+            return null;
         }
         public bool RequiereDivisionEnBloques(string textoPDF)
         {
@@ -403,30 +429,7 @@ namespace Control_de_Facturas.Servicios
                 .OrderBy(e => e)
                 .ToList();
         }
-        private IEnumerable<string> DividirEnBloques(string textoPDF)
-        {
-            textoPDF = textoPDF.Replace("\r", "");
-
-            Match match = busquedaDeRegex(textoPDF);
-            switch (match.Groups[1].Value)
-            {
-                case "30-70861788-8":
-                    {
-                        var bloques = Regex.Split(textoPDF, @"(?=Cliente\s*\d{8})", RegexOptions.IgnoreCase);
-                        return bloques.Where(b => b.Contains("Cliente"));
-                    }
-                case "01-031962":
-                    {
-                        var bloques = Regex.Split(textoPDF, @"(?=Liquidaci[óo]n)", RegexOptions.IgnoreCase);
-                        return bloques.Where(b => b.Contains("Liquidación"));
-                    }
-               
-            }
-
-            return null;
-
-            
-        }
+      
         #endregion
 
         #region Modificación de Facturas

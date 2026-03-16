@@ -1,0 +1,17 @@
+140452  cliente
+10/03/2026 vencimiento
+02/2026 periodo
+13/02/2026 emision
+
+10/04/2026El monto de IVA discriminado no puede computarse como Crédito FiscalDetalle de Int. Pago Fuera de TérminoCargo FijoConsumo EquivalenteInteres Pago Fuera De TerminoTasa Fiscaliz. Y Control 2%Exento                         17,947.76 41,566.32 939.73 1,190.28 12,695.30  Fecha Último Pago: 30/01/2026       Cantidad Facturas Impagas: 1              *Monto Adeudado: $71363.38
+
+10/03/2026 vencimiento
+ $74,339.39 importe
+B-0028-10264946 factura y tipo de comprobante
+
+Nº DE USUARIO:0002/02018710PERÍODO :140452Consumo Equivalente Facturado (m3):       39.61LIQUIDACION SERVICIOS PUBLICOS1630COSAYSADiametro Facturado: 13mm.*El monto adeudado vencido al 20/02/2026 no incluye intereses por mora.20 DE FEBRERO N° 131, Bº SAN MARTÍNS R DE LA NUEVA ORANCUIT:30624051919CONDICION IVA:EXENTO02/2026FECHA DE VENCIMIENTO:MONTO A PAGAR:CATASTRO:202512:      939.73COND.:UOP. LOC.20 DE FEBRERO N° 141, Bº SAN MARTÍNCP: 4530, S R DE LA NUEVA ORANDELEGACION POLICIA FEDERALREFERENCIA:TITULAR: ASSEFH MARIO ORLANDO DOMICILIO:  6 -  041 - 004 - AGUA Y CLOACAOFICINAS 
+
+NACIONALES3705900616226914/02/2026 cesp y vto cesp
+
+8710 $74,339.39 $74,339.39ACTIVIDAD:CATASTRO:COND:SECC.MANZ.PARC.:SERVICIO:CUPÓN DE CONTROL AGENTE RECAUDADORCargo Variable por m3 $ 1049.444  NO RESIDENCIAL 1Fecha de Impresión: 20/02/2026 07:43            Numero de Página: 1         LIQ. SERV. PUBLICOS B (18)Nº 0028-10264946INFORMACIÓN DE CONSUMOSDATOS POSTALESDATOS DEL INMUEBLEPERÍODO:VTO. DE LA FACTURA:TOTAL A PAGAR:Fecha de Emisión:Vto. Próx. Factura:CESP. Nº:Vto. CESP.:DATOS DE FACTURACIÓNTOTAL A PAGARDETALLE DE FACTURACIÓNEspaña 887 - 4400 Salta   Tel.: 0-800-88-88-AGUA (2482)           C.U.I.T. 33-71097454-9  IVA. Resp. Inscripto          Act. Ec. 33-71097454-9  Inicio de Act: 26/05/2009       Nº DE USUARIOSr. Usuario: Según art. 59 del Nuevo Marco Regulatorio, Aguas de Norte está habilitada a restringir el servicio si ud. mantiene deuda. La misma puede serregularizada mediante plan de pago con DNI. Por uso indebido del agua de 8 a 22 hs. se aplicarán multas desde el 1º de Enero al 31 de Diciembre (ResoluciónEnte Regulador Nº 115/17). TITULAR: POLICIA FEDERAL ARGENTINA DOMICILIO: Zona          Sup. Edificada      Sup. Terreno        Bocas Consumo        Pileta   1          101 a 200              301 a 350                   14 a 18      El consumo equivalente se determina en base a los siguientes parametros delinmueble:Código Electrónico Red Link: 00140452
+

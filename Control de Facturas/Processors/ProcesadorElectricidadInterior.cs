@@ -93,11 +93,10 @@
             // Lógica para extraer el número de cliente del texto del PDF
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"BANELCO\s*(\d{8})", RegexOptions.IgnoreCase),//EPEC -->minoritarias
-                
-                new Regex(@"(\d{7})\s*Liq\.\s*Serv\.", RegexOptions.IgnoreCase),//EDESAL
+               new Regex(@"BANELCO\s*(\d{8})", RegexOptions.IgnoreCase),//EPEC -->minoritarias
+               new Regex(@"(\d{7})\s*Liq\.\s*Serv\.", RegexOptions.IgnoreCase),//EDESAL
                new Regex(@"(\d{8})\s*\/\s*\d{2}", RegexOptions.IgnoreCase),//EPEC
-               new Regex(@"BANELCO\s*(\d{9})", RegexOptions.IgnoreCase),//EDEA
+               new Regex(@"Cuenta\s*\d{2}\s*-\s*(\d{7})", RegexOptions.IgnoreCase),//EDEA
 
 
             };
@@ -215,7 +214,7 @@
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?B""?\s*[\s\S]+\d{5}\s*\−\s*(\d{8})\s*P", RegexOptions.IgnoreCase),//EPEC -> no es el comprobante interno
                 new Regex(@"B\s*\(18\)\s*N[º°]\s*\d{5}-(\d{8})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"Liq\.\s*Serv\.\s*P[úu]b\.\s*""?B""?\s*\(18\)\s*N[º°]\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//EDESAL
-                new Regex(@"N°\s*Factura\s*(\d{8})", RegexOptions.IgnoreCase),//EDEA
+                new Regex(@"Factura\s*(\d{8})", RegexOptions.IgnoreCase),//EDEA
 
             };
 
@@ -249,11 +248,10 @@
         {
             List<Regex> patrones = new List<Regex>
             {
+                new Regex(@"Fecha\s*de\s*Emisi[óo]n\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
                 new Regex(@"Emisi[oó]n\s*\:?[\s\S]+(\d{2}\/\d{2}\/\d{4})\s*Imprime", RegexOptions.IgnoreCase),//EPEC
-                  new Regex(@"C[óo]rdoba\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
-                  new Regex(@"\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDESAL
-                  new Regex(@"Fecha\s*Emisión\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
- 
+                new Regex(@"C[óo]rdoba\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDESAL
             };
 
             DateTime fechaEmision = DateTime.MinValue;
@@ -283,8 +281,9 @@
             {
                 new Regex(@"TOTAL\s*A\s*Pagar\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"Vencimiento\s*\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
                 new Regex(@"(\d{2}\/\d{2}\/\d{4})[\s\S]+\s*62405191", RegexOptions.IgnoreCase),//EDESAL
-                new Regex(@"Fecha\s*Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
+                
 
             };
             DateTime fechaVencimiento = DateTime.MinValue;
@@ -324,7 +323,7 @@
                 new Regex(@"F\s*\d{4}\−\s*\d{8}[\s\S]+(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"(\d{2}\/\d{4})\s*N[º°]\s*F", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"(\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EDESAL
-                new Regex(@"Periodo\s*(\d{2}/\d{2})", RegexOptions.IgnoreCase),//EDEA
+                new Regex(@"Per[íi]odo\s*(\d{2}\/\d{2})", RegexOptions.IgnoreCase),//EDEA
  
             };
 
@@ -362,7 +361,7 @@
                 new Regex(@"F\s*\d{4}\−\s*\d{8}([\d.,]+)\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EPEC
                     new Regex(@"\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)\s*\$", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"\$\s*([\d.,]+)\s*\*", RegexOptions.IgnoreCase),//EDESAL
-                new Regex(@"Importe\s*Primer\s*Vencimiento\s*([\d\.]+,\d{2})", RegexOptions.IgnoreCase),//EDEA
+                new Regex(@"Total\s*A\s*Pagar\s*:?\s*\$?\**\s*([\d\.]+,\d{2})", RegexOptions.IgnoreCase), //EDEA
                 
             };
             decimal ImportePrimerVencimiento = 0;
@@ -442,6 +441,7 @@
             {
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\.?\s*C\.?E\.?S\.?P\.?(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
                new Regex(@"Fecha\s*de\s*Vto\.?\s*C\.?E\.?S\.?P\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"Vto\.?\s*C\.?E\.?S\.?P\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDESAL
 
 
