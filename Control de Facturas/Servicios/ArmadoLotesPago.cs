@@ -37,7 +37,7 @@ namespace Control_de_Facturas.Servicios
                     });
 
                     sb.Clear();
-                    sb.AppendLine("SERVICIO AGUA INTERIOR");
+                    sb.AppendLine($"SERVICIO {factura.TipoServicio}");
                     importeParcial = 0;
                     clienteActual = null;
                     primerfactura = null;
