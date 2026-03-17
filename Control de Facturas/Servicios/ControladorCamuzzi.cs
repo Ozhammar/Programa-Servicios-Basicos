@@ -8,11 +8,25 @@ namespace Control_de_Facturas.Servicios
     {
         public ControladorCamuzzi() { }
 
+        Dictionary<string, string> clientes = new Dictionary<string, string>()
+        {
+            {"Neuquinos", "83000940600081425"},
+            {"Fagnano", "94000940600149324" },
+            {"Alberdi", "92000940600020772" },
+            {"Catamarca", "76000990403737859" },
+            {"Calle", "63600940600122119" },
+            {"Arturo", "63000031000591301" },
+            {"Pellegrini", "63000940600187037" }
+        };
+
+
+
         public bool ControlarCamuzziSur(string textoPDF)
         {
             bool match = false;
+
             string[] palabrasClave =
-            {
+           {
                 "94000940600148071",
                 "91000250300870415",
                 "94000940600098389",
@@ -57,8 +71,9 @@ namespace Control_de_Facturas.Servicios
         public bool ControlarCamuzziPampeana(string textoPDF)
         {
             bool match = false;
+
             string[] palabrasClave =
-            {
+    {
                 "19000940600543300",
                 "19000940601128792",
                 "70000940600260990",
@@ -86,6 +101,23 @@ namespace Control_de_Facturas.Servicios
                 }
             }
             return match;
+        }
+
+        public string buscarCliente(string pBusqueda)
+        {
+            string cliente = string.Empty;
+            try
+            {
+                if (clientes.ContainsKey(pBusqueda))
+                {
+                    cliente = clientes[pBusqueda];
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Key no encontrada");
+            }
+            return cliente; 
         }
     }
 }

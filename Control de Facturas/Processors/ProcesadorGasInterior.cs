@@ -115,13 +115,22 @@ namespace Control_de_Facturas.Processors
             // Lógica para extraer el número de cliente del texto del PDF
             List<Regex> patrones = new List<Regex>
             {
-                new Regex(@"N[º°]\s*Cliente:?\s*(\d{9})", RegexOptions.IgnoreCase),//distrigas
-                  new Regex(@"Suministro\s*[\s\S]\s*-\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//PROAGAS
+                new Regex(@"(\d{17})\s*Capital\s*Federal", RegexOptions.IgnoreCase),//camuzzi sur
                 new Regex(@"N[ÚU]MERO\s*DE\s*CUENTA\s*:?\s*(\d{8})", RegexOptions.IgnoreCase),//ecogas
+                  new Regex(@"Cup[óo]n\:?\s*\d{2}\s*-\s*\d{4}\s*-\s*\d{8}(\d+)", RegexOptions.IgnoreCase),//naturgy noa
+                new Regex(@"(Neuquinos)", RegexOptions.IgnoreCase),//camuzzi sur
+                new Regex(@"(Fagnano)", RegexOptions.IgnoreCase),//camuzzi sur
+                new Regex(@"(Alberdi)", RegexOptions.IgnoreCase),//camuzzi sur
+                new Regex(@"(Catamarca)", RegexOptions.IgnoreCase),//camuzzi pampeana
+                new Regex(@"(Calle)", RegexOptions.IgnoreCase),//camuzzi pampeana
+                new Regex(@"(Arturo)", RegexOptions.IgnoreCase),//camuzzi pampeana
+                new Regex(@"(Pellegrini)", RegexOptions.IgnoreCase),//camuzzi pampeana
+                new Regex(@"N[º°]\s*Cliente:?\s*(\d{9})", RegexOptions.IgnoreCase),//distrigas
+                new Regex(@"Suministro\s*[\s\S]\s*-\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//PROAGAS
+                
                 new Regex(@"Exento\s*(\d{6})-", RegexOptions.IgnoreCase),//gasjunin
                 new Regex(@"\d{2}\s*-\s*(\d{8})-\s*\d{2}", RegexOptions.IgnoreCase),//redengas
-                new Regex(@"Cup[óo]n\:?\s*\d{2}\s*-\s*\d{4}\s*-\s*\d{8}(\d+)", RegexOptions.IgnoreCase),//naturgy noa
-                new Regex(@"(\d{17})\s*Capital\s*Federal", RegexOptions.IgnoreCase),//camuzzi sur
+              
                 new Regex(@"Total\s*a\s*pagar\s*(\d+)", RegexOptions.IgnoreCase),//naturgy ban
                 new Regex(@"\d{2}\s*\/\s*\d{4}\s*(\d{10})", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"BANELCO\s*Pagos\:?\s*\d{9}\s*(\d{8})\d+C[oó]digo", RegexOptions.IgnoreCase),//gasnea
@@ -136,7 +145,50 @@ namespace Control_de_Facturas.Processors
                 Match match = regex.Match(textoPDF);
                 if (match.Success)
                 {
-                    numeroCliente = match.Groups[1].Value.TrimStart('0',' ');
+                    switch (match.Groups[1].Value)
+                    {
+                        case "Neuquinos":
+                            {
+                                numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                break;
+                            }
+                        case "Pellegrini":
+                            {
+                                numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                break;
+                            }
+                        case "Arturo":
+                            {
+                                numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                break;
+                            }
+                        case "Calle":
+                            {
+                                numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                break;
+                            }
+                        case "Catamarca":
+                            {
+                                numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                break;
+                            }
+                        case "Fagnano":
+                            {
+                                numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                break;
+                            }
+                        case "Alberdi":
+                            {
+                                numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                break;
+                            }
+                        default:
+                            {
+                                numeroCliente = match.Groups[1].Value.TrimStart('0', ' ');
+                                break;
+                            }
+                    }
+                    //numeroCliente = match.Groups[1].Value.TrimStart('0',' ');
                     break;
                 }
             }
