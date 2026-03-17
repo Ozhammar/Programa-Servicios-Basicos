@@ -33,7 +33,7 @@ namespace Control_de_Facturas.Servicios
                     {
                         Observacion = sb.ToString().TrimEnd(),
                         Importe = importeParcial,
-                        PrimerFactura = facturaInicial,
+                        PrimerFactura = primerfactura,
                     });
 
                     sb.Clear();
@@ -58,12 +58,16 @@ namespace Control_de_Facturas.Servicios
                 importeParcial += factura.ImporteAbonable;
             }
 
-            lotesPago.Add(new LotesPago
+            if(primerfactura != null)
             {
-                Observacion = sb.ToString().TrimEnd(),
-                Importe = importeParcial,
-                PrimerFactura = primerfactura
-            });
+                lotesPago.Add(new LotesPago
+                {
+                    Observacion = sb.ToString().TrimEnd(),
+                    Importe = importeParcial,
+                    PrimerFactura = primerfactura
+                });
+            }
+ 
 
             return lotesPago;
         }
