@@ -233,11 +233,11 @@ namespace Control_de_Facturas.Processors
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"FCB\s*(\d{4})\s*-\d{8}\s*Emisi[óo]n", RegexOptions.IgnoreCase),//PROAGAS
+                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*N[º°]\s*(\d{4})\s*-", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"(\d{5})\s*-", RegexOptions.IgnoreCase),//CAMUZZISUR
                 new Regex(@"Factura\s*N[º°]\s*(\d{4})-", RegexOptions.IgnoreCase),//DISTRIGAS
                 new Regex(@"cod\s*\(?\d+\)?\s*:\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//ecogas
                 new Regex(@"\d{2}\s*/\s*\d{2}\s*/\s*\d{2}\s*(\d{5})\s*\d+\s*\-\s*\'", RegexOptions.IgnoreCase),//naturgy ban
-                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*N[º°]\s*(\d{4})\s*-", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"(\d{4})\s*-\s*\d{10}", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"\,\d{2}\s*(\d{4})-", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"\(cod\.?\s*17\)\:?\s*(\d{4})−", RegexOptions.IgnoreCase),//gascuyana
@@ -516,6 +516,7 @@ namespace Control_de_Facturas.Processors
                    new Regex(@"C\.E\.S\.P\.?\:?\s*N[º°]:?\s*\d{15}\s*Vencimiento:?(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                         new Regex(@"C\.E\.S\.P\.[\s\S]+\d{14}Vto\:\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//CAMUZZI SUR
                    new Regex(@"C\.E\.S\.P\.?\:?\s*N[º°]:?\s*\d{14}\s*Fecha\s*Vto.?:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//DISTRIGAS
+                   new Regex(@"C\.?E\.?S\.?P\.?\:?\s*N\:?\s*\d{14}\s*Fecha\s*de\s*Vto.?:?\s*(\d{1}/\d{1}/\d{4})", RegexOptions.IgnoreCase),//NATURGYNOA
                       new Regex(@"Vto\.?\s*C\.E\.S\.P\.:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                    new Regex(@"Fecha\s*de\s*Vto\.?\:?\s*(\d{2}/\d+/\d{4})", RegexOptions.IgnoreCase),//naturgy noa - naturgy ban
                    new Regex(@"Nro\.\s*:?\s*\d{14}F\.?Vto\.?\:?\s*(\d{2}/\d+/\d{4})", RegexOptions.IgnoreCase),//LITORAL GAS
