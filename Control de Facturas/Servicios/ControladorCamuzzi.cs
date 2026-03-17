@@ -16,7 +16,10 @@ namespace Control_de_Facturas.Servicios
             {"Catamarca", "76000990403737859" },
             {"Calle", "63600940600122119" },
             {"Arturo", "63000031000591301" },
-            {"Pellegrini", "63000940600187037" }
+            {"Pellegrini", "63000940600187037" },
+            {"Rondeau", "80000940600856251" },
+            {"Sarmiento 2551", "76000940601787206" },
+            {"Sarmiento 2564", "76000960703428986" }
         };
 
 
