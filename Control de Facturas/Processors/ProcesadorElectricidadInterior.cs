@@ -57,6 +57,7 @@
                 new Regex(@"(30-65865024-2)", RegexOptions.IgnoreCase),//EDET
                 new Regex(@"(30-69383434-8)", RegexOptions.IgnoreCase),//EDEN
                 new Regex(@"(30-54578816-7)", RegexOptions.IgnoreCase),//EPE
+                new Regex(@"(30-65787766-9)", RegexOptions.IgnoreCase),//EDELAP
                 
 
 
@@ -96,6 +97,11 @@
                                 empresa = "EPE";
                                 break;
                             }
+                        case "30-65787766-9":
+                            {
+                                empresa = "EDELAP";
+                                break;
+                            }
                     }
                     break;
                 }
@@ -117,12 +123,11 @@
                new Regex(@"Exento\s*\d{12}\s*(\d{7})\d{2}", RegexOptions.IgnoreCase),//EDEN
                new Regex(@"SERVICIO\s*(\d+)\s*Vencimiento", RegexOptions.IgnoreCase),//EDET
                new Regex(@"N[úu]mero\s*de\s*Cliente\s*\:?\s*(\d{9})", RegexOptions.IgnoreCase),//EPE
+               new Regex(@"\,\s*\d{2}(\d{9})", RegexOptions.IgnoreCase),//EDELAP
                new Regex(@"(\d{7})\s*Liq\.\s*Serv\.", RegexOptions.IgnoreCase),//EDESAL
                new Regex(@"(\d{8})\s*\/\s*\d{2}", RegexOptions.IgnoreCase),//EPEC
                new Regex(@"Cuenta\s*\d{2}\s*-\s*(\d{7})", RegexOptions.IgnoreCase),//EDEA
                
-               
-
 
             };
             string numeroCliente = "";
@@ -318,6 +323,7 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"\d{4}\-?\-?\d{8}\s*(\d{2}/\d{2}/\d{4})\s*Total\s*Factura", RegexOptions.IgnoreCase),//EDET
+                new Regex(@"C\s*\d{2}/\d{2}/\d{4}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"\d{4}\s*\-?\s*\d{8}\s*\d{2}\/\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EDEN
                 new Regex(@"2\s*Fecha\s*\:?\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"TOTAL\s*A\s*Pagar\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
@@ -362,8 +368,10 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"F\s*\d{4}\−\s*\d{8}[\s\S]+(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"CICLO\s*\:?\s*(20\d{4})", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"facturaci[óo]n.*?(20\d{4})", RegexOptions.IgnoreCase), //EDEN
                 new Regex(@"Vencimiento\s*\d{2}/\d{2}/\d{4}\s*(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDET
+                
                 new Regex(@"Per[íi]odo\s*[\s\S]+\s*(\d{2}\/\d{2})\s*T", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"(\d{2}\/\d{4})\s*N[º°]\s*F", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"(\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EDESAL
@@ -410,6 +418,7 @@
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"Total\s*a\s*Pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
+                new Regex(@"Ciclo\s*\:?\s*\d{6}([\d.,]+)", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"F\s*\d{4}\−\s*\d{8}([\d.,]+)\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EPEC
                     new Regex(@"\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)\s*\$", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"\$\s*([\d.,]+)\s*\*", RegexOptions.IgnoreCase),//EDESAL
@@ -492,6 +501,7 @@
                 new Regex(@"C\.?E\.?S\.?P\.?[\s\S]+(\d{14})Vto\:?\.?", RegexOptions.IgnoreCase),
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"\d{4}\s*\-\d{8}\s*B18\s*(\d{14})", RegexOptions.IgnoreCase),//EDEN
+                new Regex(@"C\.?E\.?S\.?P\.?:?\s*Vto\.?\:?\s*(\d{14})", RegexOptions.IgnoreCase),//EDELAP
 
 
             };
@@ -518,6 +528,7 @@
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDESAL
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPE
                new Regex(@"\d{4}\s*\-\d{8}\s*B18\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEN
+               new Regex(@"C\.?E\.?S\.?P\.?:?\s*Vto\.?\:?\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDELAP
 
 
             };
