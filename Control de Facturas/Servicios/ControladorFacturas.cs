@@ -14,6 +14,7 @@ namespace Control_de_Facturas.Servicios
 {
     internal class ControladorFacturas
     {
+        #region DECLARACION DE DEPENDENCIAS
         private readonly GestorArchivos gestorArchivos;
         private readonly ProcesadorEdesur procesadorEdesur;
         private readonly ProcesadorEdenor procesadorEdenor;
@@ -23,7 +24,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorGasInterior procesadorGasInterior;
         private readonly ProcesadorAguaInterior procesadorAguaInterior;
         private readonly ProcesadorElectricidadInterior procesadorElectricidadInterior;
-
+        #endregion
         public ControladorFacturas()
         {
             gestorArchivos = new GestorArchivos();
@@ -230,6 +231,7 @@ namespace Control_de_Facturas.Servicios
             }
         }
         #endregion
+
         #region Filtrado y Ordenamiento
         private TiposServicios? corroborarInterior(string textoPDF)
         {

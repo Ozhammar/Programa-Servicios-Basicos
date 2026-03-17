@@ -364,6 +364,7 @@
                 new Regex(@"F\s*\d{4}\−\s*\d{8}[\s\S]+(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"facturaci[óo]n.*?(20\d{4})", RegexOptions.IgnoreCase), //EDEN
                 new Regex(@"Vencimiento\s*\d{2}/\d{2}/\d{4}\s*(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDET
+                new Regex(@"Per[íi]odo\s*[\s\S]+\s*(\d{2}\/\d{2})\s*T", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"(\d{2}\/\d{4})\s*N[º°]\s*F", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"(\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EDESAL
                 new Regex(@"Per[íi]odo\s*(\d{2}\/\d{2})", RegexOptions.IgnoreCase),//EDEA
@@ -392,11 +393,11 @@
                             periodo = periodo.Replace(" ", "");
                         }
 
-                        if(periodo.Length == 6)
+                        if (periodo.Length == 6)
                         {
                             string anio = periodo.Substring(0, 4);
                             string mes = periodo.Substring(4, 2);
-                            periodo = mes + "-" + anio.Substring(2,2);
+                            periodo = mes + "-" + anio.Substring(2, 2);
                         }
                         break;
                     }
@@ -417,17 +418,36 @@
                 
             };
             decimal ImportePrimerVencimiento = 0;
-
-            foreach (Regex regex in patrones)
+            if (textoPDF.Contains("30-54578816-7"))
             {
-                Match match = regex.Match(textoPDF);
-                if (match.Success)
+                Regex patrones_EPE = new Regex(@"Cuota\s*(\d+)[\s\S]+?Importe\s*Total\s*:\s*\$?\s*([\d.,]+)", RegexOptions.IgnoreCase);
+
+                decimal importe_parcial = 0;
+
+                foreach (Match match in patrones_EPE.Matches(textoPDF))
                 {
-                    string valor = match.Groups[1].Value;
-                    ImportePrimerVencimiento = convertidorImportes.ParseImporteFlexible(valor);
-                    break;
+                        if (decimal.TryParse(match.Groups[2].Value, out decimal valor))
+                        {
+                            importe_parcial += valor;
+                        }
+                }
+                ImportePrimerVencimiento = importe_parcial;
+                importe_parcial = 0;
+            }
+            else
+            {
+                foreach (Regex regex in patrones)
+                {
+                    Match match = regex.Match(textoPDF);
+                    if (match.Success)
+                    {
+                        string valor = match.Groups[1].Value;
+                        ImportePrimerVencimiento = convertidorImportes.ParseImporteFlexible(valor);
+                        break;
+                    }
                 }
             }
+
             return ImportePrimerVencimiento;
         }
         private long ExtraerCUIT(string textoPDF)
@@ -496,6 +516,7 @@
                new Regex(@"Fecha\s*de\s*Vto\.?\s*C\.?E\.?S\.?P\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"Vto\.?\s*C\.?E\.?S\.?P\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDESAL
+                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPE
                new Regex(@"\d{4}\s*\-\d{8}\s*B18\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEN
 
 
