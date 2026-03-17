@@ -61,9 +61,12 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"(LitoralGas)", RegexOptions.IgnoreCase),//litoral gas
                 new Regex(@"www.(gasnea).com.ar", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"www.(gasjunin).com.ar", RegexOptions.IgnoreCase),//gasJUNIN
-                new Regex(@"(DISTRIBUIDORA DE GAS DEL CENTRO)", RegexOptions.IgnoreCase),//gasJUNIN
+                new Regex(@"(DISTRIBUIDORA DE GAS DEL CENTRO)", RegexOptions.IgnoreCase),//gas CENTRO
+                new Regex(@"(DISTRIBUIDORA DE GAS CUYANA)", RegexOptions.IgnoreCase),//gas CUYANA
                 new Regex(@"(DISTRIGAS)", RegexOptions.IgnoreCase),//distrigas
-                
+                new Regex(@"www\.(proagas)\.com\.ar", RegexOptions.IgnoreCase),//PROAGAS
+
+
             };
 
             foreach (Regex regex in patrones)
@@ -84,6 +87,11 @@ namespace Control_de_Facturas.Processors
                                 empresa = "ECOGAS";
                                 break;
                             }
+                        case "DISTRIBUIDORA DE GAS CUYANA":
+                            {
+                                empresa = "ECOGAS CUYANA";
+                                break;
+                            }
                     }
 
                     break;
@@ -99,9 +107,6 @@ namespace Control_de_Facturas.Processors
             {
                 empresa = "CAMUZZI PAMPEANA";
             }
-
-
-
             return empresa;
         }
         private string ExtraerNumeroCliente(string textoPDF)
@@ -111,6 +116,7 @@ namespace Control_de_Facturas.Processors
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"N[º°]\s*Cliente:?\s*(\d{9})", RegexOptions.IgnoreCase),//distrigas
+                  new Regex(@"Suministro\s*[\s\S]\s*-\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//PROAGAS
                 new Regex(@"N[ÚU]MERO\s*DE\s*CUENTA\s*:?\s*(\d{8})", RegexOptions.IgnoreCase),//ecogas
                 new Regex(@"Exento\s*(\d{6})-", RegexOptions.IgnoreCase),//gasjunin
                 new Regex(@"\d{2}\s*-\s*(\d{8})-\s*\d{2}", RegexOptions.IgnoreCase),//redengas
@@ -119,6 +125,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"Total\s*a\s*pagar\s*(\d+)", RegexOptions.IgnoreCase),//naturgy ban
                 new Regex(@"\d{2}\s*\/\s*\d{4}\s*(\d{10})", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"BANELCO\s*Pagos\:?\s*\d{9}\s*(\d{8})\d+C[oó]digo", RegexOptions.IgnoreCase),//gasnea
+              
 
                 //CuentadeServicios
             };
@@ -129,7 +136,7 @@ namespace Control_de_Facturas.Processors
                 Match match = regex.Match(textoPDF);
                 if (match.Success)
                 {
-                    numeroCliente = match.Groups[1].Value;
+                    numeroCliente = match.Groups[1].Value.TrimStart('0',' ');
                     break;
                 }
             }
@@ -144,6 +151,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"COD#(\d{2})", RegexOptions.IgnoreCase),//camuzzi sur
                 new Regex(@"Liquidaci[óo]n\s*Clase\s*(B)", RegexOptions.IgnoreCase),//redengas
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?(B)""?", RegexOptions.IgnoreCase),//naturgy noa
+                new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?(A)""?", RegexOptions.IgnoreCase),//gascuyana
                  new Regex(@"(B)\d{4}-\d{8}", RegexOptions.IgnoreCase),//gasjunin
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*Clase\s*(B)", RegexOptions.IgnoreCase),//naturgy noa
             };
@@ -172,6 +180,7 @@ namespace Control_de_Facturas.Processors
 
             List<Regex> patrones = new List<Regex>
             {
+                new Regex(@"FCB\s*(\d{4})\s*-\d{8}\s*Emisi[óo]n", RegexOptions.IgnoreCase),//PROAGAS
                 new Regex(@"(\d{5})\s*-", RegexOptions.IgnoreCase),//CAMUZZISUR
                 new Regex(@"Factura\s*N[º°]\s*(\d{4})-", RegexOptions.IgnoreCase),//DISTRIGAS
                 new Regex(@"cod\s*\(?\d+\)?\s*:\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//ecogas
@@ -179,6 +188,8 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*N[º°]\s*(\d{4})\s*-", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"(\d{4})\s*-\s*\d{10}", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"\,\d{2}\s*(\d{4})-", RegexOptions.IgnoreCase),//gasnea
+                new Regex(@"\(cod\.?\s*17\)\:?\s*(\d{4})−", RegexOptions.IgnoreCase),//gascuyana
+                new Regex(@"\(cod\.?\s*18\)\:?\s*(\d{4})−", RegexOptions.IgnoreCase),//gascuyana
 
             };
 
@@ -200,7 +211,6 @@ namespace Control_de_Facturas.Processors
                     break;
                 }
             }
-
             return puntoVenta;
         }
         private string ExtraerNumeroFactura(string textoPDF)
@@ -210,15 +220,17 @@ namespace Control_de_Facturas.Processors
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"\d{5}\s*-(\d{8})\/\d{1}", RegexOptions.IgnoreCase),//CAMUZZISUR
+                new Regex(@"FCB\s*\d{4}\s*-(\d{8})\s*Emisi[óo]n", RegexOptions.IgnoreCase),//PROAGAS
                 new Regex(@"Factura\s*N[º°]\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//DISTRIGAS
                 new Regex(@"cod\s*\(?\d+\)?\s*:\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//ecogas
                 new Regex(@"Factura\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//gasjunin
                   new Regex(@"\,\d{2}\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"FCB\s*(\d{8})", RegexOptions.IgnoreCase),//redengas
-                
                 new Regex(@"N[º°]\s*\d{4}\s*-\s*(\d{8})", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"\d{2}\s*/\s*\d{2}\s*/\s*\d{2}\s*\d{5}\s*(\d{8})18\s*\-\s*\'\s*Liquidaci[oó]n", RegexOptions.IgnoreCase),//naturgy ban
                 new Regex(@"\d{4}\s*-\s*(\d{8})", RegexOptions.IgnoreCase),//LITORAL GAS
+                new Regex(@"\(cod\.?\s*17\)\:?\s*\d{4}−(\d{8})", RegexOptions.IgnoreCase),//gascuyana
+                new Regex(@"\(cod\.?\s*18\)\:?\s*\d{4}−(\d{8})", RegexOptions.IgnoreCase),//gascuyana
               
             };
 
@@ -240,7 +252,7 @@ namespace Control_de_Facturas.Processors
 
                     if (numeroFactura.Contains("/"))
                     {
-                        numeroFactura = numeroFactura.Replace("/", "-"); 
+                        numeroFactura = numeroFactura.Replace("/", "-");
                     }
                     break;
                 }
@@ -255,6 +267,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"Fecha\s*de\s*Emisi[oó]n\s*:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"−\s*(\d{2}/\d{2}/\d{4})\s*N[ÚU]MERO\s*DE\s*CUENTA", RegexOptions.IgnoreCase),//ecogas
                 new Regex(@"\d{4}\/\d{2}-\d(\d{2}/\d{2}/\d{4})\s*Ruta", RegexOptions.IgnoreCase),//naturgy noagasjunin
+                new Regex(@"Emisi[óo]n\s*\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//PROAGAS
                 new Regex(@"FCB\s*\d{8}\s*\d{4}/\d{2}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"Fecha\s*de\s*Emisi[óo]n\s*(\d{2}\s*/\s*\d{2}\s*/\s*\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"(\d{2}\s*/\s*\d{2}\s*/\s*\d{2})\s*\d{2}/\d{2}\-", RegexOptions.IgnoreCase),//naturgy ban
@@ -286,11 +299,11 @@ namespace Control_de_Facturas.Processors
         {
             List<Regex> patrones = new List<Regex>
             {
+                new Regex(@"Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//PROAGAS
                 new Regex(@"PAGAR\?\$[\s\S]+,\d{2}(\d{2}\s*/\s*\d{2}\s*/\s*\d{4})", RegexOptions.IgnoreCase),//CAMUZZISUR
                 new Regex(@"(\d{2}/\d{2}/\d{4})\s*Factura\s*N[º°]\s*\d{4}-\d{8}", RegexOptions.IgnoreCase),//DISTRIGAS
                 new Regex(@"hasta\s*el\s*(\d{2}/\d{2}/\d{4})\$", RegexOptions.IgnoreCase),//ecogas
                 new Regex(@"Vto\s*\.?:?\s*(\d/\d{2}/\d{4})", RegexOptions.IgnoreCase),//gasjunin
-
                 new Regex(@"Fecha\s*Vto\s*:?(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"Mensual\s*(\d{2}\s*/\s*\d{2}\s*/\s*\d{2})", RegexOptions.IgnoreCase),//naturgy ban
                 new Regex(@"TOTAL\s*A\s*PAGAR\s*hasta\s*el\s*(\d{2}\s*/\s*\d{2}\s*/\s*\d{2})", RegexOptions.IgnoreCase),//litoral gas
@@ -317,9 +330,10 @@ namespace Control_de_Facturas.Processors
             string periodo = "";
             List<Regex> patrones = new List<Regex>
             {
-                 new Regex(@"(\d{2}\s*/\s*\d{2}\s*/\s*\d{4})\s*sgp", RegexOptions.IgnoreCase),//CAMUZZISUR
+                new Regex(@"(\d{2}\s*/\s*\d{2}\s*/\s*\d{4})\s*sgp", RegexOptions.IgnoreCase),//CAMUZZISUR
                 new Regex(@"Ciclo:?\s*(\d{2}/\d{4})", RegexOptions.IgnoreCase),//DISTRIGAS
-                    new Regex(@"Per[íi]odo\s*de\s*consumo\s*(\d{4}/\d{2})", RegexOptions.IgnoreCase),//ecogas
+                new Regex(@"Per[íi]odo\s*de\s*consumo\s*(\d{4}/\d{2})", RegexOptions.IgnoreCase),//ecogas
+                new Regex(@"Per\.?\s*(\d{4}-\d{2})", RegexOptions.IgnoreCase),//PROAGAS
                 new Regex(@"Mensual\s*\d{2}\/(\d{2}/\d{4})", RegexOptions.IgnoreCase),//gasjunin
                 new Regex(@"Per[íi]odo\s*:?\s*(\d+\s*/\s*\d{4})", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"FCB\s*\d{8}\s*(\d{4}/\d{2})", RegexOptions.IgnoreCase),//redengas
@@ -357,7 +371,8 @@ namespace Control_de_Facturas.Processors
             List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"\d/\d{2}/\d{4}\s*([\d.,]+)\s*Total\s*a\s*pagar", RegexOptions.IgnoreCase),//gasjunin
-                new Regex(@"\d{2}/\d{2}/\d{4}\s*(\d+\.\d{2})\s*C", RegexOptions.IgnoreCase),             //REDENGAS
+                new Regex(@"IMPORTE\s*TOTAL\s*A\s*PAGAR\s*([\d.,]+)", RegexOptions.IgnoreCase),//PROAGAS
+                new Regex(@"\d{2}/\d{2}/\d{4}\s*(\d+\.\d{2})\s*C", RegexOptions.IgnoreCase),//REDENGAS
                 new Regex(@"Importe\s*Total\s*:?\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"Total\s*a\s*pagar[\s\S]*?\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"Total\s*a\s*pagar[\s\S]*?\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//naturgy ban
@@ -383,11 +398,10 @@ namespace Control_de_Facturas.Processors
             long cuitLong = 0;
             List<Regex> patrones = new List<Regex>
             {
-                 new Regex(@"C\s*\.\s*U\s*\.\s*I\s*\.\s*T\.\s*\:?\s*(\d{2}-\d{8}-\d{1})", RegexOptions.IgnoreCase),//redengas
+                new Regex(@"C\s*\.\s*U\s*\.\s*I\s*\.\s*T\.\s*\:?\s*(\d{2}-\d{8}-\d{1})", RegexOptions.IgnoreCase),//redengas
                 new Regex(@"(\d{2}-\d{8}-\d{1})\s*C\s*\.\s*U\s*\.\s*I\s*\.\s*T\.\s*\:?", RegexOptions.IgnoreCase),//naturgynoa
                 new Regex(@"CUIT\s*(\d{2}-\d{8}-\d{1})", RegexOptions.IgnoreCase),//ecogas
-
-                 //Per[íi]odo\s*de\s*facturaci[oó]n\s*cargos\s*fijos\s*\d{2}/\d{2}/\d{4}\s*AL\s*(\d{2}/\d{2}/\d{4})
+                new Regex(@"(33−65786558−9)", RegexOptions.IgnoreCase),//gas CUYANA
             };
 
             foreach (Regex regex in patrones)
@@ -396,19 +410,22 @@ namespace Control_de_Facturas.Processors
                 if (match.Success)
                 {
                     CUIT = match.Groups[1].Value;
-                    if (CUIT.Contains("-"))
+                    if (CUIT.Contains("-") || CUIT.Contains("−"))
                     {
-                        CUIT = CUIT.Replace("-", "");
+                        CUIT = CUIT.Replace("-", ""); //GUION
+                        CUIT = CUIT.Replace("−", ""); //SIGNO MENOS
                     }
                     cuitLong = long.Parse(CUIT);
                     break;
                 }
-                else
-                {
-                    string CUIT_buscado = buscadorCUIT.BuscarCUIT(ExtraerEmpresa(textoPDF).ToUpper().Trim());
-                    cuitLong = long.Parse(CUIT_buscado);
-                    break;
-                }
+
+            }
+
+            if (cuitLong == 0 || cuitLong == 30624051919)
+            {
+                string CUIT_buscado = buscadorCUIT.BuscarCUIT(ExtraerEmpresa(textoPDF).ToUpper().Trim());
+                cuitLong = long.Parse(CUIT_buscado);
+
             }
             return cuitLong;
         }

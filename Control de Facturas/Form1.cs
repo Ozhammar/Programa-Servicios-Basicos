@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic;
+using System.ComponentModel;
 
 namespace Control_de_Facturas
 {
@@ -28,6 +29,8 @@ namespace Control_de_Facturas
             btnEjecutar.Enabled = false;
 
             btnEjecutar.Enabled = true; //ELIMINAR CUANDO NO SE QUIERA PROBAR LA CARGA AUTOMÁTICA DE LA CARPETA PREDEFINIDA
+           
+
         }
         #endregion
 
@@ -70,6 +73,7 @@ namespace Control_de_Facturas
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = true;
             dataGridView1.CellContentDoubleClick -= modificarDatosFactura;
+            headerCheckBox.Visible = false;
         }
 
         private async Task comprobacionCache()
@@ -86,9 +90,10 @@ namespace Control_de_Facturas
         {
             progressBar1.Visible = true;
             labelPorcentaje.Visible = true;
-
+            
             await cargaFacturas();
-
+            
+            headerCheckBox.Visible = true;
             btnEjecutar.Enabled = false;
             btnSeleccionarCarpeta.Enabled = false;
             btnValidar.Enabled = true;
@@ -104,8 +109,11 @@ namespace Control_de_Facturas
                 btnSeleccionarCarpeta.Enabled = false;
                 btnEjecutar.Enabled = false;
 
-                dataGridView1.Rows.Clear();
-
+                if(facturasCache == null)
+                {
+                    dataGridView1.Rows.Clear();
+                }
+                
                 int totalPDFS = gestorArchivos.ObtenerPDF(path).Count();
 
                 if (totalPDFS == 0)
@@ -134,9 +142,13 @@ namespace Control_de_Facturas
                 });
                 #endregion
 
+
                 // Procesar facturas
-                facturasCache = await controladorFacturas
-                    .ProcesarFacturasEnCarpeta(path, progreso);
+                if (facturasCache == null)
+                    facturasCache = new List<Factura>();
+
+                facturasCache.AddRange(await controladorFacturas
+                    .ProcesarFacturasEnCarpeta(path, progreso));
 
                 ordenarCache();
 
@@ -147,7 +159,7 @@ namespace Control_de_Facturas
                     if (col.DataPropertyName != "Seleccionada")
                         col.ReadOnly = true;
                 }
-
+               
                 FormatearColumnasDecimales();
             }
             catch (Exception ex)
@@ -164,6 +176,7 @@ namespace Control_de_Facturas
                 btnLimpiarPath.Enabled = true;
                 btnEjecutar.Enabled = true;
                 btnSeleccionarCarpeta.Enabled = true;
+                AgregarCheckBoxHeader();
             }
         }
 
@@ -267,9 +280,37 @@ namespace Control_de_Facturas
 
         }
         //LIQUIDACION INTERIOR UNIFICADA
-        private void btnLiqUInterior_Click(object sender, EventArgs e)
+        private async void btnLiqUInterior_Click(object sender, EventArgs e)
         {
+            await comprobacionCache();
+            List<Factura> facturasElectricidadInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "ELECTRICIDAD INTERIOR");
 
+            if (facturasElectricidadInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de ELECTRICIDAD INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para ELECTRICIDAD INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+
+            if (string.IsNullOrEmpty(actividadProgramatica))
+            {
+                MessageBox.Show("La actividad programática no puede estar vacía. Se cancelará la generación de la liquidación unificada para ELECTRICIDAD INTERIOR.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            exportadorExcel.generarLiquidacionUnificadaInterior(facturasElectricidadInterior, actividadProgramatica);
+        }
+        private async void btnInformeInterior_Luz_Click(object sender, EventArgs e)
+        {
+            await comprobacionCache();
+            List<Factura> facturasElectricidadInterior = controladorFacturas.filtrarPorTipoServicio(facturasCache, "ELECTRICIDAD INTERIOR");
+
+            if (facturasElectricidadInterior.Count == 0)
+            {
+                MessageBox.Show("No se encontraron facturas de ELECTRICIDAD INTERIOR", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            exportadorExcel.GenerarInformeInterior("INTERIOR", facturasElectricidadInterior);
         }
         #endregion
 
@@ -325,6 +366,13 @@ namespace Control_de_Facturas
                 return;
             }
             var actividadProgramatica = Interaction.InputBox("Ingrese la actividad programática para AGUA INTERIOR:", "Actividad Programática", "28.0.0.1.0");
+
+            if (string.IsNullOrEmpty(actividadProgramatica))
+            {
+                MessageBox.Show("La actividad programática no puede estar vacía. Se cancelará la generación de la liquidación unificada para AGUA INTERIOR.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             exportadorExcel.generarLiquidacionUnificadaInterior(facturasAguaInterior, actividadProgramatica);
         }
         //INFORME AGUA INTERIOR
@@ -512,7 +560,7 @@ namespace Control_de_Facturas
             dataGridView1.DataSource = null;
             ordenarCache();
             dataGridView1.DataSource = facturasCache;
-            AgregarCheckBoxHeader();
+           AgregarCheckBoxHeader();
 
             foreach (DataGridViewColumn col in dataGridView1.Columns)
             {
@@ -532,6 +580,9 @@ namespace Control_de_Facturas
 
         private void AgregarCheckBoxHeader()
         {
+            if (dataGridView1.Controls.Contains(headerCheckBox))
+                return;
+
             Rectangle rect = dataGridView1.GetCellDisplayRectangle(0, -1, true);
 
             headerCheckBox.Size = new Size(15, 15);
@@ -680,6 +731,27 @@ namespace Control_de_Facturas
 
 
 
- 
+
+        private void btnCargaManual_Click(object sender, EventArgs e)
+        {
+            FormularioCargaManual cargaManual = new FormularioCargaManual();
+            if (cargaManual.ShowDialog() == DialogResult.OK)
+            {
+                if (facturasCache == null)
+                    facturasCache = new List<Factura>();
+
+                foreach (var factura in cargaManual.facturasCargadas)
+                {
+                    if (!facturasCache.Any(f => f.NumeroFactura == factura.NumeroFactura))
+                        facturasCache.Add(factura);
+                }
+                btnValidar.Enabled = true;
+                ordenarCache();
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = facturasCache;
+            }
+        }
+
+
     }
 }

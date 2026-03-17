@@ -8,6 +8,8 @@ Recolectar todas las facturas procesadas en un List<Factura>
 Manejar errores y reportarlos
 Retornar la lista final a Form1*/
 
+using System.ComponentModel;
+
 namespace Control_de_Facturas.Servicios
 {
     internal class ControladorFacturas
@@ -20,7 +22,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorMetrogasPequenios procesadorMetrogasPequenios;
         private readonly ProcesadorGasInterior procesadorGasInterior;
         private readonly ProcesadorAguaInterior procesadorAguaInterior;
-        //private readonly ProcesadorTelecom procesadorTelecom;
+        private readonly ProcesadorElectricidadInterior procesadorElectricidadInterior;
 
         public ControladorFacturas()
         {
@@ -32,7 +34,7 @@ namespace Control_de_Facturas.Servicios
             procesadorMetrogasPequenios = new ProcesadorMetrogasPequenios();
             procesadorGasInterior = new ProcesadorGasInterior();
             procesadorAguaInterior = new ProcesadorAguaInterior();
-            //procesadorTelecom = new ProcesadorTelecom();
+            procesadorElectricidadInterior = new ProcesadorElectricidadInterior();
         }
 
         public enum TiposServicios
@@ -63,7 +65,6 @@ namespace Control_de_Facturas.Servicios
             List<Factura> facturasProcesadas = new List<Factura>();
             IEnumerable<string> archivosPDF = gestorArchivos.ObtenerPDF(carpeta);
 
-            int total = archivosPDF.Count();
             int actual = 0;
 
             foreach (string archivo in archivosPDF)
@@ -104,12 +105,11 @@ namespace Control_de_Facturas.Servicios
                                     facturasProcesadas.Add(factura);
                                 }
                             }
-                           
                         }
                         else
                         {
                             Factura factura = IdentificarYProcesarFactura(textoPDF, archivo);
-                            if (factura != null)
+                            if (factura != null && !facturasProcesadas.Any(f => f.NumeroFactura == factura.NumeroFactura))
                             {
                                 facturasProcesadas.Add(factura);
                             }
@@ -129,11 +129,59 @@ namespace Control_de_Facturas.Servicios
             return facturasProcesadas;
         }
 
+        public Match busquedaDeRegex(string textoPDF)
+        {
+            Match match_aux = null;
+            List<Regex> patrones = new List<Regex>
+            {
+                new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//Aguas del Tucumán
+                new Regex(@"(01-031962)", RegexOptions.IgnoreCase),//Aguas de Catamarca
+                new Regex(@"(30-68997751-7)", RegexOptions.IgnoreCase),//EDEA
+            };
 
+                foreach (Regex regex in patrones)
+                {
+                    Match match = regex.Match(textoPDF);
+                    if (match.Success)
+                    {
+                    match_aux = match;
+                    }
+                }
+
+                return match_aux;
+
+        }
+        private IEnumerable<string> DividirEnBloques(string textoPDF)
+        {
+            textoPDF = textoPDF.Replace("\r", "");
+
+            Match match = busquedaDeRegex(textoPDF);
+            switch (match.Groups[1].Value)
+            {
+                case "30-70861788-8"://AGUAS DE TUCUMAN
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=Cliente\s*\d{8})", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("Cliente"));
+                    }
+                case "01-031962"://AGUAS DE CATAMARCA
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=Liquidaci[óo]n)", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("Liquidación"));
+                    }
+                case "30-68997751-7"://EDEA
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=HOJA\s*\d{1}\s*de)", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("HOJA"));
+                    }
+            }
+            return null;
+        }
         public bool RequiereDivisionEnBloques(string textoPDF)
         {
             bool check = false;
-            if (textoPDF.Contains("30-70861788-8" /* Aguas del Tucumán*/))
+            Match match = busquedaDeRegex(textoPDF);
+
+            if (match != null && match.Success)
             {
                 check = true;
             }
@@ -143,7 +191,6 @@ namespace Control_de_Facturas.Servicios
 
         private Factura IdentificarYProcesarFactura(string textoPDF, string rutaArchivo)
         {
-
             if (textoPDF.Contains("Edesur"))
             {
                 return procesadorEdesur.ProcesarFactura(textoPDF, rutaArchivo);
@@ -175,43 +222,15 @@ namespace Control_de_Facturas.Servicios
                 {
                     return procesadorAguaInterior.ProcesarFactura(textoPDF, rutaArchivo);
                 }
+                if (tipoServicioInterior == TiposServicios.LUZ)
+                {
+                    return procesadorElectricidadInterior.ProcesarFactura(textoPDF, rutaArchivo);
+                }
                 return null;
             }
         }
-
-
         #endregion
-
         #region Filtrado y Ordenamiento
-        public List<Factura> FiltrarPorEmpresa(List<Factura> facturas, string empresa)
-        {
-            if (facturas == null || facturas.Count == 0)
-                return new List<Factura>();
-
-            var facturasFiltradas = facturas
-                .Where(f => f.Empresa.Equals(empresa, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            return OrdenarSegunEmpresa(facturasFiltradas, empresa);
-        }
-
-        public List<Factura> filtrarPorTipoServicio(List<Factura> facturas, string tipoServicio)
-        {
-            if (facturas == null || facturas.Count == 0)
-                return new List<Factura>();
-
-            var facturasFiltradas = facturas
-                .Where(f => f.TipoServicio.Equals(tipoServicio, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-            return OrdenarSegunEmpresa(facturasFiltradas, tipoServicio);
-        }
-        /*  public List<Factura> borrarDuplicados(List<Factura> facturas)
-          {
-              List<Factura> facturasSinDuplicados = facturas.Distinct().ToList();
-
-              return facturasSinDuplicados;
-          }*/
-
         private TiposServicios? corroborarInterior(string textoPDF)
         {
             string[] palabrasClave_GAS =
@@ -230,10 +249,14 @@ namespace Control_de_Facturas.Servicios
                 "DISTRIBUIDORA DE GAS DEL CENTRO",
                 "30-67364611-1",
                 "DISTRIGAS",
+                "33-65786558-9",
+                "DISTRIBUIDORA DE GAS CUYANA",
+                "www.proagas.com.ar",
                 #region camuzziSUR
                 "94000940600148071",
                 "94000940600098389",
                 "94000940600168381",
+                "91000250300870415",
                 "94200940600112201",
                 "92000940600020772",
                 "92030940600006061",
@@ -260,7 +283,8 @@ namespace Control_de_Facturas.Servicios
                 #endregion
                 #region camuzziPampeana
                 "19000940600543300",
-                "7000940600260990",
+                "19000940601128792",
+                "70000940600260990",
                 "76000990403737859",
                 "76300030900324405",
                 "80000940600856251",
@@ -295,11 +319,24 @@ namespace Control_de_Facturas.Servicios
                 "30-71151356-2",
                 "33-69809590-9",
                 "aguasdeformosa",
+                "33-71097454-9",
+                "30-64263072-1",
+                "01-031962", //aguas catamarca
                 #endregion
             };
             string[] palabrasClave_LUZ =
             {
                 #region LUZ INTERIOR
+                "30−99902748−9",
+                "30-99902748-9",
+                "VILLA MERCEDES",
+                "30-68997751-7",
+                "30-65865024-2",
+                "30-69383434-8",
+                "30-54578816-7",
+                "SANTA FE",
+                "ROSARIO",
+                "RECONQUISTA",
 
                 #endregion
             };
@@ -315,7 +352,7 @@ namespace Control_de_Facturas.Servicios
 
             foreach (string palabra in palabrasClave_AGUA)
             {
-                if (textoPDF.Contains(palabra))
+                if (textoPDF.Contains(palabra) && !palabrasClave_LUZ.Contains(palabra))
                 {
                     return TiposServicios.AGUA;
                 }
@@ -329,6 +366,28 @@ namespace Control_de_Facturas.Servicios
                 }
             }
             return null;
+        }
+        public List<Factura> FiltrarPorEmpresa(List<Factura> facturas, string empresa)
+        {
+            if (facturas == null || facturas.Count == 0)
+                return new List<Factura>();
+
+            var facturasFiltradas = facturas
+                .Where(f => f.Empresa.Equals(empresa, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return OrdenarSegunEmpresa(facturasFiltradas, empresa);
+        }
+
+        public List<Factura> filtrarPorTipoServicio(List<Factura> facturas, string tipoServicio)
+        {
+            if (facturas == null || facturas.Count == 0)
+                return new List<Factura>();
+
+            var facturasFiltradas = facturas
+                .Where(f => f.TipoServicio.Equals(tipoServicio, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            return OrdenarSegunEmpresa(facturasFiltradas, tipoServicio);
         }
 
         private List<Factura> OrdenarSegunEmpresa(List<Factura> facturas, string empresa)
@@ -376,14 +435,7 @@ namespace Control_de_Facturas.Servicios
                 .OrderBy(e => e)
                 .ToList();
         }
-        private IEnumerable<string> DividirEnBloques(string textoPDF)
-        {
-            textoPDF = textoPDF.Replace("\r", "");
-
-            var bloques = Regex.Split(textoPDF, @"(?=Cliente\s*\d{8})", RegexOptions.IgnoreCase);
-
-            return bloques.Where(b => b.Contains("Cliente"));
-        }
+      
         #endregion
 
         #region Modificación de Facturas
