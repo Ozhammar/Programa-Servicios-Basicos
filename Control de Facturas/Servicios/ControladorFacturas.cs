@@ -139,6 +139,7 @@ namespace Control_de_Facturas.Servicios
                 new Regex(@"(01-031962)", RegexOptions.IgnoreCase),//Aguas de Catamarca
                 new Regex(@"(30-68997751-7)", RegexOptions.IgnoreCase),//EDEA
                 new Regex(@"(30-65787766-9)", RegexOptions.IgnoreCase),//EDELAP
+                new Regex(@"(33-67509874-9)", RegexOptions.IgnoreCase),//EDESE
             };
 
                 foreach (Regex regex in patrones)
@@ -179,6 +180,11 @@ namespace Control_de_Facturas.Servicios
                     {
                         var bloques = Regex.Split(textoPDF, @"(?=Ministerio)", RegexOptions.IgnoreCase);
                         return bloques.Where(b => b.Contains("Ministerio"));
+                    }
+                case "33-67509874-9"://EDESE
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=EstimadoCliente\:Empresa)", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("EstimadoCliente:Empresa"));
                     }
             }
             return null;
@@ -346,6 +352,12 @@ namespace Control_de_Facturas.Servicios
                 "ROSARIO",
                 "RECONQUISTA",
                 "30-65787766-9",
+                "33-67509874-9",
+                "EDESA SA",
+                "edemsa",
+                "LA ENERGÍA DE NUESTRA GENTE",//EDERSA
+                "30-57190936-3",
+                "USHUAIA",
 
                 #endregion
             };
