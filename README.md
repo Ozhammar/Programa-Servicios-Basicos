@@ -53,19 +53,19 @@ El flujo de trabajo típico es:
 
 | Tecnología | Detalle |
 |---|---|
-| Lenguaje | C# 12 |
-| Framework | .NET 8 (Windows) |
+| Lenguaje | C# 13 |
+| Framework | .NET 10 (Windows) — `net10.0-windows` |
 | UI | Windows Forms (WinForms) |
 | IDE recomendado | Visual Studio 2022 o superior |
 | SO requerido | Windows 10 / 11 (64-bit) |
 
 ### Paquetes NuGet
 
-| Paquete | Propósito | Notas |
-|---|---|---|
-| `UglyToad.PdfPig` | Lectura y extracción de texto de PDFs | Sin dependencias nativas |
-| `ClosedXML` | Lectura y escritura de archivos `.xlsx` | API de alto nivel |
-| `NPOI` | Conversión `.xlsx` → `.xls` (formato SIDIF) | Soporte HSSF/XSSF |
+| Paquete | Versión | Propósito | Notas |
+|---|---|---|---|
+| `PdfPig` | 0.1.13 | Lectura y extracción de texto de PDFs | Sin dependencias nativas |
+| `ClosedXML` | 0.105.0 | Lectura y escritura de archivos `.xlsx` | API de alto nivel |
+| `NPOI` | 2.7.5 | Conversión `.xlsx` → `.xls` (formato SIDIF) | Soporte HSSF/XSSF |
 
 ---
 
@@ -345,7 +345,7 @@ Cada empresa tiene su plantilla específica (`AYSA.xlsx`, `EDESUR.xlsx`, etc.) e
 Para generar un ejecutable autónomo sin requerir .NET instalado en el equipo destino:
 
 ```bash
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -f net10.0-windows
 ```
 
 > **Importante:** la carpeta `Assets/Plantillas/` debe copiarse manualmente junto al ejecutable publicado, ya que contiene archivos de datos que el programa accede en tiempo de ejecución mediante rutas relativas al directorio base de la aplicación.
