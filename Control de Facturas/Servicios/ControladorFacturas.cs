@@ -353,7 +353,8 @@ namespace Control_de_Facturas.Servicios
                 "RECONQUISTA",
                 "30-65787766-9",
                 "33-67509874-9",
-                "EDESA SA"
+                "EDESA SA",
+                "edemsa"
 
                 #endregion
             };
