@@ -10,6 +10,7 @@ namespace Control_de_Facturas.Servicios
     internal class ExportadorExcel
     {
         string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        private readonly ConvertidorExcel convertidorExcel;
         private readonly string rutaPlantilla_SIDIF;
         private readonly string rutaPlantillaInforme_AYSA;
         private readonly string rutaPlantillaInforme_EDESUR;
@@ -20,6 +21,7 @@ namespace Control_de_Facturas.Servicios
 
         public ExportadorExcel()
         {
+            convertidorExcel = new ConvertidorExcel();
             //PLANTILLA BASE SIDIF
             rutaPlantilla_SIDIF = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Plantillas", "PLANTILLA.xlsx");
 
@@ -275,7 +277,13 @@ namespace Control_de_Facturas.Servicios
                 detalle_financiero.Cell($"AJ{filaDetalleFinanciero}").Value = factura.ImporteAbonable;
                 ++filaDetalleFinanciero;
             }
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturas[0].Empresa}_ExportadasIndividual_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+
+            string nombreArchivo = $"Facturas_{facturas[0].TipoServicio}_Exportadas_Unidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+            string pathFinal = Path.Combine(desktopPath, nombreArchivo);
+            libro.SaveAs(pathFinal);
+
+            convertidorExcel.conversor_XLS(pathFinal);
+
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
 
@@ -395,7 +403,14 @@ namespace Control_de_Facturas.Servicios
                 factura = null;
             }
 
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas{facturasPorPeriodo[0][0].Empresa}_ExportadasUnidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+
+
+            string nombreArchivo = $"Facturas_{facturasPorPeriodo[0][0].TipoServicio}_Exportadas_Unidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+            string pathFinal = Path.Combine(desktopPath, nombreArchivo);
+            libro.SaveAs(pathFinal);
+
+            convertidorExcel.conversor_XLS(pathFinal);
+
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
 
@@ -507,7 +522,12 @@ namespace Control_de_Facturas.Servicios
                 }
             }
 
-            libro.SaveAs(Path.Combine(desktopPath, $"Facturas_{facturasPorEmpresa[0][0].TipoServicio}_Exportadas_Unidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx"));
+            string nombreArchivo = $"Facturas_{facturasPorEmpresa[0][0].TipoServicio}_Exportadas_Unidifcado_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+            string pathFinal = Path.Combine(desktopPath, nombreArchivo);
+            libro.SaveAs(pathFinal);
+
+            convertidorExcel.conversor_XLS(pathFinal);
+
             MessageBox.Show("LIBRO GUARDADO correctamente");
         }
 

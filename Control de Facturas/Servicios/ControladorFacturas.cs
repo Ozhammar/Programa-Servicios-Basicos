@@ -14,6 +14,7 @@ namespace Control_de_Facturas.Servicios
 {
     internal class ControladorFacturas
     {
+        #region DECLARACION DE DEPENDENCIAS
         private readonly GestorArchivos gestorArchivos;
         private readonly ProcesadorEdesur procesadorEdesur;
         private readonly ProcesadorEdenor procesadorEdenor;
@@ -23,7 +24,7 @@ namespace Control_de_Facturas.Servicios
         private readonly ProcesadorGasInterior procesadorGasInterior;
         private readonly ProcesadorAguaInterior procesadorAguaInterior;
         private readonly ProcesadorElectricidadInterior procesadorElectricidadInterior;
-
+        #endregion
         public ControladorFacturas()
         {
             gestorArchivos = new GestorArchivos();
@@ -137,6 +138,7 @@ namespace Control_de_Facturas.Servicios
                 new Regex(@"(30-70861788-8)", RegexOptions.IgnoreCase),//Aguas del Tucumán
                 new Regex(@"(01-031962)", RegexOptions.IgnoreCase),//Aguas de Catamarca
                 new Regex(@"(30-68997751-7)", RegexOptions.IgnoreCase),//EDEA
+                new Regex(@"(30-65787766-9)", RegexOptions.IgnoreCase),//EDELAP
             };
 
                 foreach (Regex regex in patrones)
@@ -172,6 +174,11 @@ namespace Control_de_Facturas.Servicios
                     {
                         var bloques = Regex.Split(textoPDF, @"(?=HOJA\s*\d{1}\s*de)", RegexOptions.IgnoreCase);
                         return bloques.Where(b => b.Contains("HOJA"));
+                    }
+                case "30-65787766-9"://EDELAP
+                    {
+                        var bloques = Regex.Split(textoPDF, @"(?=Ministerio)", RegexOptions.IgnoreCase);
+                        return bloques.Where(b => b.Contains("Ministerio"));
                     }
             }
             return null;
@@ -230,6 +237,7 @@ namespace Control_de_Facturas.Servicios
             }
         }
         #endregion
+
         #region Filtrado y Ordenamiento
         private TiposServicios? corroborarInterior(string textoPDF)
         {
@@ -337,6 +345,7 @@ namespace Control_de_Facturas.Servicios
                 "SANTA FE",
                 "ROSARIO",
                 "RECONQUISTA",
+                "30-65787766-9",
 
                 #endregion
             };

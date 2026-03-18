@@ -812,6 +812,7 @@
             dataGridView1.Size = new Size(1009, 220);
             dataGridView1.TabIndex = 7;
             dataGridView1.CellContentDoubleClick += modificarDatosFactura;
+            dataGridView1.CellDoubleClick += modificarDatosFactura;
             dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
             dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
             dataGridView1.RowPostPaint += dataGridView1_RowPostPaint;

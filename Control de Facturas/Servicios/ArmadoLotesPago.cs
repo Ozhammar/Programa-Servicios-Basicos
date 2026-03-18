@@ -33,11 +33,11 @@ namespace Control_de_Facturas.Servicios
                     {
                         Observacion = sb.ToString().TrimEnd(),
                         Importe = importeParcial,
-                        PrimerFactura = facturaInicial,
+                        PrimerFactura = primerfactura,
                     });
 
                     sb.Clear();
-                    sb.AppendLine("SERVICIO AGUA INTERIOR");
+                    sb.AppendLine($"SERVICIO {factura.TipoServicio}");
                     importeParcial = 0;
                     clienteActual = null;
                     primerfactura = null;
@@ -58,12 +58,16 @@ namespace Control_de_Facturas.Servicios
                 importeParcial += factura.ImporteAbonable;
             }
 
-            lotesPago.Add(new LotesPago
+            if(primerfactura != null)
             {
-                Observacion = sb.ToString().TrimEnd(),
-                Importe = importeParcial,
-                PrimerFactura = primerfactura
-            });
+                lotesPago.Add(new LotesPago
+                {
+                    Observacion = sb.ToString().TrimEnd(),
+                    Importe = importeParcial,
+                    PrimerFactura = primerfactura
+                });
+            }
+ 
 
             return lotesPago;
         }
