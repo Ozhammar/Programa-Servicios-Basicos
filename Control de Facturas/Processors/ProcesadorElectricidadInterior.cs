@@ -58,6 +58,7 @@
                 new Regex(@"(30-69383434-8)", RegexOptions.IgnoreCase),//EDEN
                 new Regex(@"(30-54578816-7)", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"(30-65787766-9)", RegexOptions.IgnoreCase),//EDELAP
+                new Regex(@"(33-67509874-9)", RegexOptions.IgnoreCase),//EDESE
                 
 
 
@@ -102,6 +103,11 @@
                                 empresa = "EDELAP";
                                 break;
                             }
+                        case "33-67509874-9":
+                            {
+                                empresa = "EDESE";
+                                break;
+                            }
                     }
                     break;
                 }
@@ -125,8 +131,10 @@
                new Regex(@"N[úu]mero\s*de\s*Cliente\s*\:?\s*(\d{9})", RegexOptions.IgnoreCase),//EPE
                new Regex(@"\,\s*\d{2}(\d{9})", RegexOptions.IgnoreCase),//EDELAP
                new Regex(@"(\d{7})\s*Liq\.\s*Serv\.", RegexOptions.IgnoreCase),//EDESAL
+               new Regex(@"(\d{14})\s*OriginalBCod\.", RegexOptions.IgnoreCase),//EDESE
                new Regex(@"(\d{8})\s*\/\s*\d{2}", RegexOptions.IgnoreCase),//EPEC
                new Regex(@"Cuenta\s*\d{2}\s*-\s*(\d{7})", RegexOptions.IgnoreCase),//EDEA
+               
                
 
             };
@@ -152,6 +160,7 @@
 
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?(B)""?", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"Liquidaci[óo]n\s*Servicios\s*P[úu]blicos\s*-?\s*?""?(B)""?", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"Original(B)Cod\.", RegexOptions.IgnoreCase),//EDESE
                  new Regex(@"(18)\s*Liq\.?\s*de\s*Serv\.?\s*P[úu]blicos", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"\d{4}\s*\-\d{8}\s*(B)", RegexOptions.IgnoreCase),//EDEN
                 new Regex(@"(B)\s*\(18\)", RegexOptions.IgnoreCase),//EPEC
@@ -212,6 +221,7 @@
             {
                  new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?B""?\s*[\s\S]+(\d{5})\s*\−", RegexOptions.IgnoreCase),//EPEC
                  new Regex(@"Liq\s*\.?\s*de\s*Serv\s*\.?\s*P[úu]blicos\s*N[º°]\s*\:?\s*(\d{5})-", RegexOptions.IgnoreCase),//EPE
+                 new Regex(@"OriginalBCod\.18No\.(\d{5})-", RegexOptions.IgnoreCase),//EDESE
                  new Regex(@"(\d{4})\s*\-\d{8}\s*B", RegexOptions.IgnoreCase),//EDEN
                  new Regex(@"B\s*\(18\)\s*N[º°]\s*(\d{5})-", RegexOptions.IgnoreCase),//EPEC
                  new Regex(@"Liq\.\s*Serv\.\s*P[úu]b\.\s*""?B""?\s*\(18\)\s*N[º°]\s*(\d{4})\s*\-", RegexOptions.IgnoreCase),//EDESAL
@@ -250,6 +260,7 @@
             {
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?B""?\s*[\s\S]+\d{5}\s*\−\s*(\d{8})\s*P", RegexOptions.IgnoreCase),//EPEC -> no es el comprobante interno
                 new Regex(@"Liq\.?\s*de\s*Serv\.?\s*P[úu]blicos\s*N[º°]\s*\:?\s*\d{5}-(\d{8})", RegexOptions.IgnoreCase),//EPE
+                new Regex(@"OriginalBCod\.18No\.\d{5}-(\d{8})", RegexOptions.IgnoreCase),//EDESE
                 new Regex(@"\d{4}\s*\-(\d{8})\s*B", RegexOptions.IgnoreCase),//EDEN
                 new Regex(@"B\s*\(18\)\s*N[º°]\s*\d{5}-(\d{8})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"Liq\.\s*Serv\.\s*P[úu]b\.\s*""?B""?\s*\(18\)\s*N[º°]\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//EDESAL
@@ -291,6 +302,7 @@
                 new Regex(@"Fecha\s*de\s*Emisi[óo]n\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
                 new Regex(@"Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDET
                 new Regex(@"Emisi[oó]n\s*\:?[\s\S]+(\d{2}\/\d{2}\/\d{4})\s*Imprime", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"Vto\.\s*[\s\S]+?\s*(\d{2}/\d{2}/\d{2})\D{1}", RegexOptions.IgnoreCase),//EDESE
                 new Regex(@"Emisi[oó]n\s*\:?\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"C[óo]rdoba\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"\d{4}\s*\-?\s*\d{8}\s*\d{2}\/\d{2}\/\d{4}\s*\d{2}\/\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDEN
@@ -325,6 +337,7 @@
                 new Regex(@"\d{4}\-?\-?\d{8}\s*(\d{2}/\d{2}/\d{4})\s*Total\s*Factura", RegexOptions.IgnoreCase),//EDET
                 new Regex(@"C\s*\d{2}/\d{2}/\d{4}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"\d{4}\s*\-?\s*\d{8}\s*\d{2}\/\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EDEN
+                new Regex(@"(\d{2}/\d{2}/\d{2})\s*Per\:", RegexOptions.IgnoreCase),//EDESE
                 new Regex(@"2\s*Fecha\s*\:?\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"TOTAL\s*A\s*Pagar\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
@@ -371,7 +384,7 @@
                 new Regex(@"CICLO\s*\:?\s*(20\d{4})", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"facturaci[óo]n.*?(20\d{4})", RegexOptions.IgnoreCase), //EDEN
                 new Regex(@"Vencimiento\s*\d{2}/\d{2}/\d{4}\s*(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDET
-                
+                new Regex(@"\d{2}/\d{2}/\d{2}\s*Per\:\s*(\d{2}\/\d{2})", RegexOptions.IgnoreCase),//EDESE
                 new Regex(@"Per[íi]odo\s*[\s\S]+\s*(\d{2}\/\d{2})\s*T", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"(\d{2}\/\d{4})\s*N[º°]\s*F", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"(\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EDESAL
@@ -420,9 +433,10 @@
                 new Regex(@"Total\s*a\s*Pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
                 new Regex(@"Ciclo\s*\:?\s*\d{6}([\d.,]+)", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"F\s*\d{4}\−\s*\d{8}([\d.,]+)\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EPEC
-                    new Regex(@"\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)\s*\$", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)\s*\$", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"\$\s*([\d.,]+)\s*\*", RegexOptions.IgnoreCase),//EDESAL
                 new Regex(@"Total\s*A\s*Pagar\s*:?\s*\$?\**\s*([\d\.]+,\d{2})", RegexOptions.IgnoreCase), //EDEA
+                new Regex(@"Total\s*Factura\s*\**\s*([\d\.]+,\d{2})", RegexOptions.IgnoreCase), //EDESE
                 new Regex(@"Servicios\s*gENERALES\s*([\d\.]+,\d{2})", RegexOptions.IgnoreCase), //EDEN
                 
             };
@@ -525,6 +539,7 @@
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\.?\s*C\.?E\.?S\.?P\.?(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
                new Regex(@"Fecha\s*de\s*Vto\.?\s*C\.?E\.?S\.?P\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"Vto\.?\s*C\.?E\.?S\.?P\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
+                new Regex(@"Cesp\:\s*\d{14}\s*Vto\.\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDESE
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\.?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDESAL
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*N[º°]\s*:?\s*\d{14}\s*Fecha\s*de\s*Vto\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EPE
                new Regex(@"\d{4}\s*\-\d{8}\s*B18\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEN
