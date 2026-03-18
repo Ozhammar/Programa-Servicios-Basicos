@@ -61,6 +61,7 @@
                 new Regex(@"(33-67509874-9)", RegexOptions.IgnoreCase),//EDESE
                 new Regex(@"(EDESA)\s*SA", RegexOptions.IgnoreCase),//EDESA
                 new Regex(@"WWW\.(EDEMSA)\.COM", RegexOptions.IgnoreCase),//EDEMSA
+                new Regex(@"(LA\s*ENERG[ÍI]A\s*DE\s*NUESTRA\s*GENTE)", RegexOptions.IgnoreCase),//EDERSA
                 
 
 
@@ -110,6 +111,11 @@
                                 empresa = "EDESE";
                                 break;
                             }
+                        case "LA ENERGÍA DE NUESTRA GENTE":
+                            {
+                                empresa = "EDERSA";
+                                break;
+                            }
                     }
                     break;
                 }
@@ -127,6 +133,7 @@
             // Lógica para extraer el número de cliente del texto del PDF
             List<Regex> patrones = new List<Regex>
             {
+               new Regex(@"B-\d{4}-\d{8}\s*\d{2}/\d{2}/\d{2}\s*[\d.,]+\s*(\d{11})", RegexOptions.IgnoreCase),//EDERSA
                new Regex(@"BANELCO\s*(\d{8})", RegexOptions.IgnoreCase),//EPEC -->minoritarias
                new Regex(@"Exento\s*\d{12}\s*(\d{7})\d{2}", RegexOptions.IgnoreCase),//EDEN
                new Regex(@"SERVICIO\s*(\d+)\s*Vencimiento", RegexOptions.IgnoreCase),//EDET
@@ -137,9 +144,6 @@
                new Regex(@"(\d{14})\s*OriginalBCod\.", RegexOptions.IgnoreCase),//EDESE
                new Regex(@"(\d{8})\s*\/\s*\d{2}", RegexOptions.IgnoreCase),//EPEC
                new Regex(@"Cuenta\s*\d{2}\s*-\s*(\d{7})", RegexOptions.IgnoreCase),//EDEA
-               
-               
-               
 
             };
             string numeroCliente = "";
@@ -171,6 +175,7 @@
                 new Regex(@"(B)\s*\(18\)", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"Liq\.\s*Serv\.\s*P[úu]b\.\s*""?(B)""?", RegexOptions.IgnoreCase),//EDESAL
                 new Regex(@"(B)Cod\.\s*018\d{7}", RegexOptions.IgnoreCase),//EDEMSA
+                new Regex(@"Serv\.\s*P[úu]b\.\s*(B)-", RegexOptions.IgnoreCase),//EDERSA
                 new Regex(@"FACTURA\s+([A-Z])", RegexOptions.IgnoreCase),//EDEA
                 
 
@@ -230,6 +235,7 @@
                  new Regex(@"Liq\s*\.?\s*de\s*Serv\s*\.?\s*P[úu]blicos\s*N[º°]\s*\:?\s*(\d{5})-", RegexOptions.IgnoreCase),//EPE
                  new Regex(@"Factura\s*N[º°]\s*\:?\s*(\d{4})-", RegexOptions.IgnoreCase),//EDEMSA
                  new Regex(@"18\s*\(B\)\s*Nro\.(\d{4})-", RegexOptions.IgnoreCase),//EDESA
+                 new Regex(@"Serv\.\s*P[úu]b\.\s*B-(\d{4})", RegexOptions.IgnoreCase),//EDERSA
                  new Regex(@"OriginalBCod\.18No\.(\d{5})-", RegexOptions.IgnoreCase),//EDESE
                  new Regex(@"(\d{4})\s*\-\d{8}\s*B", RegexOptions.IgnoreCase),//EDEN
                  new Regex(@"B\s*\(18\)\s*N[º°]\s*(\d{5})-", RegexOptions.IgnoreCase),//EPEC
@@ -269,6 +275,7 @@
             {
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?B""?\s*[\s\S]+\d{5}\s*\−\s*(\d{8})\s*P", RegexOptions.IgnoreCase),//EPEC -> no es el comprobante interno
                 new Regex(@"Liq\.?\s*de\s*Serv\.?\s*P[úu]blicos\s*N[º°]\s*\:?\s*\d{5}-(\d{8})", RegexOptions.IgnoreCase),//EPE
+                new Regex(@"Serv\.\s*P[úu]b\.\s*B-\d{4}-(\d{8})", RegexOptions.IgnoreCase),//EDERSA
                 new Regex(@"Factura\s*N[º°]\s*\:?\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//EDEMSA
                 new Regex(@"18\s*\(B\)\s*Nro\.\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//EDESA
                 new Regex(@"OriginalBCod\.18No\.\d{5}-(\d{8})", RegexOptions.IgnoreCase),//EDESE
@@ -313,6 +320,7 @@
                 new Regex(@"Fecha\s*de\s*Emisi[óo]n\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEA
                 new Regex(@"Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDET
                 new Regex(@"Emisi[oó]n\s*\:?[\s\S]+(\d{2}\/\d{2}\/\d{4})\s*Imprime", RegexOptions.IgnoreCase),//EPEC
+                new Regex(@"GENTE\s*(\d{2}\/\d{2}\/\d{2})", RegexOptions.IgnoreCase),//EDERSA
                 new Regex(@"Vto\.\s*[\s\S]+?\s*(\d{2}/\d{2}/\d{2})\D{1}", RegexOptions.IgnoreCase),//EDESE
                 new Regex(@"Emisi[oó]n\s*\:?\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPE
                 new Regex(@"C[óo]rdoba\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
@@ -348,6 +356,7 @@
                 new Regex(@"\d{4}\-?\-?\d{8}\s*(\d{2}/\d{2}/\d{4})\s*Total\s*Factura", RegexOptions.IgnoreCase),//EDET
                 new Regex(@"C\s*\d{2}/\d{2}/\d{4}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"\d{4}\s*\-?\s*\d{8}\s*\d{2}\/\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//EDEN
+                new Regex(@"B-\d{4}-\d{8}\s*(\d{2}/\d{2}/\d{2})", RegexOptions.IgnoreCase),//EDERSA
                 new Regex(@"(\d{2}/\d{2}/\d{2})\s*Per\:", RegexOptions.IgnoreCase),//EDESE
                 new Regex(@"\(A\)\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEMSA
                 new Regex(@"2\s*Fecha\s*\:?\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPE
@@ -395,6 +404,7 @@
                 new Regex(@"F\s*\d{4}\−\s*\d{8}[\s\S]+(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EPEC
                 new Regex(@"CICLO\s*\:?\s*(20\d{4})", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"facturaci[óo]n.*?(20\d{4})", RegexOptions.IgnoreCase), //EDEN
+                new Regex(@"(\d{2}\/\d{4})\s*Liquidaci[óo]n", RegexOptions.IgnoreCase), //EDERSA
                 new Regex(@"Vencimiento\s*\d{2}/\d{2}/\d{4}\s*(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDET
                 new Regex(@"Per[íi]odo\s*Facturado\s*\:?\s*BIM\s*(\d{2}\/\d{4})", RegexOptions.IgnoreCase),//EDEMSA
                 new Regex(@"\d{2}/\d{2}/\d{2}\s*Per\:\s*(\d{2}\/\d{2})", RegexOptions.IgnoreCase),//EDESE
@@ -464,10 +474,10 @@
 
                 foreach (Match match in patrones_EPE.Matches(textoPDF))
                 {
-                        if (decimal.TryParse(match.Groups[2].Value, out decimal valor))
-                        {
-                            importe_parcial += valor;
-                        }
+                    if (decimal.TryParse(match.Groups[2].Value, out decimal valor))
+                    {
+                        importe_parcial += valor;
+                    }
                 }
                 ImportePrimerVencimiento = importe_parcial;
                 importe_parcial = 0;
@@ -516,10 +526,17 @@
                 }
             }
 
-            if (cuitLong == 0 || cuitLong == 30624051919)
+            try
             {
-                string CUIT_buscado = buscadorCUIT.BuscarCUIT(ExtraerEmpresa(textoPDF).ToUpper().Trim());
-                cuitLong = long.Parse(CUIT_buscado);
+                if (cuitLong == 0 || cuitLong == 30624051919)
+                {
+                    string CUIT_buscado = buscadorCUIT.BuscarCUIT(ExtraerEmpresa(textoPDF).ToUpper().Trim());
+                    cuitLong = long.Parse(CUIT_buscado);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
             return cuitLong;
         }
@@ -532,6 +549,7 @@
                 new Regex(@"\d{4}\s*\-\d{8}\s*B18\s*(\d{14})", RegexOptions.IgnoreCase),//EDEN
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*Vto\.?\:?\s*(\d{14})", RegexOptions.IgnoreCase),//EDELAP
                 new Regex(@"C\.?E\.?S\.?P\.?:?\s*(\d{15})", RegexOptions.IgnoreCase),//EDESA
+                new Regex(@"C\.?E\.?S\.?P\.?:?\s*(\d{14})", RegexOptions.IgnoreCase),//EDERSA
 
 
             };
@@ -562,6 +580,7 @@
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*Vto\.?\:?\s*\d{14}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDELAP
                new Regex(@"C\.?E\.?S\.?P\.?:?\s*\d{15}\s*Vto\.?\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDESA
                new Regex(@"Fecha\s*Vto\.?\s*C\.?E\.?S\.?P\.?:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//EDEMSA
+               new Regex(@"C\.?E\.?S\.?P\.?:?\s*\d{14}\s*Vto\.?\:?\s*(\d{2}/\d{2}/\d{2})", RegexOptions.IgnoreCase),//EDERSA
 
 
             };

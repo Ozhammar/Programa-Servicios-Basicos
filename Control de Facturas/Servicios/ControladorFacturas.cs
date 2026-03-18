@@ -354,7 +354,8 @@ namespace Control_de_Facturas.Servicios
                 "30-65787766-9",
                 "33-67509874-9",
                 "EDESA SA",
-                "edemsa"
+                "edemsa",
+                "LA ENERGÍA DE NUESTRA GENTE"//EDERSA
 
                 #endregion
             };
