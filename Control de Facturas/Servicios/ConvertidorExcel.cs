@@ -12,7 +12,6 @@
                 HSSFWorkbook wb = new HSSFWorkbook();
 
                 int cantidad_hojas = wb_xlsx.NumberOfSheets;
-                MessageBox.Show($"{cantidad_hojas}");
 
                 for (int i = 0; i < cantidad_hojas; i++)
                 {

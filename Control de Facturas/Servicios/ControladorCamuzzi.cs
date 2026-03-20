@@ -11,7 +11,9 @@ namespace Control_de_Facturas.Servicios
         Dictionary<string, string> clientes = new Dictionary<string, string>()
         {
             {"Neuquinos", "83000940600081425"},
-            {"Fagnano", "94000940600149324" },
+            {"Fagnano459", "94000940600149324" },
+            {"TresLagos", "94000940600098389" },
+            {"Ameghino298", "94000940600168381"},
             {"Alberdi", "92000940600020772" },
             {"Catamarca", "76000990403737859" },
             {"Calle", "63600940600122119" },
@@ -19,7 +21,9 @@ namespace Control_de_Facturas.Servicios
             {"Pellegrini", "63000940600187037" },
             {"Rondeau", "80000940600856251" },
             {"Sarmiento 2551", "76000940601787206" },
-            {"Sarmiento 2564", "76000960703428986" }
+            {"Sarmiento 2564", "76000960703428986" },
+            {"AltaBarda", "83000100101297507"} 
+
         };
 
 

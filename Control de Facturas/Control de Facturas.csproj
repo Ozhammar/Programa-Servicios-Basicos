@@ -19,6 +19,7 @@
     <None Remove="Assets\Plantillas\Plantillas Pagos\METROGAS GRANDES.xlsx" />
     <None Remove="Assets\Plantillas\Plantillas Pagos\METROGAS PEQUEÑOS.xlsx" />
     <None Remove="Assets\Plantillas\UBICACIONES GEOGRAFICAS POR DEPENDENCIA Y EMPRESA.xlsx" />
+    <None Remove="Assets\Plantillas\windowsdesktop-runtime-10.0.5-win-x64.exe" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +57,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Plantillas\UBICACIONES GEOGRAFICAS POR DEPENDENCIA Y EMPRESA.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Plantillas\windowsdesktop-runtime-10.0.5-win-x64.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -41,6 +41,12 @@ namespace Control_de_Facturas.Processors
             factura.CUIT = ExtraerCUIT(textoPDF);
             factura.ObjetoGasto = "3.1.3.0"; // Objeto de gasto fijo para GAS
             factura.CodigoCatalogo = "3.1.3-2392-1"; // Código de catálogo fijo para GAS
+
+            if(ExtraerEmpresa(textoPDF).ToUpper() == "EXTRAGAS")
+            {
+                factura.TipoCodigoAutorizacion = "CAE";
+            }
+
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
             factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
@@ -65,7 +71,8 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"(DISTRIBUIDORA DE GAS CUYANA)", RegexOptions.IgnoreCase),//gas CUYANA
                 new Regex(@"(DISTRIGAS)", RegexOptions.IgnoreCase),//distrigas
                 new Regex(@"www\.(proagas)\.com\.ar", RegexOptions.IgnoreCase),//PROAGAS
-
+                new Regex(@"(30-63718290/7)", RegexOptions.IgnoreCase),//EXTRAGAS
+                
 
             };
 
@@ -80,6 +87,11 @@ namespace Control_de_Facturas.Processors
                         case "NATURGY":
                             {
                                 empresa = "NATURGYBAN";
+                                break;
+                            }
+                        case "30-63718290/7":
+                            {
+                                empresa = "EXTRAGAS";
                                 break;
                             }
                         case "DISTRIBUIDORA DE GAS DEL CENTRO":
@@ -119,14 +131,18 @@ namespace Control_de_Facturas.Processors
                 List<Regex> patrones = new List<Regex>
             {
                 new Regex(@"(\d{17})\s*Capital\s*Federal", RegexOptions.IgnoreCase),//camuzzi sur
-                new Regex(@"\s*\$?\s*[\d\.]+,\d{2}\s*(\d{17})", RegexOptions.IgnoreCase),//camuzzi sur
+                new Regex(@"(TresLagos)", RegexOptions.IgnoreCase),//camuzzi sur
+                new Regex(@"(Ameghino298)", RegexOptions.IgnoreCase),//camuzzi sur
                 new Regex(@"(Neuquinos)", RegexOptions.IgnoreCase),//camuzzi sur
-                new Regex(@"(Fagnano)", RegexOptions.IgnoreCase),//camuzzi sur
+                new Regex(@"(Fagnano459)", RegexOptions.IgnoreCase),//camuzzi sur
                 new Regex(@"(Alberdi)", RegexOptions.IgnoreCase),//camuzzi sur
                 new Regex(@"(Catamarca)", RegexOptions.IgnoreCase),//camuzzi pampeana
                 new Regex(@"(Calle)", RegexOptions.IgnoreCase),//camuzzi pampeana
                 new Regex(@"(Arturo)", RegexOptions.IgnoreCase),//camuzzi pampeana
                 new Regex(@"(Pellegrini)", RegexOptions.IgnoreCase),//camuzzi pampeana
+                new Regex(@"(AltaBarda)", RegexOptions.IgnoreCase),//camuzzi sur
+                new Regex(@"\s*\$?\s*[\d\.]+,\d{2}\s*(\d{17})", RegexOptions.IgnoreCase),//camuzzi sur
+                
             };
                 foreach (Regex regex in patrones)
                 {
@@ -161,7 +177,7 @@ namespace Control_de_Facturas.Processors
                                     numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
                                     break;
                                 }
-                            case "Fagnano":
+                            case "Fagnano459":
                                 {
                                     numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
                                     break;
@@ -171,6 +187,22 @@ namespace Control_de_Facturas.Processors
                                     numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
                                     break;
                                 }
+                            case "AltaBarda":
+                                {
+                                    numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                    break;
+                                }
+                            case "TresLagos":
+                                {
+                                    numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                    break;
+                                }
+                            case "Ameghino298":
+                                {
+                                    numeroCliente = controladorCamuzzi.buscarCliente(match.Groups[1].Value);
+                                    break;
+                                }
+                                
                             default:
                                 {
                                     numeroCliente = match.Groups[1].Value.TrimStart('0', ' ');
@@ -194,6 +226,8 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"\d{2}\s*-\s*(\d{8})-\s*\d{2}", RegexOptions.IgnoreCase),//redengas
                 new Regex(@"Total\s*a\s*pagar\s*(\d+)", RegexOptions.IgnoreCase),//naturgy ban
                 new Regex(@"BANELCO\s*Pagos\:?\s*\d{9}\s*(\d{8})\d+C[oó]digo", RegexOptions.IgnoreCase),//gasnea
+                new Regex(@"Cliente\s*N[º°]:?\s*(\d{10})", RegexOptions.IgnoreCase),//EXTRAGAS
+
                 };
 
                 foreach (Regex regex in patrones)
@@ -304,6 +338,8 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*-?\s*?""?(A)""?", RegexOptions.IgnoreCase),//gascuyana
                  new Regex(@"(B)\d{4}-\d{8}", RegexOptions.IgnoreCase),//gasjunin
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*Clase\s*(B)", RegexOptions.IgnoreCase),//naturgy noa
+                    new Regex(@"C\.?A\.?E\.?\s*\d{3}\s*(B)", RegexOptions.IgnoreCase),//EXTRAGAS
+
             };
 
             foreach (Regex regex in patrones)
@@ -333,6 +369,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"FCB\s*(\d{4})\s*-\d{8}\s*Emisi[óo]n", RegexOptions.IgnoreCase),//PROAGAS
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*N[º°]\s*(\d{4})\s*-", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"(\d{4})\s*-\s*\d{10}", RegexOptions.IgnoreCase),//LITORAL GAS
+                new Regex(@"Fecha\s*(\d{5})-", RegexOptions.IgnoreCase),//EXTRAGAS
                 new Regex(@"(\d{5})\s*-", RegexOptions.IgnoreCase),//CAMUZZISUR
                 new Regex(@"Factura\s*N[º°]\s*(\d{4})-", RegexOptions.IgnoreCase),//DISTRIGAS
                 new Regex(@"cod\s*\(?\d+\)?\s*:\s*([O0-9\-]+)", RegexOptions.IgnoreCase),//ecogas
@@ -341,6 +378,8 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"\,\d{2}\s*(\d{4})-", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"\(cod\.?\s*17\)\:?\s*(\d{4})−", RegexOptions.IgnoreCase),//gascuyana
                 new Regex(@"\(cod\.?\s*18\)\:?\s*(\d{4})−", RegexOptions.IgnoreCase),//gascuyana
+                
+                
 
             };
 
@@ -382,6 +421,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"\d{4}\s*-\s*(\d{8})", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"\(cod\.?\s*17\)\:?\s*\d{4}−(\d{8})", RegexOptions.IgnoreCase),//gascuyana
                 new Regex(@"\(cod\.?\s*18\)\:?\s*\d{4}−(\d{8})", RegexOptions.IgnoreCase),//gascuyana
+                new Regex(@"Fecha\s*\d{5}−(\d{8})", RegexOptions.IgnoreCase),//EXTRAGAS
               
             };
 
@@ -422,7 +462,8 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"FCB\s*\d{8}\s*\d{4}/\d{2}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"Fecha\s*de\s*Emisi[óo]n\s*(\d{2}\s*/\s*\d{2}\s*/\s*\d{4})", RegexOptions.IgnoreCase),
                 new Regex(@"(\d{2}\s*/\s*\d{2}\s*/\s*\d{2})\s*\d{2}/\d{2}\-", RegexOptions.IgnoreCase),//naturgy ban
-                       new Regex(@"\d{4}\s*-\s*\d{8}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//LITORAL GAS
+                new Regex(@"\d{4}\s*-\s*\d{8}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//LITORAL GAS
+                new Regex(@"(\d{2}/\d{2}/\d{4})\s*Fecha\s*\d{5}-\d{8}", RegexOptions.IgnoreCase),//EXTRAGAS
             };
 
             DateTime fechaEmision = DateTime.MinValue;
@@ -460,6 +501,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"TOTAL\s*A\s*PAGAR\s*hasta\s*el\s*(\d{2}\s*/\s*\d{2}\s*/\s*\d{2})", RegexOptions.IgnoreCase),//litoral gas
                 new Regex(@"\d{46}(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"(\d{2}/\d{2}/\d{4})\d+\.\d{2}", RegexOptions.IgnoreCase),//REDENGAS
+                new Regex(@"Fecha\s*Vto\s*\.:(\d{2}\.\d{2}\.\d{4})", RegexOptions.IgnoreCase),//EXTRAGAS
                 
             };
             DateTime fechaVencimiento = DateTime.MinValue;
@@ -491,6 +533,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"\d{2}\s*/\s*\d{2}\s*/\s*\d{2}\s*(\d{2}/\d{2})\-", RegexOptions.IgnoreCase),//naturgy ban
                 new Regex(@"(\d{2}\s*\/\s*\d{4})\s*\d{10}", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"Mensual\s*(\d{4}\s*\/\s*\d{1})", RegexOptions.IgnoreCase),//GASNEA
+                new Regex(@"Fecha\s*Vto\s*\.:(\d{2}\.\d{2}\.\d{4})", RegexOptions.IgnoreCase),//EXTRAGAS
 
             };
 
@@ -528,6 +571,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"Importe\s*Total\s*:?\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//naturgy noa
                 new Regex(@"Total\s*a\s*pagar[\s\S]*?\d{2}/\d{2}/\d{4}\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"Total\s*a\s*pagar[\s\S]*?\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//naturgy ban
+                new Regex(@"TOTAL\s*([\d.,]+)", RegexOptions.IgnoreCase),//EXTRAGAS
                 
             };
             decimal ImportePrimerVencimiento = 0;
@@ -594,6 +638,7 @@ namespace Control_de_Facturas.Processors
                 new Regex(@"C\.E\.S\.P\.:?\s*N[º°]?\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//naturgy noa
                     new Regex(@"CESP\s*N[º°]?\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"C\.E\.S\.P\.:?\s*Nro\.\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//LITORAL GAS
+                new Regex(@"\d{2}\.\d{2}\.\d{4}\s*(\d{14})\s*Vto\.?\:?\s*C\.A\.E\.", RegexOptions.IgnoreCase),//EXTRAGAS
             };
             string codigoAutorizacion = "";
 
@@ -620,6 +665,7 @@ namespace Control_de_Facturas.Processors
                       new Regex(@"Vto\.?\s*C\.E\.S\.P\.:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                    new Regex(@"Fecha\s*de\s*Vto\.?\:?\s*(\d{2}/\d+/\d{4})", RegexOptions.IgnoreCase),//naturgy noa - naturgy ban
                    new Regex(@"Nro\.\s*:?\s*\d{14}F\.?Vto\.?\:?\s*(\d{2}/\d+/\d{4})", RegexOptions.IgnoreCase),//LITORAL GAS
+                   new Regex(@"(\d{2}\.\d{2}\.\d{4})\s*\d{14}\s*Vto\.?\:?\s*C\.A\.E\.", RegexOptions.IgnoreCase),//EXTRAGAS
 
             };
             DateTime fechaVencimientoAut = DateTime.MinValue;
