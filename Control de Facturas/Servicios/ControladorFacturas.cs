@@ -258,6 +258,7 @@ namespace Control_de_Facturas.Servicios
                 "30-65786633-0",
                 "litoralgas",
                 "gasnea",
+                "30-63718290/7",
                 "30-66554905-0",
                 "33-65786527-9",
                 "DISTRIBUIDORA DE GAS DEL CENTRO",
