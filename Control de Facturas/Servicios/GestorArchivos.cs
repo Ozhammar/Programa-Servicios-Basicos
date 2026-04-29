@@ -26,7 +26,7 @@
             string PathFinal = path;
             if (File.Exists(path))
             {
-        
+                if (periodo.Contains("/")) { periodo = periodo.Replace("/", "-"); }
                 string PathNuevo = Path.Combine(Path.GetDirectoryName(path)!, $"{empresa}_{cliente}_{periodo}_{puntoVenta}-{numeroFactura}.pdf");
                 if(PathFinal != PathNuevo)
                 {
