@@ -535,9 +535,9 @@ namespace Control_de_Facturas.Servicios
         {
             int fila = 2;
 
-            List<List<Factura>> facturasPorCarpeta = facturas.GroupBy(f => Path.GetDirectoryName(f.Archivo)).Select(g => g.ToList()).ToList();
+            List<List<Factura>> facturasPorPeriodo = facturas.GroupBy(f => f.Periodo).Select(g => g.ToList()).ToList();
 
-            foreach (List<Factura> carpeta in facturasPorCarpeta)
+            foreach (List<Factura> carpeta in facturasPorPeriodo)
             {
                 XLWorkbook libro = this.abrirPlantilla(obtenerRutaPlantillaInforme(plantilla));
                 IXLWorksheet informe = libro.Worksheet("Informe de Pago Realizado");

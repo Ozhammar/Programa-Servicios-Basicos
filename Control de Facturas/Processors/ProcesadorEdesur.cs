@@ -31,7 +31,7 @@ namespace Control_de_Facturas.Processors
             factura.CodigoCatalogo = "3.1.1-2390-1"; // Código de catálogo fijo para Edesur
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
-            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
+            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.Periodo, factura.PuntoVenta, factura.NumeroFactura);
             factura.TipoServicio = "ELECTRICIDAD";
             factura.Tarifa = ExtraerTarifa(textoPDF);
 
@@ -42,18 +42,34 @@ namespace Control_de_Facturas.Processors
         {
             string periodo = "";
             List<Regex> patrones = new List<Regex>
-           {
-                new Regex(@"estado\s*actual\s*al\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
-                new Regex(@"Actual\s*Consumo\s*Importe\s*Estados\s*al\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase)
-           };
+    {
+        new Regex(@"meses\s*\d{2}/\d{2}\d{2}/\d{2}\d{2}/\d{2}\d{2}/\d{2}\d{2}/\d{2}(\d{2}/\d{2})", RegexOptions.IgnoreCase),
+        new Regex(@"mes\s*\d{2}-\d{2}\d{2}-\d{2}\d{2}-\d{2}\d{2}-\d{2}\d{2}-\d{2}(\d{2}-\d{2})", RegexOptions.IgnoreCase),
+        new Regex(@"(\d{2}/\d{2})\d{2}/\d{2}\s*Per[ií]odo", RegexOptions.IgnoreCase),
+        //new Regex(@"estado\s*actual\s*al\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
+        //new Regex(@"Actual\s*Consumo\s*Importe\s*Estados\s*al\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase)
+    };
 
             foreach (Regex regex in patrones)
             {
                 Match match = regex.Match(textoPDF);
                 if (match.Success)
                 {
-                    DateTime fecha = Convert.ToDateTime(match.Groups[1].Value);
-                    periodo = fecha.ToString("MMMM").ToUpper();
+                    string valorFecha = match.Groups[1].Value;
+                    string formato = valorFecha.Contains("/") ? "MM/yy" : "MM-yy";
+
+                    if (DateTime.TryParseExact(valorFecha, formato, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fecha))
+                    {
+                        if (ExtraerTarifa(textoPDF) != "3")
+                        {
+                            periodo = fecha.ToString("MMMM", new CultureInfo("es-AR")).ToUpper();
+                        }
+                        else
+                        {
+                            fecha = fecha.AddMonths(1);
+                            periodo = fecha.ToString("MMMM", new CultureInfo("es-AR")).ToUpper();
+                        }
+                    }
                 }
             }
             return periodo;

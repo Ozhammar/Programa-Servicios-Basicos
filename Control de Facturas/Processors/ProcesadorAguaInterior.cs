@@ -33,7 +33,7 @@
             factura.CodigoCatalogo = "3.1.2-2391-1"; // Código de catálogo fijo para AGUA
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
-            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
+            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.Periodo, factura.PuntoVenta, factura.NumeroFactura);
             factura.TipoServicio = "AGUA INTERIOR";
 
             if (factura.CodigoAutorizacion == "")

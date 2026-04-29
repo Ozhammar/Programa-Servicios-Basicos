@@ -36,7 +36,7 @@
             factura.CodigoCatalogo = "3.1.1-2390-1"; // Código de catálogo fijo para ELECTRICIDAD
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
-            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
+            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.Periodo, factura.PuntoVenta, factura.NumeroFactura);
             factura.TipoServicio = "ELECTRICIDAD INTERIOR";
 
             if (factura.CodigoAutorizacion == "")
