@@ -60,15 +60,9 @@ namespace Control_de_Facturas.Processors
 
                     if (DateTime.TryParseExact(valorFecha, formato, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fecha))
                     {
-                        if (ExtraerTarifa(textoPDF) != "3")
-                        {
+                     
                             periodo = fecha.ToString("MMMM", new CultureInfo("es-AR")).ToUpper();
-                        }
-                        else
-                        {
-                            fecha = fecha.AddMonths(1);
-                            periodo = fecha.ToString("MMMM", new CultureInfo("es-AR")).ToUpper();
-                        }
+                  
                     }
                 }
             }
