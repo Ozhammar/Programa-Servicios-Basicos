@@ -21,13 +21,13 @@
             return texto.ToString();
         }
 
-        public string RenombrarArchivo(string path, string empresa, string cliente, string puntoVenta, string numeroFactura)
+        public string RenombrarArchivo(string path, string empresa, string cliente, string periodo, string puntoVenta, string numeroFactura)
         {
             string PathFinal = path;
             if (File.Exists(path))
             {
-        
-                string PathNuevo = Path.Combine(Path.GetDirectoryName(path)!, $"{empresa}_{cliente}_{puntoVenta}-{numeroFactura}.pdf");
+                if (periodo.Contains("/")) { periodo = periodo.Replace("/", "-"); }
+                string PathNuevo = Path.Combine(Path.GetDirectoryName(path)!, $"{empresa}_{cliente}_{periodo}_{puntoVenta}-{numeroFactura}.pdf");
                 if(PathFinal != PathNuevo)
                 {
                     File.Copy(PathFinal, PathNuevo, true);

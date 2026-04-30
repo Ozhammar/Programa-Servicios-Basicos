@@ -49,7 +49,7 @@ namespace Control_de_Facturas.Processors
 
             factura.CodigoAutorizacion = ExtraerCodigoAutorizacion(textoPDF);
             factura.VencimientoCodigoAutorizacion = ExtraerVencimientoCodigoAutorizacion(textoPDF);
-            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.PuntoVenta, factura.NumeroFactura);
+            factura.Archivo = gestorArchivos.RenombrarArchivo(rutaArchivo, factura.Empresa, factura.NumeroCliente, factura.Periodo, factura.PuntoVenta, factura.NumeroFactura);
             factura.TipoServicio = "GAS INTERIOR";
             //factura.Tarifa = ExtraerTarifa(textoPDF);
 
