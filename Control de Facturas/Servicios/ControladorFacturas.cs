@@ -318,7 +318,7 @@ namespace Control_de_Facturas.Servicios
             string[] palabrasClave_AGUA =
             {
                 #region AGUA INTERIOR
-                "USHUAIA",
+                "USHUAIAFC",
                 "www.osmgp.gov.ar",
                 "30 - 63046762 - 0",
                 "RIO NEGRO",
@@ -334,10 +334,13 @@ namespace Control_de_Facturas.Servicios
                 "30-71151356-2",
                 "33-69809590-9",
                 "aguasdeformosa",
+                "FORMOSA",
                 "33-71097454-9",
                 "30-64263072-1",
                 "01-031962", //aguas catamarca
                 "30-70791990-2",
+                "APSJ",
+                "30-52093971-3"
                 #endregion
             };
             string[] palabrasClave_LUZ =
@@ -350,9 +353,9 @@ namespace Control_de_Facturas.Servicios
                 "30-65865024-2",
                 "30-69383434-8",
                 "30-54578816-7",
-                "SANTA FE",
-                "ROSARIO",
-                "RECONQUISTA",
+                //"SANTA FE",
+                //"ROSARIO", COMENTADO DE MOMENTO PORQUE NO SE UTILIZA EN LOS PROCESADORES DE LUZ INTERIOR, PERO SE DEBERÍA ANALIZAR SI SE DEBE QUEDAR O NO
+                //"RECONQUISTA",
                 "30-65787766-9",
                 "33-67509874-9",
                 "EDESA SA",
@@ -372,11 +375,12 @@ namespace Control_de_Facturas.Servicios
                     return TiposServicios.GAS;
                 }
             }
-
+            bool esAgua = false;
             foreach (string palabra in palabrasClave_AGUA)
             {
                 if (textoPDF.Contains(palabra) && !palabrasClave_LUZ.Contains(palabra))
                 {
+                    esAgua = true;
                     return TiposServicios.AGUA;
                 }
             }
