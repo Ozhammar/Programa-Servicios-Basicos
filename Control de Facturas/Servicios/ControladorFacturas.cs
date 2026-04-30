@@ -337,6 +337,7 @@ namespace Control_de_Facturas.Servicios
                 "33-71097454-9",
                 "30-64263072-1",
                 "01-031962", //aguas catamarca
+                "30-70791990-2",
                 #endregion
             };
             string[] palabrasClave_LUZ =

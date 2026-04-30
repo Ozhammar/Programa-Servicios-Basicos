@@ -702,7 +702,8 @@ namespace Control_de_Facturas
                 }
 
                 string texto = gestorArchivos.LeerPDF(primerPdf);
-                string path_archivo_prueba = @"..\..\..\prueba.txt";
+                //string path_archivo_prueba = @"..\..\..\prueba.txt";
+                string path_archivo_prueba = Path.Combine(Path.GetDirectoryName(primerPdf), "prueba.txt");
 
                 using (StreamWriter sw = new StreamWriter(path_archivo_prueba, true))
                 {

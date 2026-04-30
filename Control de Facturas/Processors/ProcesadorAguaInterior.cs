@@ -64,6 +64,7 @@
                 new Regex(@"(33-71097454-9)", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
                 new Regex(@"(30-64263072-1)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES - SANLUIS
                 new Regex(@"(01-031962)", RegexOptions.IgnoreCase),//AGUAS DE CATAMARCA
+                new Regex(@"(30-70791990-2)", RegexOptions.IgnoreCase),//ABSA
 
             };
 
@@ -145,6 +146,12 @@
                                 empresa = "AGUAS DE CATAMARCA";
                                 break;
                             }
+                        case "30-70791990-2":
+                            {
+                                empresa = "AGUAS BONAERENSES";
+                                break;
+                            }
+                            
                     }
                     break;
                 }
@@ -170,6 +177,7 @@
                 new Regex(@"Cuenta\s*Emisi[óo]n\s*(\d{3}-\d{7}-\d{3})", RegexOptions.IgnoreCase),//AGUAS DE MISIONES
                 new Regex(@"\d{2}/\d{2}/\d{4}\s*(\d+)\s*Policia", RegexOptions.IgnoreCase),//AGUAS DE FORMOSA
                 new Regex(@"(\d+)\s*\d{2}\/\d{2}\/\d{4}\s*\d{2}\/\d{4}\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
+                new Regex(@"\d{3}-(\d{6})\d{2}-\d{4}", RegexOptions.IgnoreCase),//ABSA
 
             };
             string numeroCliente = "";
@@ -202,6 +210,7 @@
                 new Regex(@"(B)\s*\d{4}\s*\-\s*\d{8}", RegexOptions.IgnoreCase),//AGUA DE FORMOSA
                 new Regex(@"(B)\s*\d{3}\s*\-\s*\d{8}", RegexOptions.IgnoreCase),//AGUA DE MISIONES
                new Regex(@"(30-64263072-1)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
+               new Regex(@"Liq\s*de\s*Serv\.Publicos\s*\'(B)\'", RegexOptions.IgnoreCase),//ABSA
                 
                  
             };
@@ -261,6 +270,7 @@
                 new Regex(@"""B""\s*(\d{4})-", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"FC\s*\-\s*(\d{4})", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                 new Regex(@"FC\s*(\d{4})\s*\−", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
+                new Regex(@"FC\s*(\d{4})\s*\-", RegexOptions.IgnoreCase),//ABSA
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*\-\s*(\d{4})", RegexOptions.IgnoreCase),//AGUAS MENDOCINAS
                 new Regex(@"B\s*(\d{4})\s*\-\s*\d{8}", RegexOptions.IgnoreCase),//AGUA DE FORMOSA
                 new Regex(@"B\s*(\d{3})\s*\-\s*\d{8}", RegexOptions.IgnoreCase),//AGUA DE MISIONES
@@ -304,12 +314,14 @@
                 new Regex(@"""B""\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                 new Regex(@"Factura\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
                 new Regex(@"FC\s*\-\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
+                
                 new Regex(@"FC\s*\d{4}\s*\−\s*(\d{8})\s*In", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
                 new Regex(@"Liquidaci[óo]n\s*de\s*Servicios\s*P[úu]blicos\s*B\s*\-\s*\d{4}\s*(\d{8})", RegexOptions.IgnoreCase),//AGUAS MENDOCINAS
                 new Regex(@"B\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//AGUA DE FORMOSA
                 new Regex(@"B\s*\d{3}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//AGUA DE MISIONES
                 new Regex(@"B\s*\-\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//AGUA DEL NORTE
-                      new Regex(@"\d{2}\/\d{2}\/\d{4}\s*\$\s*[\d.,]+\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
+                new Regex(@"\d{2}\/\d{2}\/\d{4}\s*\$\s*[\d.,]+\s*\d{4}-(\d{8})", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
+                new Regex(@"FC\s*\d{4}\s*\-\s*(\d{8})", RegexOptions.IgnoreCase),//ABSA
                              
             };
 
@@ -356,6 +368,7 @@
                 new Regex(@"B\s*\d{4}\s*\-\s*\d{8}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUA DE FORMOSA
                 new Regex(@"Cuenta\s*Emisi[óo]n\s*\d{3}-\d{7}-\d{3}\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS DE MISIONES
                 new Regex(@"\d+\s*\d{2}\/\d{2}\/\d{4}\s*\d{2}\/\d{4}\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
+                   new Regex(@"\d{2}\-\d{4}(\d{2}/\d{2}/\d{4})\s*\d{2}/\d{2}/\d{4}", RegexOptions.IgnoreCase),//ABSA
             };
 
             DateTime fechaEmision = DateTime.MinValue;
@@ -383,6 +396,7 @@
         {
             List<Regex> patrones = new List<Regex>
             {
+                new Regex(@"\d{3}-\d{6}\d{2}-\d{4}(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//ABSA
                 new Regex(@"2\s*Vencimiento\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS MENDOCINAS
                 new Regex(@"B\s*COD\.?\s*18[\s\S]+\s*\d{2}\/\d{2}\/\d{4}\s*\d{14}\s*(\d{2}\/\d{2}\/\d{4})", RegexOptions.IgnoreCase),//AGUAS DE CATAMARCA
                 new Regex(@"\$\s*[\d.,]+\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUA DE FORMOSA
@@ -394,6 +408,7 @@
                 new Regex(@"(\d{2}/\d{2}/\d{4})\s*[\d.,]+\s*FC", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
                   new Regex(@"\d+\s*(\d{2}\/\d{2}\/\d{4})\s*\d{2}\/\d{4}\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
                 new Regex(@"[\d.,]+\s*(\d{2}\/\d{2}\/\d{4})\s*\$\s*[\d.,]+", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
+              
             };
             DateTime fechaVencimiento = DateTime.MinValue;
 
@@ -439,6 +454,7 @@
                 new Regex(@"per[íi]odo\s*comercial\s*(\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
                 new Regex(@"\d+\s*\d{2}\/\d{2}\/\d{4}\s*(\d{2}\/\d{4})\s*\d{2}\/\d{2}\/\d{4}", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
                     new Regex(@"BIM\s*(\d{4}\s*-\s*Cuota\s*\S+)\s*01\-", RegexOptions.IgnoreCase),//AGUAS DE CATAMARCA
+                    new Regex(@"\d{3}-\d{6}(\d{2}-\d{4})", RegexOptions.IgnoreCase),//ABSA
 
             };
 
@@ -473,6 +489,7 @@
         {
             List<Regex> patrones = new List<Regex>
             {
+                new Regex(@"\d{3}-\d{6}\d{2}-\d{4}\d{2}\/\d{2}\/\d{4}\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//ABSA
                 new Regex(@"Total\s*a\s*Pagar\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MDP
                 new Regex(@"\d+\s*\.\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//AGUAS MENDOCINAS
                 new Regex(@"doc\.?\s*\$\s*([\d.,]+)\s*\d{2}/\d{2}/\d{4}", RegexOptions.IgnoreCase),//AGUA DE MISIONES
@@ -484,8 +501,9 @@
                 new Regex(@"total\s*\$?\s*([\d.,]+)", RegexOptions.IgnoreCase),//AGUAS CORDOBESAS
                 new Regex(@"Importe\s*\$?\s*([\d.,]+)", RegexOptions.IgnoreCase),//AGUAS DE TUCUMAN
                 new Regex(@"\d{2}\s*-\s*\d{4}\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//AGUA DE FORMOSA
-                  new Regex(@"\d{2}\/\d{2}\/\d{4}\s*\$\s*([\d.,]+)\s*B", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
-                         new Regex(@"\d{2}\/\d{2}\/\d{4}\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
+                new Regex(@"\d{2}\/\d{2}\/\d{4}\s*\$\s*([\d.,]+)\s*B", RegexOptions.IgnoreCase),//AGUAS DEL NORTE
+                new Regex(@"\d{2}\/\d{2}\/\d{4}\s*\$\s*([\d.,]+)", RegexOptions.IgnoreCase),//OBRAS SANITARIAS MERCEDES
+                    
                 
             };
             decimal ImportePrimerVencimiento = 0;
@@ -544,9 +562,10 @@
                 new Regex(@"C\.?E\.?S\.?P\.?[\s\S]+(\d{14})Vto\:?\.?", RegexOptions.IgnoreCase),
                 new Regex(@"B\s*COD\.?\s*18\s*\d{2}\-\d{6}\s*\d{2}\/\d{2}\/\d{4}\s*(\d{14})", RegexOptions.IgnoreCase),//AGUAS DE CATAMARCA
                 new Regex(@"C\.E\.S\.P\.?:?\s*N[º°]\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//REDENGAS
-                new Regex(@"C\.E\.S\.P\.?:?\s*Nro\s*(\d{14})", RegexOptions.IgnoreCase),//ecogas
+                new Regex(@"C\.E\.S\.P\.?:?\s*Nro\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//ecogas
                 new Regex(@"C\.E\.S\.P\:?\s*(\d{14})", RegexOptions.IgnoreCase),
                 new Regex(@"C\.E\.S\.P\.:?\s*N[º°]?\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//naturgy noa
+                new Regex(@"CESP\s*Nro:\s*(\d{14})", RegexOptions.IgnoreCase),//absa
                 new Regex(@"CESP\s*N[º°]?\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//gasnea
                 new Regex(@"C\.?E\.?S\.?P\.?\s*:?\s*Nro\.\s*:?\s*(\d{14})", RegexOptions.IgnoreCase),//LITORAL GAS
                 new Regex(@"C\.?E\.?S\.?P\.?\s*:?\s*(\d{14})\s*\.", RegexOptions.IgnoreCase),//AGUAS MENDOCINAS
@@ -583,6 +602,7 @@
                  new Regex(@"C\.E\.S\.P\.?\:?\s*N[º°]:?\s*\d{14}\s*Fecha\s*Vto.?:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//DISTRIGAS
                  new Regex(@"Vto\.?\s*C\.?E\.?S\.?P\.?:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),
                  new Regex(@"Fecha\s*de\s*Vto\.?\:?\s*(\d{2}/\d+/\d{4})", RegexOptions.IgnoreCase),//naturgy noa - naturgy ban
+                 new Regex(@"Fec\.\s*Vto\.?\:?\s*(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//ABSA
                  new Regex(@"Nro\.\s*:?\s*\d{14}F\.?Vto\.?\:?\s*(\d{2}/\d+/\d{4})", RegexOptions.IgnoreCase),//LITORAL GAS
                  new Regex(@"""B""\s*\d{4}\s*-\s*\d{8}\s*\d{14}(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS SANTAFESINAS
                  new Regex(@"FC\s*\-\s*\d{4}\s*\-\s*\d{16}\d{2}/\d{2}/\d{4}\d{14}(\d{2}/\d{2}/\d{4})", RegexOptions.IgnoreCase),//AGUAS DE CORRIENTES
